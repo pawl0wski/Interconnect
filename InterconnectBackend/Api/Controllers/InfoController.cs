@@ -5,12 +5,12 @@ namespace Api.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    public class CitadelInfoController : ControllerBase
+    public class InfoController : ControllerBase
     {
         private readonly IVersionService _versionService;
-        private readonly ILogger<CitadelInfoController> _logger;
+        private readonly ILogger<InfoController> _logger;
 
-        public CitadelInfoController(ILogger<CitadelInfoController> logger, IVersionService versionService)
+        public InfoController(ILogger<InfoController> logger, IVersionService versionService)
         {
             _logger = logger;
             _versionService = versionService;

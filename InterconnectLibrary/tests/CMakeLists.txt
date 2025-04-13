@@ -10,20 +10,20 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 add_executable(
-        citadel_unit_tests
+        interconnect_unit_tests
         library_test.cpp
 )
 
-# Include Citadel library
+# Include Interconnect library
 target_link_libraries(
-        citadel_unit_tests
-        citadel_library
+        interconnect_unit_tests
+        interconnect_library
 )
 
 target_link_libraries(
-        citadel_unit_tests
+        interconnect_unit_tests
         GTest::gtest_main
 )
 
 include(GoogleTest)
-gtest_discover_tests(citadel_unit_tests)
+gtest_discover_tests(interconnect_unit_tests)
