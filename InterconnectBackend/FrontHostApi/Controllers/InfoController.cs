@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Services;
 
-namespace Api.Controllers
+namespace FrontHostApi.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]

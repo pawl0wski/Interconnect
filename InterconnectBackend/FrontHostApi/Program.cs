@@ -2,7 +2,7 @@
 using Services;
 using Services.Impl;
 
-namespace Api
+namespace FrontHostApi
 {
     public class Program
     {

@@ -1,0 +1,71 @@
+name: "Interconnect CI"
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  frontend:
+    name: "Frontend"
+    runs-on: ubuntu-latest
+    container:
+      image: node:lts-jod
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v4
+
+      - name: "Install dependencies"
+        working-directory: "./InterconnectFrontend"
+        run: npm ci
+
+      - name: "Build"
+        working-directory: "./InterconnectFrontend"
+        run: npm run build
+
+      - name: "Run tests"
+        working-directory: "./InterconnectFrontend"
+        run: npm run test
+
+  backend:
+    name: "Backend"
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/dotnet/sdk:8.0
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v4
+
+      - name: "Build"
+        working-directory: "./InterconnectBackend"
+        run: dotnet build
+
+      - name: "Run tests"
+        working-directory: "./InterconnectBackend"
+        run: dotnet test
+
+  library:
+    name: "Library"
+    runs-on: ubuntu-latest
+    container:
+      image: alpine
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v4
+
+      - name: "Install dependencies"
+        run: |
+          apk update
+          apk add gcc g++ cmake make
+
+      - name: "Build"
+        working-directory: "./InterconnectLibrary"
+        run: make build
+
+      - name: "Build unit tests"
+        working-directory: "./InterconnectLibrary"
+        run: make build-tests
+
+      - name: "Run tests"
+        working-directory: "./InterconnectLibrary/build/tests"
+        run: ./interconnect_unit_tests
