@@ -1,6 +1,6 @@
 #ifndef LIBRARY_LIBRARY_H
 #define LIBRARY_LIBRARY_H
 
-void hello();
+int addTwoNumbers(int a, int b);
 
 #endif //LIBRARY_LIBRARY_H

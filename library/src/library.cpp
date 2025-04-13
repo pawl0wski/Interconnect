@@ -1,7 +1,5 @@
 #include "library.h"
 
-#include <iostream>
-
-void hello() {
-    std::cout << "Hello, World!" << std::endl;
+int addTwoNumbers(const int a, const int b) {
+    return a + b;
 }
