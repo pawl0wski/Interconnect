@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "library.h"
+#include "virtual_machine_manager.h"
 
 TEST(AddTwoNumberTest, ShouldAddTwoNumbers) {
     EXPECT_EQ(addTwoNumbers(2, 5), 7);
