@@ -1,5 +1,5 @@
-#ifndef LIBRARY_LIBRARY_H
-#define LIBRARY_LIBRARY_H
+#ifndef VIRTUALMACHINEMANAGER_H
+#define VIRTUALMACHINEMANAGER_H
 #include <optional>
 #include <string>
 #include <libvirt/libvirt.h>
@@ -22,4 +22,4 @@ public:
     void getInfoAboutVirtualMachine();
 };
 
-#endif //LIBRARY_LIBRARY_H
+#endif //VIRTUALMACHINEMANAGER_H

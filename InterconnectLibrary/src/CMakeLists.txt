@@ -1,12 +1,10 @@
 add_library(interconnect_library STATIC VirtualMachineManager.cpp
-        exceptions/ConnectionToVMBackendFailed.cpp
         exceptions/ConnectionToVMBackendFailed.h
         interfaces/ILibvirtWrapper.h
         LibvirtWrapper.cpp
         LibvirtWrapper.h)
 
 add_library(interconnect_library_shared SHARED VirtualMachineManager.cpp
-        exceptions/ConnectionToVMBackendFailed.cpp
         exceptions/ConnectionToVMBackendFailed.h
         interfaces/ILibvirtWrapper.h
         LibvirtWrapper.cpp
