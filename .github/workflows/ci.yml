@@ -51,15 +51,26 @@ jobs:
     name: "Library"
     runs-on: ubuntu-latest
     container:
-      image: alpine
+      image: ubuntu:24.04
     steps:
       - name: "Checkout code"
         uses: actions/checkout@v4
 
       - name: "Install dependencies"
         run: |
-          apk update
-          apk add gcc g++ cmake make
+            apt-get update && apt-get install -y \
+                build-essential \
+                cmake \
+                git \
+                libvirt-dev \
+                libpcap-dev \
+                gdb \
+                sudo \
+                wget \
+                unzip \
+                pkg-config \
+                libgtest-dev \
+                libgmock-dev
 
       - name: "Build"
         working-directory: "./InterconnectLibrary"
