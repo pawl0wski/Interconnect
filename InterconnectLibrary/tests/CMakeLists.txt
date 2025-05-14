@@ -9,7 +9,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
 add_executable(
         interconnect_unit_tests
-        library_test.cpp
+        VirtualMachineManager.cpp
 )
 
 # Include Interconnect library
@@ -21,6 +21,7 @@ target_link_libraries(
 target_link_libraries(
         interconnect_unit_tests
         GTest::gtest_main
+        GTest::gmock
 )
 
 include(GoogleTest)

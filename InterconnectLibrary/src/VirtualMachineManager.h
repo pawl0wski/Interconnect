@@ -4,17 +4,22 @@
 #include <string>
 #include <libvirt/libvirt.h>
 
+#include "interfaces/ILibvirtWrapper.h"
+
 class VirtualMachineManager {
     virConnectPtr connectPtr = nullptr;
+    ILibvirtWrapper &libvirt;
 
 public:
-    void initializeConnection(const std::optional<std::string> &customConnectionPath);
+    explicit VirtualMachineManager(ILibvirtWrapper &libvirt)
+        : libvirt(libvirt) {
+    }
+
+    void initializeConnection(const std::optional<std::string> &customConnectionPath = std::nullopt);
 
     void createVirtualMachine();
 
     void getInfoAboutVirtualMachine();
 };
-
-int addTwoNumbers(int a, int b);
 
 #endif //LIBRARY_LIBRARY_H
