@@ -2,8 +2,8 @@
 
 #include "exceptions/ConnectionToVMBackendFailed.h"
 
-void VirtualMachineManager::initializeConnection(std::optional<std::string> customConnectionPath) {
-    auto connectionPath = customConnectionPath.has_value() ? customConnectionPath.value() : "qemu:///system";
+void VirtualMachineManager::initializeConnection(const std::optional<std::string> &customConnectionPath) {
+    const auto connectionPath = customConnectionPath.has_value() ? customConnectionPath.value() : "qemu:///system";
 
     this->connectPtr = virConnectOpen(connectionPath.c_str());
     if (!this->connectPtr) {

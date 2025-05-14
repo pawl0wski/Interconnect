@@ -8,7 +8,7 @@ class VirtualMachineManager {
     virConnectPtr connectPtr = nullptr;
 
 public:
-    void initializeConnection(std::optional<std::string> customConnectionPath);
+    void initializeConnection(const std::optional<std::string> &customConnectionPath);
 
     void createVirtualMachine();
 
