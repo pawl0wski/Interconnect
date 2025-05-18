@@ -10,6 +10,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 add_executable(
         interconnect_unit_tests
         VirtualMachineManager.cpp
+        mocks/VirtualMachineManagerMockGetInfoAboutVirtualMachine.h
 )
 
 # Include Interconnect library

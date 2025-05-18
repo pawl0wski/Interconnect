@@ -3,9 +3,37 @@
 #include "interfaces/ILibvirtWrapper.h"
 
 
+/**
+ * @brief Concrete implementation of the ILibvirtWrapper interface.
+ *
+ * This class provides actual implementations for connecting to the libvirt C API.
+ */
 class LibvirtWrapper : public ILibvirtWrapper {
 public:
-    virConnectPtr connectOpen(const char *name) override;
+    /**
+     * @brief Opens a connection to the hypervisor.
+     *
+     * @param connectionUri The name or URI of the hypervisor to connect to.
+     * @return virConnectPtr A pointer to the connection object on success.
+     */
+    virConnectPtr connectOpen(const char *connectionUri) override;
+
+    /**
+     * @brief Creates a virtual machine from an XML configuration.
+     *
+     * @param conn The active connection to the hypervisor.
+     * @param xmlConfig The XML string describing the VM configuration.
+     * @return virDomainPtr A pointer to the newly created virtual machine domain.
+     */
+    virDomainPtr createVirtualMachineFromXml(virConnectPtr conn, const char *xmlConfig) override;
+
+    /**
+     * @brief Retrieves the UUID of the given domain.
+     *
+     * @param domain The domain to get the UUID from.
+     * @param uuid A buffer to store the resulting UUID string.
+     */
+    void getUuidFromDomain(virDomainPtr domain, char *uuid) override;
 };
 
 
