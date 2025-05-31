@@ -4,6 +4,13 @@
 #include <string>
 
 
+/**
+* @brief Exception thrown when an error occurs while connecting to the VM backend.
+*
+* This exception is thrown when it is not possible to connect
+* to the virtual machine backend, e.g., due to incorrect
+* configuration or the backend not running.
+*/
 class ConnectionToVMBackendFailed : public std::exception {
     std::string message;
 
