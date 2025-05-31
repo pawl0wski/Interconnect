@@ -4,9 +4,6 @@
 #include <string>
 
 
-<<<<<<< Updated upstream
-class ConnectionToVMBackendFailed : public std::exception {
-=======
 /**
 * @brief Exception thrown when an error occurs while connecting to the VM backend.
 *
@@ -15,7 +12,6 @@ class ConnectionToVMBackendFailed : public std::exception {
 * configuration or the backend not running.
 */
 class ConnectionToVMBackendFailed final : public std::exception {
->>>>>>> Stashed changes
     std::string message;
 
 public:

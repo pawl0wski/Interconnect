@@ -1,13 +1,34 @@
-add_library(interconnect_library STATIC VirtualMachineManager.cpp
-        exceptions/ConnectionToVMBackendFailed.h
-        interfaces/ILibvirtWrapper.h
+set(SOURCE_FILES
+        VirtualMachineManager.cpp
         LibvirtWrapper.cpp
-        LibvirtWrapper.h)
+        InterconnectLibraryExtern.cpp
+)
 
-add_library(interconnect_library_shared SHARED VirtualMachineManager.cpp
+set(HEADER_FILES
         exceptions/ConnectionToVMBackendFailed.h
+        exceptions/NoActiveVMBackendConnection.h
+        exceptions/CreateVirtualMachineFailed.h
         interfaces/ILibvirtWrapper.h
-        LibvirtWrapper.cpp
-        LibvirtWrapper.h)
+        LibvirtWrapper.h
+        VirtualMachineManager.h
+        models/VirtualMachineInfo.h
+)
 
-target_include_directories(interconnect_library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+set(EXTERN_FILES
+        InterconnectLibraryExtern.cpp)
+
+add_library(interconnect STATIC
+        ${HEADER_FILES}
+        ${SOURCE_FILES}
+        ${EXTERN_FILES}
+)
+
+add_library(interconnect_shared SHARED
+        ${HEADER_FILES}
+        ${SOURCE_FILES}
+        ${EXTERN_FILES}
+)
+
+target_include_directories(interconnect PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
