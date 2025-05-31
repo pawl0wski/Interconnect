@@ -12,7 +12,7 @@ namespace FrontHostApi
 
             // Add services to the container.
 
-            builder.Services.AddSingleton<IVersionService, VersionService>();
+            builder.Services.AddSingleton<IInfoService, InfoService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
