@@ -1,8 +1,6 @@
 
-using Library.Wrappers;
-using Library.Wrappers.Impl;
+using Library;
 using Services;
-using Services.Impl;
 
 namespace FrontHostApi
 {
@@ -13,9 +11,8 @@ namespace FrontHostApi
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
-            builder.Services.AddSingleton<IInfoService, InfoService>();
-            builder.Services.AddSingleton<IVirtualMachineManagerWrapper, VirtualMachineManagerWrapper>();
+            LibraryInitializer.Initialize(builder.Services);
+            ServicesInitializer.Initialize(builder.Services);
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

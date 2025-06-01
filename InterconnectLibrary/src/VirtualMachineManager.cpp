@@ -1,26 +1,54 @@
 #include "VirtualMachineManager.h"
 
-#include "exceptions/ConnectionToVMBackendFailed.h"
-#include "exceptions/CreateVirtualMachineFailed.h"
-#include "exceptions/NoActiveVMBackendConnection.h"
+#include "exceptions/VirtualMachineManagerException.h"
+#include "utils/VersionUtils.h"
+#include "utils/StringUtils.h"
 
 void VirtualMachineManager::initializeConnection(const std::optional<std::string> &customConnectionUrl) {
     const auto connectionUri = customConnectionUrl.has_value() ? customConnectionUrl.value() : "qemu:///system";
 
-    this->connectPtr = libvirt->connectOpen(connectionUri.c_str());
-    if (!this->connectPtr) {
-        throw ConnectionToVMBackendFailed("An error occurred while connecting to " + connectionUri);
+    conn = libvirt->connectOpen(connectionUri.c_str());
+    if (!conn) {
+        throw VirtualMachineManagerException("An error occurred while connecting to " + connectionUri);
     }
 }
 
-VirtualMachineInfo VirtualMachineManager::createVirtualMachine(const std::string &virtualMachineXml) {
-    if (this->connectPtr == nullptr) {
-        throw NoActiveVMBackendConnection("No active connection to the VM backend.");
+ConnectionInfo VirtualMachineManager::getConnectionInfo() const {
+    virNodeInfo info;
+    unsigned long libVersion;
+    unsigned long driverVersion;
+
+    const auto driverType = libvirt->getDriverType(conn);
+    const auto connectionUrl = libvirt->getConnectUrl(conn);
+    if (libvirt->getNodeInfo(conn, &info) != 0) {
+        throw VirtualMachineManagerException("An error occurred while getting node information ");
+    }
+    if (libvirt->getLibVersion(conn, &libVersion) != 0) {
+        throw VirtualMachineManagerException("Failed to get lib version");
+    }
+    if (libvirt->getDriverVersion(conn, &driverVersion) != 0) {
+        throw VirtualMachineManagerException("Failed to get driver version");
     }
 
-    const auto domain = libvirt->createVirtualMachineFromXml(this->connectPtr, virtualMachineXml.c_str());
+    return ConnectionInfo{
+        info.cpus,
+        info.mhz,
+        info.memory,
+        StringUtils::toConstCharPointer(connectionUrl),
+        StringUtils::toConstCharPointer(driverType),
+        VersionUtils::getVersion(libVersion),
+        VersionUtils::getVersion(driverVersion),
+    };
+}
+
+VirtualMachineInfo VirtualMachineManager::createVirtualMachine(const std::string &virtualMachineXml) {
+    if (conn == nullptr) {
+        throw VirtualMachineManagerException("No active connection to the VM backend.");
+    }
+
+    const auto domain = libvirt->createVirtualMachineFromXml(conn, virtualMachineXml.c_str());
     if (domain == nullptr) {
-        throw CreateVirtualMachineFailed("Error while creating Virtual Machine");
+        throw VirtualMachineManagerException("Error while creating Virtual Machine");
     }
 
     char uuid[VIR_UUID_STRING_BUFLEN];

@@ -1,9 +1,9 @@
-﻿using NativeLibrary;
+﻿using Library.Models;
 using System.Runtime.InteropServices;
 
 namespace Library.Interop
 {
-    public class LibraryVirtualMachineManager
+    public class InteropVirtualMachineManager
     {
         [DllImport(Constants.LIBRARY_NAME)]
         public static extern IntPtr VirtualMachineManager_Create();
@@ -13,6 +13,8 @@ namespace Library.Interop
 
         [DllImport(Constants.LIBRARY_NAME)]
         public static extern void VirtualMachineManager_InitializeConnection(IntPtr manager, string? customConnectionUrl);
+        [DllImport(Constants.LIBRARY_NAME)]
+        public static extern IntPtr VirtualMachineManager_GetConnectionInfo(IntPtr manager, ref ConnectionInfo info);
 
         [DllImport(Constants.LIBRARY_NAME)]
         public static extern nint VirtualMachineManager_CreateVirtualMachine(string virtualMachineXml);

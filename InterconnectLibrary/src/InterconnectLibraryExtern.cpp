@@ -2,6 +2,8 @@
 #define INTERCONNECTLIBRARYEXTERN_H
 #include "VirtualMachineManager.h"
 
+ConnectionInfo info;
+
 extern "C" {
 VirtualMachineManager *VirtualMachineManager_Create() {
     return new VirtualMachineManager();
@@ -16,6 +18,10 @@ void VirtualMachineManager_InitializeConnection(VirtualMachineManager *manager, 
         customConnectionUri == nullptr
             ? std::nullopt
             : std::make_optional(std::string(customConnectionUri)));
+}
+
+void VirtualMachineManager_GetConnectionInfo(VirtualMachineManager *manager, ConnectionInfo *infoPtr) {
+    *infoPtr = manager->getConnectionInfo();
 }
 
 char *VirtualMachineManager_CreateVirtualMachine(const char *virtualMachineXml);

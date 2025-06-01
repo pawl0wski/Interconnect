@@ -1,4 +1,4 @@
-﻿namespace NativeLibrary
+﻿namespace Library
 {
     internal class Constants
     {

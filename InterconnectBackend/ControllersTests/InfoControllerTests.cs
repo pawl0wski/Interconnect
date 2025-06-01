@@ -26,7 +26,7 @@ namespace ControllersTests
         }
 
         [Test]
-        public void InfoController_GetSystemInfo_ShouldReturnSystemInfo()
+        public void GetSystemInfo_Invoke_ShouldReturnSystemInfo()
         {
             var result = _controller.GetSystemInfo().Result;
 

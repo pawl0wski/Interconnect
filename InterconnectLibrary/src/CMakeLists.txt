@@ -2,16 +2,20 @@ set(SOURCE_FILES
         VirtualMachineManager.cpp
         LibvirtWrapper.cpp
         InterconnectLibraryExtern.cpp
+        utils/VersionUtils.cpp
+        utils/StringUtils.cpp
 )
 
 set(HEADER_FILES
-        exceptions/ConnectionToVMBackendFailed.h
-        exceptions/NoActiveVMBackendConnection.h
-        exceptions/CreateVirtualMachineFailed.h
         interfaces/ILibvirtWrapper.h
         LibvirtWrapper.h
         VirtualMachineManager.h
         models/VirtualMachineInfo.h
+        models/Version.h
+        models/ConnectionInfo.h
+        exceptions/VirtualMachineManagerException.h
+        utils/VersionUtils.h
+        utils/StringUtils.h
 )
 
 set(EXTERN_FILES

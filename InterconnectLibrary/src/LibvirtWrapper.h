@@ -34,6 +34,16 @@ public:
      * @param uuid A buffer to store the resulting UUID string.
      */
     void getUuidFromDomain(virDomainPtr domain, char *uuid) override;
+
+    int getNodeInfo(virConnectPtr conn, virNodeInfoPtr info) override;
+
+    int getLibVersion(virConnectPtr conn, unsigned long * libVersion) override;
+
+    int getDriverVersion(virConnectPtr conn, unsigned long * version) override;
+
+    std::string getConnectUrl(virConnectPtr conn) override;
+
+    std::string getDriverType(virConnectPtr conn) override;
 };
 
 

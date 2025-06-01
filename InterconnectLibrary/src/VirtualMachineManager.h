@@ -6,6 +6,7 @@
 
 #include "LibvirtWrapper.h"
 #include "interfaces/ILibvirtWrapper.h"
+#include "models/ConnectionInfo.h"
 #include "models/VirtualMachineInfo.h"
 
 /**
@@ -16,7 +17,7 @@
  * and retrieving information.
  */
 class VirtualMachineManager {
-    virConnectPtr connectPtr = nullptr; ///< Pointer to the active libvirt connection
+    virConnectPtr conn = nullptr; ///< Pointer to the active libvirt connection
     ILibvirtWrapper *libvirt; ///< Reference to the libvirt wrapper interface
 
 public:
@@ -40,6 +41,8 @@ public:
      *                           If not provided, default connection is used.
      */
     void initializeConnection(const std::optional<std::string> &customConnectionUrl = std::nullopt);
+
+    ConnectionInfo getConnectionInfo() const;
 
     /**
      * @brief Creates a virtual machine based on an XML configuration.

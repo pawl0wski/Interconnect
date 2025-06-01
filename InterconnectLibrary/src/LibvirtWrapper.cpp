@@ -11,3 +11,23 @@ virDomainPtr LibvirtWrapper::createVirtualMachineFromXml(const virConnectPtr con
 void LibvirtWrapper::getUuidFromDomain(const virDomainPtr domain, char *uuid) {
     virDomainGetUUIDString(domain, uuid);
 }
+
+int LibvirtWrapper::getNodeInfo(const virConnectPtr conn, const virNodeInfoPtr info) {
+    return virNodeGetInfo(conn, info);
+}
+
+int LibvirtWrapper::getLibVersion(const virConnectPtr conn, unsigned long *libVersion) {
+    return virConnectGetLibVersion(conn, libVersion);
+}
+
+int LibvirtWrapper::getDriverVersion(virConnectPtr conn, unsigned long *version) {
+    return virConnectGetVersion(conn, version);
+}
+
+std::string LibvirtWrapper::getConnectUrl(virConnectPtr conn) {
+    return virConnectGetURI(conn);
+}
+
+std::string LibvirtWrapper::getDriverType(virConnectPtr conn) {
+    return virConnectGetType(conn);
+}

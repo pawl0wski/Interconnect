@@ -8,6 +8,8 @@ add_executable(
         interconnect_unit_tests
         VirtualMachineManager.cpp
         mocks/VirtualMachineManagerMockGetInfoAboutVirtualMachine.h
+        VersionUtils.cpp
+        StringUtils.cpp
 )
 
 # Include Interconnect library
