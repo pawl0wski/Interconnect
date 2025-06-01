@@ -1,4 +1,8 @@
 ﻿namespace Models
 {
-    public record InformationModel(string OsDescription, string OsArch);
+    public class InformationModel
+    {
+        public string OsDescription { get; set; } 
+        public string OsArch { get; set; }
+    }
 }

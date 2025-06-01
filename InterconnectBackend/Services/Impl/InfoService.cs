@@ -5,9 +5,13 @@ namespace Services.Impl
 {
     public class InfoService : IInfoService
     {
-        InformationModel IInfoService.GetInformation()
+        InformationModel IInfoService.GetSystemInfo()
         {
-            return new(RuntimeInformation.OSDescription, RuntimeInformation.OSArchitecture.ToString());
+            return new InformationModel
+            {
+                OsDescription = RuntimeInformation.OSDescription,
+                OsArch = RuntimeInformation.OSArchitecture.ToString(),
+            };
         }
     }
 }

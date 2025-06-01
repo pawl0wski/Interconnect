@@ -13,7 +13,7 @@ protected:
     VirtualMachineManager manager;
 
     VirtualMachineManagerTest()
-        : manager(mockLibvirt) {
+        : manager(&mockLibvirt) {
     }
 };
 
@@ -56,7 +56,7 @@ TEST_F(VirtualMachineManagerTest,
 }
 
 TEST_F(VirtualMachineManagerTest, createVirtualMachine_WhenVirtualMachineCreated_ShouldCallForVirtualMachineInfo) {
-    VirtualMachineManagerMockGetInfoAboutVirtualMachine customManager(mockLibvirt);
+    VirtualMachineManagerMockGetInfoAboutVirtualMachine customManager(&mockLibvirt);
 
     EXPECT_CALL(mockLibvirt, connectOpen(testing::_))
             .WillOnce(testing::Return(reinterpret_cast<virConnectPtr>(0x1234)));

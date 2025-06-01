@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services;
+using Models.Responses;
 
 namespace Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    public class InfoController : ControllerBase
+    public sealed class InfoController : ControllerBase
     {
         private IInfoService _infoService;
 
@@ -15,9 +16,14 @@ namespace Controllers
         }
 
         [HttpGet]
-        public ActionResult<String> GetVersion()
+        public ActionResult<SystemInfoResponse> GetSystemInfo()
         {
-            return Ok(_infoService.GetInformation());
+            var info = _infoService.GetSystemInfo();
+
+            return Ok(new SystemInfoResponse {
+                Os = info.OsDescription,
+                Arch = info.OsArch
+            });
         }
     }
 }

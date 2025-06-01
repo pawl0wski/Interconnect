@@ -4,6 +4,7 @@
 #include <string>
 #include <libvirt/libvirt.h>
 
+#include "LibvirtWrapper.h"
 #include "interfaces/ILibvirtWrapper.h"
 #include "models/VirtualMachineInfo.h"
 
@@ -16,7 +17,7 @@
  */
 class VirtualMachineManager {
     virConnectPtr connectPtr = nullptr; ///< Pointer to the active libvirt connection
-    ILibvirtWrapper &libvirt; ///< Reference to the libvirt wrapper interface
+    ILibvirtWrapper *libvirt; ///< Reference to the libvirt wrapper interface
 
 public:
     virtual ~VirtualMachineManager() = default;
@@ -24,17 +25,21 @@ public:
     /**
      * @param libvirt Reference to an ILibvirtWrapper implementation.
      */
-    explicit VirtualMachineManager(ILibvirtWrapper &libvirt)
+    explicit VirtualMachineManager(ILibvirtWrapper *libvirt)
         : libvirt(libvirt) {
+    }
+
+    explicit VirtualMachineManager() {
+        libvirt = new LibvirtWrapper();
     }
 
     /**
      * @brief Initializes the connection to the libvirt backend.
      *
-     * @param customConnectionUri Optional URI for a custom hypervisor connection.
+     * @param customConnectionUrl Optional URL for a custom hypervisor connection.
      *                           If not provided, default connection is used.
      */
-    void initializeConnection(const std::optional<std::string> &customConnectionUri = std::nullopt);
+    void initializeConnection(const std::optional<std::string> &customConnectionUrl = std::nullopt);
 
     /**
      * @brief Creates a virtual machine based on an XML configuration.

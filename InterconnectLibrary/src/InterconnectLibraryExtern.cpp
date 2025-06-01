@@ -1,18 +1,26 @@
 #ifndef INTERCONNECTLIBRARYEXTERN_H
 #define INTERCONNECTLIBRARYEXTERN_H
+#include "VirtualMachineManager.h"
 
 extern "C" {
-typedef struct VirtualMachineManager VirtualMachineManager;
+VirtualMachineManager *VirtualMachineManager_Create() {
+    return new VirtualMachineManager();
+}
 
-VirtualMachineManager *VirtualMachineManager_Create(void *libvirtWrapper);
+void VirtualMachineManager_Destroy(const VirtualMachineManager *manager) {
+    delete manager;
+}
 
-void VirtualMachineManager_Destroy(VirtualMachineManager *manager);
+void VirtualMachineManager_InitializeConnection(VirtualMachineManager *manager, const char *customConnectionUri) {
+    manager->initializeConnection(
+        customConnectionUri == nullptr
+            ? std::nullopt
+            : std::make_optional(std::string(customConnectionUri)));
+}
 
-void VirtualMachineManager_InitializeConnection(VirtualMachineManager *manager, const char *customConnectionUri);
+char *VirtualMachineManager_CreateVirtualMachine(const char *virtualMachineXml);
 
-char *VirtualMachineManager_CreateVirtualMachine(VirtualMachineManager *manager, const char *virtualMachineXml);
-
-char *VirtualMachineManager_GetInfoAboutVirtualMachine(VirtualMachineManager *manager, const char *uuid);
+char *VirtualMachineManager_GetInfoAboutVirtualMachine(const char *uuid);
 }
 
 #endif // INTERCONNECTLIBRARYEXTERN_H

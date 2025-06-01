@@ -8,11 +8,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServicesTests", "ServicesTe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interconnect", "Interconnect\Interconnect.csproj", "{18F885BD-0E58-4D74-A21E-218D65B06D3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeLibrary", "NativeLibrary\NativeLibrary.csproj", "{10113034-20D2-4BEC-A8A0-6BC6ED7EAC6B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library", "NativeLibrary\Library.csproj", "{10113034-20D2-4BEC-A8A0-6BC6ED7EAC6B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controllers", "Controllers\Controllers.csproj", "{D62964F6-B91D-4605-8DF9-52461372D5EF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{1C391705-47BD-42C3-AB79-2DD204737020}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControllersTests", "ControllersTests\ControllersTests.csproj", "{76842BF4-B79E-48E7-A05B-DA8E8A7AE3AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +46,10 @@ Global
 		{1C391705-47BD-42C3-AB79-2DD204737020}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C391705-47BD-42C3-AB79-2DD204737020}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C391705-47BD-42C3-AB79-2DD204737020}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76842BF4-B79E-48E7-A05B-DA8E8A7AE3AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76842BF4-B79E-48E7-A05B-DA8E8A7AE3AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76842BF4-B79E-48E7-A05B-DA8E8A7AE3AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76842BF4-B79E-48E7-A05B-DA8E8A7AE3AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

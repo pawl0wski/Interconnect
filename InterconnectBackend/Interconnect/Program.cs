@@ -1,4 +1,6 @@
 
+using Library.Wrappers;
+using Library.Wrappers.Impl;
 using Services;
 using Services.Impl;
 
@@ -13,6 +15,7 @@ namespace FrontHostApi
             // Add services to the container.
 
             builder.Services.AddSingleton<IInfoService, InfoService>();
+            builder.Services.AddSingleton<IVirtualMachineManagerWrapper, VirtualMachineManagerWrapper>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

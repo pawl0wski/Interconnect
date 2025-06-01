@@ -6,7 +6,7 @@
 
 class VirtualMachineManagerMockGetInfoAboutVirtualMachine final : public VirtualMachineManager {
 public:
-    explicit VirtualMachineManagerMockGetInfoAboutVirtualMachine(ILibvirtWrapper &libvirt)
+    explicit VirtualMachineManagerMockGetInfoAboutVirtualMachine(ILibvirtWrapper *libvirt)
         : VirtualMachineManager(libvirt) {
     }
 

@@ -29,6 +29,10 @@ add_library(interconnect_shared SHARED
         ${EXTERN_FILES}
 )
 
+target_link_libraries(interconnect_shared
+        ${LIBVIRT_LIBRARIES}
+)
+
 target_include_directories(interconnect PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
 )

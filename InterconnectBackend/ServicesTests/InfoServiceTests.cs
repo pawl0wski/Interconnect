@@ -17,7 +17,7 @@ namespace ServicesTests
         [Test]
         public void GetOperatingSystem_Invoke_ShouldReturnOperatingSystem()
         {
-            var info = _infoService.GetInformation();
+            var info = _infoService.GetSystemInfo();
 
             Assert.That(info.OsDescription, Is.EqualTo(RuntimeInformation.OSDescription));
             Assert.That(info.OsArch, Is.EqualTo(RuntimeInformation.OSArchitecture.ToString()));
