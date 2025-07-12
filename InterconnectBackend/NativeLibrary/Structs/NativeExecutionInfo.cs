@@ -1,9 +1,9 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Library.Models
+namespace NativeLibrary.Structs
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
-    public struct ExecutionInfo
+    public struct NativeExecutionInfo
     {
         [MarshalAs(UnmanagedType.I1)]
         public bool ErrorOccurred;

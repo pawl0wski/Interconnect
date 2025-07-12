@@ -1,5 +1,6 @@
-﻿using Library.Models;
-using Library.Wrappers;
+﻿using Models;
+using Models.Mappers;
+using NativeLibrary.Wrappers;
 
 namespace Services.Impl
 {
@@ -14,7 +15,9 @@ namespace Services.Impl
         }
         public ConnectionInfo GetConnectionInfo()
         {
-            return _vmManager.GetConnectionInfo();
+            var nativeConnectionInfo = _vmManager.GetConnectionInfo();
+            
+            return NativeConnectionInfoToConnectionInfoMapper.Map(nativeConnectionInfo);
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using Library.Interop;
-using Library.Models;
+﻿using NativeLibrary.Interop;
+using NativeLibrary.Structs;
 
-namespace Library.Wrappers.Impl
+namespace NativeLibrary.Wrappers.Impl
 {
     public class VirtualMachineManagerWrapper : IVirtualMachineManagerWrapper
     {
@@ -13,16 +13,16 @@ namespace Library.Wrappers.Impl
         }
         public void InitializeConnection(string? connectionUrl)
         {
-            ExecutionInfo exception = new();
+            NativeExecutionInfo exception = new();
 
             InteropVirtualMachineManager.VirtualMachineManager_InitializeConnection(ref exception, _manager, connectionUrl);
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(exception);
         }
-        public ConnectionInfo GetConnectionInfo()
+        public NativeConnectionInfo GetConnectionInfo()
         {
-            ExecutionInfo exception = new();
-            ConnectionInfo info = new();
+            NativeExecutionInfo exception = new();
+            NativeConnectionInfo info = new();
 
             InteropVirtualMachineManager.VirtualMachineManager_GetConnectionInfo(ref exception, _manager, ref info);
 

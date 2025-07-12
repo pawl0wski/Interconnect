@@ -1,11 +1,10 @@
-﻿
-using Library.Models;
+﻿using NativeLibrary.Structs;
 
-namespace Library.Wrappers
+namespace NativeLibrary.Wrappers
 {
     public interface IVirtualMachineManagerWrapper
     {
         public void InitializeConnection(string? connectionUrl);
-        public ConnectionInfo GetConnectionInfo();
+        public NativeConnectionInfo GetConnectionInfo();
     }
 }

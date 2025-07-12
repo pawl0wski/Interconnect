@@ -1,8 +1,8 @@
-﻿using Library.Wrappers;
-using Library.Wrappers.Impl;
+﻿using NativeLibrary.Wrappers;
+using NativeLibrary.Wrappers.Impl;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Library
+namespace NativeLibrary
 {
     public static class LibraryInitializer
     {

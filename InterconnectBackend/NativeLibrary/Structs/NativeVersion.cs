@@ -1,9 +1,9 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Library.Models
+namespace NativeLibrary.Structs
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public record Version
+    public record NativeVersion
     {
         public uint Minor;
         public uint Major;

@@ -1,6 +1,6 @@
-﻿namespace Models.Responses
+﻿namespace Models
 {
-    public class ConnectionInfoResponse
+    public class ConnectionInfo
     {
         public uint CpuCount { get; set; }
         public uint CpuFreq { get; set; }

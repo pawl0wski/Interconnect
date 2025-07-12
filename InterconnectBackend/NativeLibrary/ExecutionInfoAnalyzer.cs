@@ -1,10 +1,10 @@
-﻿using Library.Models;
+﻿using NativeLibrary.Structs;
 
-namespace Library
+namespace NativeLibrary
 {
     public static class ExecutionInfoAnalyzer
     {
-        public static void ThrowIfErrorOccurred(ExecutionInfo executionInfo)
+        public static void ThrowIfErrorOccurred(NativeExecutionInfo executionInfo)
         {
             if (executionInfo.ErrorOccurred)
             {

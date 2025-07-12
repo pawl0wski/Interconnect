@@ -11,8 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Mappers\Mappers.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
-    <ProjectReference Include="..\NativeLibrary\Library.csproj" />
+    <ProjectReference Include="..\NativeLibrary\NativeLibrary.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,12 +1,12 @@
-﻿using Library.Models;
-using Models.Responses;
+﻿using NativeLibrary.Structs;
 
-namespace Mappers
+namespace Models.Mappers
 {
-    public static class ConnectionInfoToConnectionInfoResponse
+    public static class NativeConnectionInfoToConnectionInfoMapper
     {
-        public static ConnectionInfoResponse Map(ConnectionInfo info)
-            => new()
+        public static ConnectionInfo Map(NativeConnectionInfo info)
+        {
+            return new ConnectionInfo
             {
                 CpuCount = info.CpuCount,
                 CpuFreq = info.CpuFreq,
@@ -16,5 +16,6 @@ namespace Mappers
                 LibVersion = info.LibVersion.ToString(),
                 DriverVersion = info.DriverVersion.ToString()
             };
+        }
     }
 }

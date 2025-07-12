@@ -1,5 +1,5 @@
-﻿using Mappers;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Models;
 using Models.Requests;
 using Models.Responses;
 using Services;
@@ -26,13 +26,11 @@ namespace Controllers
         }
 
         [HttpGet]
-        public ActionResult<BaseResponse<ConnectionInfoResponse>> ConnectionInfo()
+        public ActionResult<BaseResponse<ConnectionInfo>> ConnectionInfo()
         {
             var connectionInfo = _vmManagerService.GetConnectionInfo();
 
-            var connectionInfoResponse = ConnectionInfoToConnectionInfoResponse.Map(connectionInfo);
-
-            return Ok(BaseResponse<ConnectionInfoResponse>.WithSuccess(connectionInfoResponse));
+            return Ok(BaseResponse<ConnectionInfo>.WithSuccess(connectionInfo));
         }
     }
 }
