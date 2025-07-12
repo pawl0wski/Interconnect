@@ -1,6 +1,4 @@
-﻿using LibVersion = Models.Version;
-using DriverVersion = Models.Version;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace Library.Models
 {
@@ -14,7 +12,7 @@ namespace Library.Models
         public string ConnectionUrl;
         [MarshalAs(UnmanagedType.LPStr)]
         public string DriverType;
-        public LibVersion LibVersion;
-        public DriverVersion DriverVersion;
+        public Version LibVersion;
+        public Version DriverVersion;
     }
 }

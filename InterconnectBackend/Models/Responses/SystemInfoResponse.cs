@@ -2,7 +2,7 @@
 {
     public class SystemInfoResponse
     {
-        public string Os { get; set; }
-        public string Arch { get; set; }
+        public required string Os { get; set; }
+        public required string Arch { get; set; }
     }
 }

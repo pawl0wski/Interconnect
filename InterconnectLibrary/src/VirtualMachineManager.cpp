@@ -1,5 +1,7 @@
 #include "VirtualMachineManager.h"
 
+#include <stdexcept>
+
 #include "exceptions/VirtualMachineManagerException.h"
 #include "utils/VersionUtils.h"
 #include "utils/StringUtils.h"
@@ -8,12 +10,17 @@ void VirtualMachineManager::initializeConnection(const std::optional<std::string
     const auto connectionUri = customConnectionUrl.has_value() ? customConnectionUrl.value() : "qemu:///system";
 
     conn = libvirt->connectOpen(connectionUri.c_str());
-    if (!conn) {
+    if (conn == nullptr) {
         throw VirtualMachineManagerException("An error occurred while connecting to " + connectionUri);
     }
 }
 
 ConnectionInfo VirtualMachineManager::getConnectionInfo() const {
+    if (conn == nullptr)
+    {
+        throw VirtualMachineManagerException("No connected to any hypervisor");
+    }
+
     virNodeInfo info;
     unsigned long libVersion;
     unsigned long driverVersion;

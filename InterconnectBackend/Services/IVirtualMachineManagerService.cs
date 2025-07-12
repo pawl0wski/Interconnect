@@ -4,7 +4,7 @@ namespace Services
 {
     public interface IVirtualMachineManagerService
     {
-        public void InitializeConnection();
+        public void InitializeConnection(string? connectionUrl);
         public ConnectionInfo GetConnectionInfo();
     }
 }

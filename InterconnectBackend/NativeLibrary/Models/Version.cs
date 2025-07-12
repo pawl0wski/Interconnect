@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Models
+namespace Library.Models
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public record Version

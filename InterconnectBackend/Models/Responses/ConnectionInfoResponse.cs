@@ -5,9 +5,9 @@
         public uint CpuCount { get; set; }
         public uint CpuFreq { get; set; }
         public long TotalMemory { get; set; }
-        public string ConnectionUrl { get; set; }
-        public string DriverType { get; set; }
-        public string LibVersion { get; set; }
-        public string DriverVersion { get; set; }
+        public required string ConnectionUrl { get; set; }
+        public required string DriverType { get; set; }
+        public required string LibVersion { get; set; }
+        public required string DriverVersion { get; set; }
     }
 }

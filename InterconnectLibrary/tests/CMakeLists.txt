@@ -4,18 +4,33 @@ enable_testing()
 
 find_package(GTest REQUIRED)
 
+set(TEST_FILES
+        VirtualMachineManagerTests.cpp
+        utils/VersionUtilsTests.cpp
+        utils/StringUtilsTests.cpp
+        utils/ExecutionInfoObtainerTests.cpp
+)
+
+set(MOCK_FILES
+        mocks/VirtualMachineManagerMockGetInfoAboutVirtualMachine.h
+        mocks/LibvirtWrapperMock.h
+)
+
+set(UTIL_FILES
+        TestingUtils.cpp
+        TestingUtils.h
+)
+
 add_executable(
         interconnect_unit_tests
-        VirtualMachineManager.cpp
-        mocks/VirtualMachineManagerMockGetInfoAboutVirtualMachine.h
-        VersionUtils.cpp
-        StringUtils.cpp
+        ${UTIL_FILES}
+        ${MOCK_FILES}
+        ${TEST_FILES}
 )
 
 # Include Interconnect library
 target_link_libraries(
-        interconnect_unit_tests
-        interconnect
+        interconnect_unit_tests interconnect
 )
 
 target_link_libraries(

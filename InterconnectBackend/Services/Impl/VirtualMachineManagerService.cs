@@ -8,9 +8,13 @@ namespace Services.Impl
         private readonly IVirtualMachineManagerWrapper _vmManager;
 
         public VirtualMachineManagerService(IVirtualMachineManagerWrapper vmManager) => _vmManager = vmManager;
-        public void InitializeConnection()
-            => _vmManager.InitializeConnection(null);
+        public void InitializeConnection(string? connectionUrl)
+        {
+            _vmManager.InitializeConnection(connectionUrl ?? "qemu:///session");
+        }
         public ConnectionInfo GetConnectionInfo()
-            => _vmManager.GetConnectionInfo();
+        {
+            return _vmManager.GetConnectionInfo();
+        }
     }
 }

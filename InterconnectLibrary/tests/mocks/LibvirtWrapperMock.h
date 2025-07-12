@@ -3,7 +3,7 @@
 #include <gmock/gmock.h>
 #include "interfaces/ILibvirtWrapper.h"
 
-class LibvirtWrapperMockTests : public ILibvirtWrapper {
+class LibvirtWrapperMock : public ILibvirtWrapper {
 public:
     MOCK_METHOD(virConnectPtr, connectOpen, (const char *name), (override));
     MOCK_METHOD(virDomainPtr, createVirtualMachineFromXml, (virConnectPtr conn, const char *xmlConfig), (override));

@@ -1,6 +1,6 @@
-﻿using Library.Models;
-using Mappers;
+﻿using Mappers;
 using Microsoft.AspNetCore.Mvc;
+using Models.Requests;
 using Models.Responses;
 using Services;
 
@@ -17,20 +17,22 @@ namespace Controllers
             _vmManagerService = vmManagerService;
         }
 
-        [HttpGet]
-        public ActionResult InitializeConnection()
+        [HttpPost]
+        public ActionResult<BaseResponse<object>> InitializeConnection(InitializeConnectionRequest req)
         {
-            _vmManagerService.InitializeConnection();
+            _vmManagerService.InitializeConnection(req.ConnectionUrl);
 
-            return Ok();
+            return Ok(BaseResponse<object>.WithEmptyBaseResponse());
         }
 
         [HttpGet]
-        public ActionResult<ConnectionInfoResponse> ConnectionInfo()
+        public ActionResult<BaseResponse<ConnectionInfoResponse>> ConnectionInfo()
         {
             var connectionInfo = _vmManagerService.GetConnectionInfo();
 
-            return Ok(ConnectionInfoToConnectionInfoResponse.Map(connectionInfo));
+            var connectionInfoResponse = ConnectionInfoToConnectionInfoResponse.Map(connectionInfo);
+
+            return Ok(BaseResponse<ConnectionInfoResponse>.WithSuccess(connectionInfoResponse));
         }
     }
 }

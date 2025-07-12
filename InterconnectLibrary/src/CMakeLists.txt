@@ -4,6 +4,7 @@ set(SOURCE_FILES
         InterconnectLibraryExtern.cpp
         utils/VersionUtils.cpp
         utils/StringUtils.cpp
+        utils/ExecutionInfoObtainer.cpp
 )
 
 set(HEADER_FILES
@@ -13,9 +14,11 @@ set(HEADER_FILES
         models/VirtualMachineInfo.h
         models/Version.h
         models/ConnectionInfo.h
+        models/ExecutionInfo.h
         exceptions/VirtualMachineManagerException.h
         utils/VersionUtils.h
         utils/StringUtils.h
+        utils/ExecutionInfoObtainer.h
 )
 
 set(EXTERN_FILES

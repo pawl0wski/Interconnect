@@ -1,8 +1,9 @@
 
 using Library;
 using Services;
+using Interconnect.Middlewares;
 
-namespace FrontHostApi
+namespace Interconnect
 {
     public class Program
     {
@@ -27,6 +28,8 @@ namespace FrontHostApi
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseExceptionMiddleware();
 
             app.UseHttpsRedirection();
 

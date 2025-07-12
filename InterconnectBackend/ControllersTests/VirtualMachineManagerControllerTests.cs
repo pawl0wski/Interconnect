@@ -1,5 +1,6 @@
 ﻿using Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Models.Requests;
 using Models.Responses;
 using Moq;
 using Services;
@@ -8,7 +9,7 @@ namespace ControllersTests
 {
     class VirtualMachineManagerControllerTests
     {
-        private Mock<IVirtualMachineManagerService> _mockManagerService; 
+        private Mock<IVirtualMachineManagerService> _mockManagerService;
         private VirtualMachineManagerController _controller;
 
         [SetUp]
@@ -22,10 +23,12 @@ namespace ControllersTests
         [Test]
         public void InitializeConnection_Invoke_ShouldCallForConnectionInitialize()
         {
-            var result = _controller.InitializeConnection();
+            var response = _controller.InitializeConnection(new InitializeConnectionRequest { ConnectionUrl = null });
+            var baseResponse = ((OkObjectResult)response.Result).Value as BaseResponse<object>;
 
-            Assert.That(result, Is.InstanceOf<OkResult>());
-            _mockManagerService.Verify(s => s.InitializeConnection(), Times.Once());
+            Assert.That(baseResponse?.Success, Is.True);
+            Assert.That(baseResponse?.ErrorMessage, Is.Null);
+            _mockManagerService.Verify(s => s.InitializeConnection(null), Times.Once());
         }
     }
 }
