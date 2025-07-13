@@ -1,10 +1,11 @@
 #ifndef STRINGTOCHARUTILS_H
 #define STRINGTOCHARUTILS_H
-#include <string_view>
+#include <string>
 
-class StringUtils {
+class StringUtils
+{
 public:
-    static const char *toConstCharPointer(const std::string &in);
+    static void copyStringToCharArray(const std::string& src, char* charArray, int length);
 };
 
 

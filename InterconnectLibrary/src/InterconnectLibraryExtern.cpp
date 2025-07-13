@@ -41,9 +41,23 @@ void VirtualMachineManager_GetConnectionInfo(ExecutionInfo* executionInfo, Virtu
     });
 }
 
-char* VirtualMachineManager_CreateVirtualMachine(const char* virtualMachineXml);
+void VirtualMachineManager_CreateVirtualMachine(ExecutionInfo* executionInfo, VirtualMachineManager* manager,
+                                                const char* virtualMachineXml)
+{
+    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [manager, virtualMachineXml]
+    {
+        manager->createVirtualMachine(virtualMachineXml);
+    });
+}
 
-char* VirtualMachineManager_GetInfoAboutVirtualMachine(const char* uuid);
+void VirtualMachineManager_GetInfoAboutVirtualMachine(ExecutionInfo* executionInfo, VirtualMachineManager* manager,
+                                                      const char* name, VirtualMachineInfo* vmInfo)
+{
+    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [manager, name, vmInfo]
+    {
+        *vmInfo = manager->getInfoAboutVirtualMachine(name);
+    });
+}
 }
 
 #endif // INTERCONNECTLIBRARYEXTERN_H

@@ -3,7 +3,8 @@
 #include <gmock/gmock.h>
 #include "interfaces/ILibvirtWrapper.h"
 
-class LibvirtWrapperMock : public ILibvirtWrapper {
+class LibvirtWrapperMock : public ILibvirtWrapper
+{
 public:
     MOCK_METHOD(virConnectPtr, connectOpen, (const char *name), (override));
     MOCK_METHOD(virDomainPtr, createVirtualMachineFromXml, (virConnectPtr conn, const char *xmlConfig), (override));
@@ -13,6 +14,10 @@ public:
     MOCK_METHOD(int, getDriverVersion, (virConnectPtr conn, unsigned long *version), (override));
     MOCK_METHOD(std::string, getConnectUrl, (virConnectPtr conn), (override));
     MOCK_METHOD(std::string, getDriverType, (virConnectPtr conn), (override));
+    MOCK_METHOD(std::string, getLastError, (), (override));
+    MOCK_METHOD(virDomainPtr, domainLookupByName, (virConnectPtr conn, std::string name), (override));
+    MOCK_METHOD(int, domainGetInfo, (virDomainPtr domain, virDomainInfo& domainInfo), (override));
+    MOCK_METHOD(int, getDomainUUID, (virDomainPtr domain, std::string& uuid), (override));
 };
 
 

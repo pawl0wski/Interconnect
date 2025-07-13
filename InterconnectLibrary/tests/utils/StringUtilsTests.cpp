@@ -7,9 +7,12 @@ protected:
     StringUtilsTests() = default;
 };
 
-TEST_F(StringUtilsTests, toConstCharPointer_WhenInvoked_ShouldReturnStringConstCharPtr)
+TEST_F(StringUtilsTests, copyStringToCharArray_WhenInvoked_ShouldCopyStringToCharArray)
 {
-    const auto ccStr = StringUtils::toConstCharPointer("Test TEST test");
+    const std::string source = "test string";
+    char dest[64];
 
-    EXPECT_STREQ(ccStr, "Test TEST test");
+    StringUtils::copyStringToCharArray(source, dest, sizeof(dest));
+
+    EXPECT_STREQ(dest, "test string");
 }

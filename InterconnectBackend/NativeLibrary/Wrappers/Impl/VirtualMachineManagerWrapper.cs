@@ -13,22 +13,42 @@ namespace NativeLibrary.Wrappers.Impl
         }
         public void InitializeConnection(string? connectionUrl)
         {
-            NativeExecutionInfo exception = new();
+            NativeExecutionInfo executionInfo = new();
 
-            InteropVirtualMachineManager.VirtualMachineManager_InitializeConnection(ref exception, _manager, connectionUrl);
+            InteropVirtualMachineManager.VirtualMachineManager_InitializeConnection(ref executionInfo, _manager, connectionUrl);
 
-            ExecutionInfoAnalyzer.ThrowIfErrorOccurred(exception);
+            ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
         }
         public NativeConnectionInfo GetConnectionInfo()
         {
-            NativeExecutionInfo exception = new();
+            NativeExecutionInfo executionInfo = new();
             NativeConnectionInfo info = new();
 
-            InteropVirtualMachineManager.VirtualMachineManager_GetConnectionInfo(ref exception, _manager, ref info);
+            InteropVirtualMachineManager.VirtualMachineManager_GetConnectionInfo(ref executionInfo, _manager, ref info);
 
-            ExecutionInfoAnalyzer.ThrowIfErrorOccurred(exception);
+            ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
             return info;
         }
 
+        public void CreateVirtualMachine(string xmlDefinition)
+        {
+            NativeExecutionInfo executionInfo = new();
+
+            InteropVirtualMachineManager.VirtualMachineManager_CreateVirtualMachine(ref executionInfo, _manager, xmlDefinition);
+
+            ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
+        }
+
+        public NativeVirtualMachineInfo GetVirtualMachineInfo(string name)
+        {
+            NativeExecutionInfo executionInfo = new();
+            NativeVirtualMachineInfo info = new();
+
+            InteropVirtualMachineManager.VirtualMachineManager_GetInfoAboutVirtualMachine(ref executionInfo, _manager, name, ref info);
+
+            ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
+
+            return info;
+        }
     }
 }

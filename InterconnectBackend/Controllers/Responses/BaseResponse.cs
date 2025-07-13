@@ -14,7 +14,7 @@
                 Data = data
             };
         }
-        public static BaseResponse<object> WithEmptyBaseResponse()
+        public static BaseResponse<object> WithEmptySuccess()
         {
             return new BaseResponse<object>
             {

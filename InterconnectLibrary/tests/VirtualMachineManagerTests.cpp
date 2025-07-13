@@ -44,7 +44,7 @@ TEST_F(VirtualMachineManagerTests, initializeConnection_WhenConnectionFails_Shou
     TestingUtils::expectThrowWithMessage([this]
     {
         manager.initializeConnection();
-    },  "An error occurred while connecting to qemu:///system");
+    }, "An error occurred while connecting to qemu:///system");
 }
 
 TEST_F(VirtualMachineManagerTests, createVirtualMachine_WhenNoBackendConnection_ShouldThrowNoActiveVMBackendConnection)
@@ -63,13 +63,14 @@ TEST_F(VirtualMachineManagerTests,
             .WillOnce(testing::Return(reinterpret_cast<virConnectPtr>(0x1234)));
     EXPECT_CALL(mockLibvirt, createVirtualMachineFromXml(testing::_, testing::_))
         .WillOnce(testing::Return(nullptr));
+    EXPECT_CALL(mockLibvirt, getLastError()).WillOnce(testing::Throw(std::runtime_error("MockLibVirtException")));
 
     manager.initializeConnection();
     TestingUtils::expectThrowWithMessage(
         [this]
         {
             manager.createVirtualMachine("<xml>test</xml>");
-        }, "Error while creating Virtual Machine");
+        }, "MockLibVirtException");
 }
 
 TEST_F(VirtualMachineManagerTests, createVirtualMachine_WhenVirtualMachineCreated_ShouldCallForVirtualMachineInfo)
@@ -80,17 +81,9 @@ TEST_F(VirtualMachineManagerTests, createVirtualMachine_WhenVirtualMachineCreate
             .WillOnce(testing::Return(reinterpret_cast<virConnectPtr>(0x1234)));
     EXPECT_CALL(mockLibvirt, createVirtualMachineFromXml(testing::_, testing::_))
         .WillOnce(testing::Return(reinterpret_cast<virDomainPtr>(0x1234)));
-    EXPECT_CALL(mockLibvirt, getUuidFromDomain(testing::_, testing::_)).WillOnce([&](virDomainPtr, char* uuid)
-    {
-        strcpy(uuid, "034e885e-780c-4e14-b83c-fab5f1f33b86");
-    });
-    EXPECT_CALL(customManager,
-                getInfoAboutVirtualMachine(testing::StrEq("034e885e-780c-4e14-b83c-fab5f1f33b86"))).Times(1).WillOnce(
-        testing::Return(VirtualMachineInfo{"034e885e-780c-4e14-b83c-fab5f1f33b86"}));
 
     customManager.initializeConnection();
-    const auto [uuid] = customManager.createVirtualMachine("<xml>test</xml>");
-    EXPECT_STREQ(uuid.c_str(), "034e885e-780c-4e14-b83c-fab5f1f33b86");
+    customManager.createVirtualMachine("<xml>test</xml>");
 }
 
 TEST_F(VirtualMachineManagerTests, getConnectionInfo_WhenInvoked_ShouldReturnConnectionInfo)
@@ -139,7 +132,7 @@ TEST_F(VirtualMachineManagerTests, getConnectionInfo_WhenInvoked_ShouldReturnCon
     EXPECT_THAT(info.driverVersion, ::testing::Field(&Version::patch, 152));
 }
 
-TEST_F(VirtualMachineManagerTests, getConnectionInfo_WhenGetNodeInfoFails_ShouldThrow)
+TEST_F(VirtualMachineManagerTests, getConnectionInfo_WhenGetNodeInfoFails_ShouldThrowException)
 {
     EXPECT_CALL(mockLibvirt, connectOpen(testing::StrEq("test:///testing"))).WillOnce(
         testing::Return(reinterpret_cast<virConnectPtr>(0x1234)));
@@ -155,7 +148,7 @@ TEST_F(VirtualMachineManagerTests, getConnectionInfo_WhenGetNodeInfoFails_Should
     }, "An error occurred while getting node information ");
 }
 
-TEST_F(VirtualMachineManagerTests, getConnectionInfo_WhenGetLibVersionFails_ShouldThrow)
+TEST_F(VirtualMachineManagerTests, getConnectionInfo_WhenGetLibVersionFails_ShouldThrowException)
 {
     virNodeInfo mockInfo{
         .memory = 500,
@@ -185,7 +178,7 @@ TEST_F(VirtualMachineManagerTests, getConnectionInfo_WhenGetLibVersionFails_Shou
         }, "Failed to get lib version");
 }
 
-TEST_F(VirtualMachineManagerTests, getConnectionInfo_WhenGetDriverVersionFails_ShouldThrow)
+TEST_F(VirtualMachineManagerTests, getConnectionInfo_WhenGetDriverVersionFails_ShouldThrowException)
 {
     virNodeInfo mockInfo{
         .memory = 500,
@@ -209,7 +202,7 @@ TEST_F(VirtualMachineManagerTests, getConnectionInfo_WhenGetDriverVersionFails_S
             *version = 3014159;
             return 0;
         });
-    EXPECT_CALL(mockLibvirt, getDriverVersion(testing::_, testing::_)).WillOnce(testing::Return(1)); // simulate failure
+    EXPECT_CALL(mockLibvirt, getDriverVersion(testing::_, testing::_)).WillOnce(testing::Return(1));
 
     manager.initializeConnection("test:///testing");
 
@@ -219,10 +212,79 @@ TEST_F(VirtualMachineManagerTests, getConnectionInfo_WhenGetDriverVersionFails_S
     }, "Failed to get driver version");
 }
 
-TEST_F(VirtualMachineManagerTests, getConnectionInfo_WhenNotConnected_ShouldThrow)
+TEST_F(VirtualMachineManagerTests, getConnectionInfo_WhenNotConnected_ShouldThrowException)
 {
     TestingUtils::expectThrowWithMessage([this]
     {
         manager.getConnectionInfo();
     }, "No connected to any hypervisor");
 }
+
+TEST_F(VirtualMachineManagerTests, getInfoAboutVirtualMachine_WhenVmNotExist_ShouldThrowException)
+{
+    EXPECT_CALL(mockLibvirt, connectOpen(testing::StrEq("test:///testing"))).WillOnce(
+        testing::Return(reinterpret_cast<virConnectPtr>(0x1234)));
+    EXPECT_CALL(mockLibvirt, domainLookupByName(testing::_, testing::_)).WillOnce(testing::Return(nullptr));
+
+    manager.initializeConnection("test:///testing");
+    TestingUtils::expectThrowWithMessage([this]
+    {
+        manager.getInfoAboutVirtualMachine("test");
+    }, "Error while obtaining pointer to virtual machine");
+}
+
+TEST_F(VirtualMachineManagerTests, getInfoAboutVirtualMachine_WhenVmExistButCantGetPointerToVmInfo_ShouldThrowException)
+{
+    EXPECT_CALL(mockLibvirt, connectOpen(testing::StrEq("test:///testing"))).WillOnce(
+        testing::Return(reinterpret_cast<virConnectPtr>(0x1234)));
+    EXPECT_CALL(mockLibvirt, domainLookupByName(testing::_, testing::_)).WillOnce(testing::Return(reinterpret_cast<virDomainPtr>(1)));
+    EXPECT_CALL(mockLibvirt, domainGetInfo(testing::_, testing::_)).WillOnce(testing::Return(1));
+
+    manager.initializeConnection("test:///testing");
+    TestingUtils::expectThrowWithMessage([this]
+    {
+        manager.getInfoAboutVirtualMachine("test");
+    }, "Virtual machine was found but error occurred while obtaining its info");
+}
+
+TEST_F(VirtualMachineManagerTests, getInfoAboutVirtualMachine_WhenVmExistButCantGetUuid_ShouldThrowException)
+{
+    EXPECT_CALL(mockLibvirt, connectOpen(testing::StrEq("test:///testing"))).WillOnce(
+        testing::Return(reinterpret_cast<virConnectPtr>(0x1234)));
+    EXPECT_CALL(mockLibvirt, domainLookupByName(testing::_, testing::_)).WillOnce(testing::Return(reinterpret_cast<virDomainPtr>(1)));
+    EXPECT_CALL(mockLibvirt, domainGetInfo(testing::_, testing::_)).WillOnce(testing::Return(0));
+    EXPECT_CALL(mockLibvirt, getDomainUUID(testing::_, testing::_)).WillOnce(testing::Return(1));
+
+    manager.initializeConnection("test:///testing");
+    TestingUtils::expectThrowWithMessage([this]
+    {
+        manager.getInfoAboutVirtualMachine("test");
+    }, "Virtual machine was found but error occurred while obtaining its uuid");
+}
+
+TEST_F(VirtualMachineManagerTests, getInfoAboutVirtualMachine_WhenVmExistAndSuccessfulyObtainedInfo_ShouldReturnInfo)
+{
+    EXPECT_CALL(mockLibvirt, connectOpen(testing::StrEq("test:///testing"))).WillOnce(
+        testing::Return(reinterpret_cast<virConnectPtr>(0x1234)));
+    EXPECT_CALL(mockLibvirt, domainLookupByName(testing::_, testing::_)).WillOnce(testing::Return(reinterpret_cast<virDomainPtr>(1)));
+    EXPECT_CALL(mockLibvirt, domainGetInfo(testing::_, testing::_)).WillOnce(testing::Invoke([](virDomainPtr _, virDomainInfo& domainInfo)
+    {
+        domainInfo.memory = 454;
+        domainInfo.state = 5;
+        return 0;
+    }));
+    EXPECT_CALL(mockLibvirt, getDomainUUID(testing::_, testing::_)).WillOnce(testing::Invoke([](virDomainPtr _, std::string& uuid)
+    {
+        uuid = "testUuid";
+        return 0;
+    }));
+
+    manager.initializeConnection("test:///testing");
+    auto info = manager.getInfoAboutVirtualMachine("test");
+
+    EXPECT_STREQ(info.uuid, "testUuid");
+    EXPECT_EQ(info.state, 5);
+    EXPECT_EQ(info.usedMemory, 454);
+}
+
+

@@ -6,5 +6,6 @@ namespace Services
     {
         public void InitializeConnection(string? connectionUrl);
         public ConnectionInfo GetConnectionInfo();
+        public VirtualMachineInfo CreateVirtualMachine(VirtualMachineCreateDefinition definition);
     }
 }

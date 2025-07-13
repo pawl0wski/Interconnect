@@ -5,7 +5,7 @@ namespace Services.Impl
 {
     public class InfoService : IInfoService
     {
-        InformationModel IInfoService.GetSystemInfo()
+        public InformationModel GetSystemInfo()
         {
             return new InformationModel
             {

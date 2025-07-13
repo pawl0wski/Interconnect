@@ -8,9 +8,9 @@ namespace NativeLibrary.Structs
         public uint CpuCount;
         public uint CpuFreq;
         public long TotalMemory;
-        [MarshalAs(UnmanagedType.LPStr)]
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)]
         public string ConnectionUrl;
-        [MarshalAs(UnmanagedType.LPStr)]
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)]
         public string DriverType;
         public NativeVersion LibVersion;
         public NativeVersion DriverVersion;

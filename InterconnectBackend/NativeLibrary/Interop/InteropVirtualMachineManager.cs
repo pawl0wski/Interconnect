@@ -10,12 +10,12 @@ namespace NativeLibrary.Interop
         [DllImport(Constants.LIBRARY_NAME)]
         public static extern void VirtualMachineManager_Destroy();
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern void VirtualMachineManager_InitializeConnection(ref NativeExecutionInfo exception, IntPtr manager, string? customConnectionUrl);
+        public static extern void VirtualMachineManager_InitializeConnection(ref NativeExecutionInfo executionInfo, IntPtr manager, string? customConnectionUrl);
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern void VirtualMachineManager_GetConnectionInfo(ref NativeExecutionInfo exception, IntPtr manager, ref NativeConnectionInfo info);
+        public static extern void VirtualMachineManager_GetConnectionInfo(ref NativeExecutionInfo executionInfo, IntPtr manager, ref NativeConnectionInfo info);
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern nint VirtualMachineManager_CreateVirtualMachine(string virtualMachineXml);
+        public static extern void VirtualMachineManager_CreateVirtualMachine(ref NativeExecutionInfo executionInfom, IntPtr manager, string virtualMachineXml);
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern nint VirtualMachineManager_GetInfoAboutVirtualMachine(string uuid);
+        public static extern void VirtualMachineManager_GetInfoAboutVirtualMachine(ref NativeExecutionInfo executionInfo, IntPtr manager, string name, ref NativeVirtualMachineInfo info);
     }
 }

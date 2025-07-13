@@ -48,17 +48,16 @@ public:
      * @brief Creates a virtual machine based on an XML configuration.
      *
      * @param virtualMachineXml XML string describing the virtual machine configuration.
-     * @return VirtualMachineInfo Information about the created virtual machine.
      */
-    VirtualMachineInfo createVirtualMachine(const std::string &virtualMachineXml);
+    void createVirtualMachine(const std::string &virtualMachineXml) const;
 
     /**
-     * @brief Retrieves information about a virtual machine identified by its UUID.
+     * @brief Retrieves information about a virtual machine identified by its name.
      *
-     * @param uuid UUID string of the virtual machine.
+     * @param name name string of the virtual machine.
      * @return VirtualMachineInfo Information about the virtual machine.
      */
-    virtual VirtualMachineInfo getInfoAboutVirtualMachine(const std::string &uuid);
+    virtual VirtualMachineInfo getInfoAboutVirtualMachine(const std::string &name);
 };
 
 #endif //VIRTUALMACHINEMANAGER_H

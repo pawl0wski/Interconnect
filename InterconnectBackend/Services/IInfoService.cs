@@ -4,6 +4,6 @@ namespace Services
 {
     public interface IInfoService
     {
-        InformationModel GetSystemInfo();
+        public InformationModel GetSystemInfo();
     }
 }
