@@ -22,7 +22,7 @@ namespace Controllers
         {
             _vmManagerService.InitializeConnection(req.ConnectionUrl);
 
-            return Ok(BaseResponse<object>.WithEmptyBaseResponse());
+            return Ok(BaseResponse<object>.WithEmptySuccess());
         }
 
         [HttpGet]
@@ -31,6 +31,14 @@ namespace Controllers
             var connectionInfo = _vmManagerService.GetConnectionInfo();
 
             return Ok(BaseResponse<ConnectionInfo>.WithSuccess(connectionInfo));
+        }
+
+        [HttpPost]
+        public ActionResult<BaseResponse<string>> CreateVirtualMachine(VirtualMachineCreateDefinition def)
+        {
+            _vmManagerService.CreateVirtualMachine(def);
+
+            return Ok(BaseResponse<string>.WithEmptySuccess());
         }
     }
 }

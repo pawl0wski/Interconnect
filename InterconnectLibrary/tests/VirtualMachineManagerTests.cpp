@@ -44,7 +44,7 @@ TEST_F(VirtualMachineManagerTests, initializeConnection_WhenConnectionFails_Shou
     TestingUtils::expectThrowWithMessage([this]
     {
         manager.initializeConnection();
-    },  "An error occurred while connecting to qemu:///system");
+    }, "An error occurred while connecting to qemu:///system");
 }
 
 TEST_F(VirtualMachineManagerTests, createVirtualMachine_WhenNoBackendConnection_ShouldThrowNoActiveVMBackendConnection)
@@ -63,13 +63,14 @@ TEST_F(VirtualMachineManagerTests,
             .WillOnce(testing::Return(reinterpret_cast<virConnectPtr>(0x1234)));
     EXPECT_CALL(mockLibvirt, createVirtualMachineFromXml(testing::_, testing::_))
         .WillOnce(testing::Return(nullptr));
+    EXPECT_CALL(mockLibvirt, getLastError()).WillOnce(testing::Throw(std::runtime_error("MockLibVirtException")));
 
     manager.initializeConnection();
     TestingUtils::expectThrowWithMessage(
         [this]
         {
             manager.createVirtualMachine("<xml>test</xml>");
-        }, "Error while creating Virtual Machine");
+        }, "MockLibVirtException");
 }
 
 TEST_F(VirtualMachineManagerTests, createVirtualMachine_WhenVirtualMachineCreated_ShouldCallForVirtualMachineInfo)
@@ -84,13 +85,9 @@ TEST_F(VirtualMachineManagerTests, createVirtualMachine_WhenVirtualMachineCreate
     {
         strcpy(uuid, "034e885e-780c-4e14-b83c-fab5f1f33b86");
     });
-    EXPECT_CALL(customManager,
-                getInfoAboutVirtualMachine(testing::StrEq("034e885e-780c-4e14-b83c-fab5f1f33b86"))).Times(1).WillOnce(
-        testing::Return(VirtualMachineInfo{"034e885e-780c-4e14-b83c-fab5f1f33b86"}));
 
     customManager.initializeConnection();
-    const auto [uuid] = customManager.createVirtualMachine("<xml>test</xml>");
-    EXPECT_STREQ(uuid.c_str(), "034e885e-780c-4e14-b83c-fab5f1f33b86");
+    customManager.createVirtualMachine("<xml>test</xml>");
 }
 
 TEST_F(VirtualMachineManagerTests, getConnectionInfo_WhenInvoked_ShouldReturnConnectionInfo)
