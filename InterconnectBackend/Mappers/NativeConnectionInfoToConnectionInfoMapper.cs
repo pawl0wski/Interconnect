@@ -1,6 +1,7 @@
-﻿using NativeLibrary.Structs;
+﻿using Models;
+using NativeLibrary.Structs;
 
-namespace Models.Mappers
+namespace Mappers
 {
     public static class NativeConnectionInfoToConnectionInfoMapper
     {

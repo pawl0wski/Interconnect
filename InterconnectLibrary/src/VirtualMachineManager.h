@@ -2,6 +2,7 @@
 #define VIRTUALMACHINEMANAGER_H
 #include <optional>
 #include <string>
+#include <vector>
 #include <libvirt/libvirt.h>
 
 #include "LibvirtWrapper.h"
@@ -16,9 +17,10 @@
  * and operations related to virtual machines such as creation
  * and retrieving information.
  */
-class VirtualMachineManager {
+class VirtualMachineManager
+{
     virConnectPtr conn = nullptr; ///< Pointer to the active libvirt connection
-    ILibvirtWrapper *libvirt; ///< Reference to the libvirt wrapper interface
+    ILibvirtWrapper* libvirt; ///< Reference to the libvirt wrapper interface
 
 public:
     virtual ~VirtualMachineManager() = default;
@@ -26,11 +28,13 @@ public:
     /**
      * @param libvirt Reference to an ILibvirtWrapper implementation.
      */
-    explicit VirtualMachineManager(ILibvirtWrapper *libvirt)
-        : libvirt(libvirt) {
+    explicit VirtualMachineManager(ILibvirtWrapper* libvirt)
+        : libvirt(libvirt)
+    {
     }
 
-    explicit VirtualMachineManager() {
+    explicit VirtualMachineManager()
+    {
         libvirt = new LibvirtWrapper();
     }
 
@@ -40,7 +44,7 @@ public:
      * @param customConnectionUrl Optional URL for a custom hypervisor connection.
      *                           If not provided, default connection is used.
      */
-    void initializeConnection(const std::optional<std::string> &customConnectionUrl = std::nullopt);
+    void initializeConnection(const std::optional<std::string>& customConnectionUrl = std::nullopt);
 
     ConnectionInfo getConnectionInfo() const;
 
@@ -49,7 +53,7 @@ public:
      *
      * @param virtualMachineXml XML string describing the virtual machine configuration.
      */
-    void createVirtualMachine(const std::string &virtualMachineXml) const;
+    void createVirtualMachine(const std::string& virtualMachineXml) const;
 
     /**
      * @brief Retrieves information about a virtual machine identified by its name.
@@ -57,7 +61,11 @@ public:
      * @param name name string of the virtual machine.
      * @return VirtualMachineInfo Information about the virtual machine.
      */
-    virtual VirtualMachineInfo getInfoAboutVirtualMachine(const std::string &name);
+    virtual VirtualMachineInfo getInfoAboutVirtualMachine(const std::string& name);
+
+    int getNumberOfVirtualMachines() const;
+
+    std::vector<VirtualMachineInfo> getListOfVirtualMachinesWithInfo();
 };
 
 #endif //VIRTUALMACHINEMANAGER_H

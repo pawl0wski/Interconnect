@@ -10,6 +10,7 @@ namespace Mappers
             return new VirtualMachineInfo
             {
                 Uuid = virtualMachineInfo.Uuid,
+                Name = virtualMachineInfo.Name,
                 UsedMemory = virtualMachineInfo.UsedMemory,
                 State = virtualMachineInfo.State,
             };

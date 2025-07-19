@@ -6,8 +6,8 @@ struct ConnectionInfo {
     unsigned int cpuCount;
     unsigned int cpuFreq;
     unsigned long totalMemory;
-    char connectionUrl[255];
-    char driverType[255];
+    char connectionUrl[256];
+    char driverType[256];
     Version libVersion;
     Version driverVersion;
 };

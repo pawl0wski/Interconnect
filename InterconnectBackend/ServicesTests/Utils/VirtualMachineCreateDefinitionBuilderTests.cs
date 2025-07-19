@@ -18,7 +18,7 @@ namespace ServicesTests.Utils
                 Memory = 1000,
                 Name = "MockName",
                 VirtualCpus = 5,
-            });
+            }, "test");
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace ServicesTests.Utils
             var doc = XDocument.Parse(definition);
 
             var value = doc.Root?.Element("name")?.Value;
-            Assert.That(value, Is.EqualTo("MockName"));
+            Assert.That(value, Is.EqualTo("test_MockName"));
         }
 
         [Test]

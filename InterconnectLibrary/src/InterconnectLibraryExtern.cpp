@@ -1,5 +1,7 @@
 #ifndef INTERCONNECTLIBRARYEXTERN_H
 #define INTERCONNECTLIBRARYEXTERN_H
+#include <cstring>
+
 #include "VirtualMachineManager.h"
 #include "utils/ExecutionInfoObtainer.h"
 
@@ -56,6 +58,27 @@ void VirtualMachineManager_GetInfoAboutVirtualMachine(ExecutionInfo* executionIn
     ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [manager, name, vmInfo]
     {
         *vmInfo = manager->getInfoAboutVirtualMachine(name);
+    });
+}
+
+void VirtualMachineManager_GetNumberOfVirtualMachines(ExecutionInfo* executionInfo, VirtualMachineManager* manager, int* numberOfVirtualMachines)
+{
+    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [manager, numberOfVirtualMachines]
+    {
+       *numberOfVirtualMachines = manager->getNumberOfVirtualMachines();
+    });
+}
+
+void VirtualMachineManager_GetListOfVirtualMachinesWithInfo(ExecutionInfo* executionInfo,
+                                                            VirtualMachineManager* manager,
+                                                            VirtualMachineInfo** arrayOfVirtualMachines,
+                                                            int* numberOfVirtualMachines)
+{
+    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [manager, arrayOfVirtualMachines, numberOfVirtualMachines]
+    {
+        static auto vectorOfVirtualMachines = manager->getListOfVirtualMachinesWithInfo();
+        *arrayOfVirtualMachines = vectorOfVirtualMachines.data();
+        *numberOfVirtualMachines = static_cast<int>(vectorOfVirtualMachines.size());
     });
 }
 }

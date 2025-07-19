@@ -76,10 +76,6 @@ jobs:
         working-directory: "./InterconnectLibrary"
         run: make build
 
-      - name: "Build unit tests"
-        working-directory: "./InterconnectLibrary"
-        run: make build-tests
-
       - name: "Run tests"
-        working-directory: "./InterconnectLibrary/build/tests"
-        run: ./interconnect_unit_tests
+        working-directory: "./InterconnectLibrary"
+        run: make test

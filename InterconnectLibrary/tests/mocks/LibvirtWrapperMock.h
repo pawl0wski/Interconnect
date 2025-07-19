@@ -18,6 +18,9 @@ public:
     MOCK_METHOD(virDomainPtr, domainLookupByName, (virConnectPtr conn, std::string name), (override));
     MOCK_METHOD(int, domainGetInfo, (virDomainPtr domain, virDomainInfo& domainInfo), (override));
     MOCK_METHOD(int, getDomainUUID, (virDomainPtr domain, std::string& uuid), (override));
+    MOCK_METHOD(int, getListOfAllDomains, (virConnectPtr conn, virDomainPtr **domains), (override));
+    MOCK_METHOD(std::string, getDomainName, (virDomainPtr domain), (override));
+    MOCK_METHOD(void, freeDomain, (virDomainPtr domain), (override));
 };
 
 

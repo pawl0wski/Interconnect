@@ -10,6 +10,7 @@ struct VirtualMachineInfo
     * @brief The identifier of the virtual machine in libvirt system
     */
     char uuid[128];
+    char name[256];
     unsigned long usedMemory;
     unsigned char state;
 };

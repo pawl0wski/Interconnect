@@ -1,4 +1,5 @@
 ﻿using NativeLibrary.Structs;
+using NativeLibrary.Utils;
 
 namespace NativeLibrary.Wrappers
 {
@@ -8,5 +9,6 @@ namespace NativeLibrary.Wrappers
         public NativeConnectionInfo GetConnectionInfo();
         public void CreateVirtualMachine(string xmlDefinition);
         public NativeVirtualMachineInfo GetVirtualMachineInfo(string name);
+        public INativeList<NativeVirtualMachineInfo> GetListOfVirtualMachines();
     }
 }

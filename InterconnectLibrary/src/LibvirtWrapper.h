@@ -53,6 +53,12 @@ public:
     int domainGetInfo(virDomainPtr domain, virDomainInfo& domainInfo) override;
 
     int getDomainUUID(virDomainPtr domain, std::string& uuid) override;
+
+    int getListOfAllDomains(virConnectPtr conn, virDomainPtr** domains) override;
+
+    std::string getDomainName(virDomainPtr domain) override;
+
+    void freeDomain(virDomainPtr domain) override;
 };
 
 

@@ -2,6 +2,7 @@
 using NativeLibrary;
 using Services;
 using Interconnect.Middlewares;
+using Models.Config;
 
 namespace Interconnect
 {
@@ -19,6 +20,8 @@ namespace Interconnect
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.Configure<InterconnectConfig>(
+                builder.Configuration.GetSection("Interconnect"));
 
             var app = builder.Build();
 

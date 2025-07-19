@@ -1,5 +1,6 @@
 ﻿using NativeLibrary.Interop;
 using NativeLibrary.Structs;
+using NativeLibrary.Utils;
 
 namespace NativeLibrary.Wrappers.Impl
 {
@@ -49,6 +50,19 @@ namespace NativeLibrary.Wrappers.Impl
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
 
             return info;
+        }
+
+        public INativeList<NativeVirtualMachineInfo> GetListOfVirtualMachines()
+        {
+            NativeExecutionInfo executionInfo = new();
+            IntPtr listOfVirtualMachines;
+            int numberOfVirtualMachines;
+
+            InteropVirtualMachineManager.VirtualMachineManager_GetListOfVirtualMachinesWithInfo(in executionInfo, _manager, out listOfVirtualMachines, out numberOfVirtualMachines);
+
+            ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
+
+            return new NativeList<NativeVirtualMachineInfo>(listOfVirtualMachines, numberOfVirtualMachines);
         }
     }
 }

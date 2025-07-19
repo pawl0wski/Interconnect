@@ -39,6 +39,12 @@ public:
     virtual int domainGetInfo(virDomainPtr domain, virDomainInfo& domainInfo) = 0;
 
     virtual int getDomainUUID(virDomainPtr domain, std::string& uuid) = 0;
+
+    virtual int getListOfAllDomains(virConnectPtr conn, virDomainPtr** domains) = 0;
+
+    virtual std::string getDomainName(virDomainPtr domain) = 0;
+
+    virtual void freeDomain(virDomainPtr domain) = 0;
 };
 
 

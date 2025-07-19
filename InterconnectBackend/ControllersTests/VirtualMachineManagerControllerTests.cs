@@ -20,7 +20,7 @@ namespace ControllersTests
         }
 
         [Test]
-        public void InitializeConnection_Invoke_ShouldCallForConnectionInitialize()
+        public void InitializeConnection_WhenInvoked_ShouldCallForConnectionInitialize()
         {
             var controller = new VirtualMachineManagerController(_mockManagerService.Object);
             var response = controller.InitializeConnection(new InitializeConnectionRequest { ConnectionUrl = null });
@@ -32,7 +32,7 @@ namespace ControllersTests
         }
 
         [Test]
-        public void ConnectionInfo_Invoke_ShouldGetConnectionInfo()
+        public void ConnectionInfo_WhenInvoked_ShouldGetConnectionInfo()
         {
             var controller = new VirtualMachineManagerController(_mockManagerService.Object);
             _mockManagerService.Setup(m => m.GetConnectionInfo()).Returns(new ConnectionInfo
@@ -52,7 +52,7 @@ namespace ControllersTests
         }
 
         [Test]
-        public void CreateVirtualMachine_Invoke_ShouldCreateVirtualMachine()
+        public void CreateVirtualMachine_WhenInvoked_ShouldCreateVirtualMachine()
         {
             var controller = new VirtualMachineManagerController(_mockManagerService.Object);
             _mockManagerService.Setup(m => m.CreateVirtualMachine(It.IsAny<VirtualMachineCreateDefinition>()));
@@ -66,6 +66,17 @@ namespace ControllersTests
             });
 
             _mockManagerService.Verify(m => m.CreateVirtualMachine(It.IsAny<VirtualMachineCreateDefinition>()), Times.Once);
+        }
+
+        [Test]
+        public void GetListOfVirtualMachines_WhenInvoked_ShouldListAllVirtualMachines()
+        {
+            var controller = new VirtualMachineManagerController(_mockManagerService.Object);
+            _mockManagerService.Setup(m => m.GetListOfVirtualMachines());
+
+            var response = controller.GetListOfVirtualMachines();
+
+            _mockManagerService.Verify(m => m.GetListOfVirtualMachines(), Times.Once);
         }
     }
 }

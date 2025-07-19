@@ -10,9 +10,9 @@ namespace Services.Utils
         private uint? _virtualCpus;
         private string? _bootableDiskPath;
 
-        public void SetFromCreateDefinition(VirtualMachineCreateDefinition definition)
+        public void SetFromCreateDefinition(VirtualMachineCreateDefinition definition, string prefix)
         {
-            _name = definition.Name;
+            _name = definition.GetVirtualMachineNameWithPrefix(prefix);
             _memory = definition.Memory;
             _virtualCpus = definition.VirtualCpus;
             _bootableDiskPath = definition.BootableDiskPath;
@@ -32,8 +32,6 @@ namespace Services.Utils
                 Indent = true
             }))
             {
-
-
                 writer.WriteStartDocument();
 
                 writer.WriteStartElement("domain");

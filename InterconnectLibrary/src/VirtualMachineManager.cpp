@@ -1,6 +1,8 @@
 #include "VirtualMachineManager.h"
 
+#include <iostream>
 #include <stdexcept>
+#include <bits/ostream.tcc>
 
 #include "exceptions/VirtualMachineManagerException.h"
 #include "utils/VersionUtils.h"
@@ -77,6 +79,11 @@ VirtualMachineInfo VirtualMachineManager::getInfoAboutVirtualMachine(const std::
     std::string virtualMachineUuid;
     auto domainInfo = virDomainInfo{};
 
+    if (conn == nullptr)
+    {
+        throw VirtualMachineManagerException("No active connection to the VM backend.");
+    }
+
     const auto domainPtr = libvirt->domainLookupByName(conn, name);
     if (domainPtr == nullptr)
     {
@@ -98,5 +105,34 @@ VirtualMachineInfo VirtualMachineManager::getInfoAboutVirtualMachine(const std::
         .state = domainInfo.state,
     };
     StringUtils::copyStringToCharArray(virtualMachineUuid, vmInfo.uuid, sizeof(vmInfo.uuid));
+    StringUtils::copyStringToCharArray(name, vmInfo.name, sizeof(vmInfo.name));
     return vmInfo;
+}
+
+std::vector<VirtualMachineInfo> VirtualMachineManager::getListOfVirtualMachinesWithInfo()
+{
+    virDomainPtr* domains = nullptr;
+    int numDomains = 0;
+
+    if (conn == nullptr)
+    {
+        throw VirtualMachineManagerException("No active connection to the VM backend.");
+    }
+
+    numDomains = libvirt->getListOfAllDomains(conn, &domains);
+    if (numDomains == -1)
+    {
+        throw VirtualMachineManagerException("Error retrieving the list of virtual machines.");
+    }
+
+    std::vector<VirtualMachineInfo> virtualMachines;
+    for (int i = 0; i < numDomains; i++)
+    {
+        auto virtualMachineName = libvirt->getDomainName(domains[i]);
+        virtualMachines.push_back(getInfoAboutVirtualMachine(virtualMachineName));
+        libvirt->freeDomain(domains[i]);
+    }
+
+    free(domains);
+    return virtualMachines;
 }

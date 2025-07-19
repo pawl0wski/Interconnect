@@ -1,5 +1,7 @@
 #include "LibvirtWrapper.h"
 
+#include <stdexcept>
+
 virConnectPtr LibvirtWrapper::connectOpen(const char* connectionUri)
 {
     return virConnectOpen(connectionUri);
@@ -48,7 +50,7 @@ std::string LibvirtWrapper::getLastError()
 
 virDomainPtr LibvirtWrapper::domainLookupByName(const virConnectPtr conn, std::string name)
 {
-    return virDomainLookupByName(conn, "test");
+    return virDomainLookupByName(conn, name.c_str());
 }
 
 int LibvirtWrapper::domainGetInfo(const virDomainPtr domain, virDomainInfo& domainInfo)
@@ -65,4 +67,28 @@ int LibvirtWrapper::getDomainUUID(const virDomainPtr domain, std::string& uuid)
         uuid = std::string(uuid_cstr);
     }
     return result;
+}
+
+int LibvirtWrapper::getListOfAllDomains(const virConnectPtr conn, virDomainPtr** domains)
+{
+    return virConnectListAllDomains(conn, domains,
+                                    VIR_CONNECT_LIST_DOMAINS_ACTIVE | VIR_CONNECT_LIST_DOMAINS_INACTIVE);
+}
+
+std::string LibvirtWrapper::getDomainName(const virDomainPtr domain)
+{
+    auto name = virDomainGetName(domain);
+    if (name == nullptr)
+    {
+        return "";
+    }
+    return {name};
+}
+
+void LibvirtWrapper::freeDomain(virDomainPtr domain)
+{
+    if ( virDomainFree(domain) != 0)
+    {
+        throw std::runtime_error("freeDomain failed");
+    }
 }

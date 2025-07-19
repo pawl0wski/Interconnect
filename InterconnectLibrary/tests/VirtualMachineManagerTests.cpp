@@ -1,3 +1,4 @@
+#include <format>
 #include <gtest/gtest.h>
 
 #include "TestingUtils.h"
@@ -237,7 +238,8 @@ TEST_F(VirtualMachineManagerTests, getInfoAboutVirtualMachine_WhenVmExistButCant
 {
     EXPECT_CALL(mockLibvirt, connectOpen(testing::StrEq("test:///testing"))).WillOnce(
         testing::Return(reinterpret_cast<virConnectPtr>(0x1234)));
-    EXPECT_CALL(mockLibvirt, domainLookupByName(testing::_, testing::_)).WillOnce(testing::Return(reinterpret_cast<virDomainPtr>(1)));
+    EXPECT_CALL(mockLibvirt, domainLookupByName(testing::_, testing::_)).WillOnce(
+        testing::Return(reinterpret_cast<virDomainPtr>(1)));
     EXPECT_CALL(mockLibvirt, domainGetInfo(testing::_, testing::_)).WillOnce(testing::Return(1));
 
     manager.initializeConnection("test:///testing");
@@ -251,7 +253,8 @@ TEST_F(VirtualMachineManagerTests, getInfoAboutVirtualMachine_WhenVmExistButCant
 {
     EXPECT_CALL(mockLibvirt, connectOpen(testing::StrEq("test:///testing"))).WillOnce(
         testing::Return(reinterpret_cast<virConnectPtr>(0x1234)));
-    EXPECT_CALL(mockLibvirt, domainLookupByName(testing::_, testing::_)).WillOnce(testing::Return(reinterpret_cast<virDomainPtr>(1)));
+    EXPECT_CALL(mockLibvirt, domainLookupByName(testing::_, testing::_)).WillOnce(
+        testing::Return(reinterpret_cast<virDomainPtr>(1)));
     EXPECT_CALL(mockLibvirt, domainGetInfo(testing::_, testing::_)).WillOnce(testing::Return(0));
     EXPECT_CALL(mockLibvirt, getDomainUUID(testing::_, testing::_)).WillOnce(testing::Return(1));
 
@@ -266,25 +269,91 @@ TEST_F(VirtualMachineManagerTests, getInfoAboutVirtualMachine_WhenVmExistAndSucc
 {
     EXPECT_CALL(mockLibvirt, connectOpen(testing::StrEq("test:///testing"))).WillOnce(
         testing::Return(reinterpret_cast<virConnectPtr>(0x1234)));
-    EXPECT_CALL(mockLibvirt, domainLookupByName(testing::_, testing::_)).WillOnce(testing::Return(reinterpret_cast<virDomainPtr>(1)));
-    EXPECT_CALL(mockLibvirt, domainGetInfo(testing::_, testing::_)).WillOnce(testing::Invoke([](virDomainPtr _, virDomainInfo& domainInfo)
-    {
-        domainInfo.memory = 454;
-        domainInfo.state = 5;
-        return 0;
-    }));
-    EXPECT_CALL(mockLibvirt, getDomainUUID(testing::_, testing::_)).WillOnce(testing::Invoke([](virDomainPtr _, std::string& uuid)
-    {
-        uuid = "testUuid";
-        return 0;
-    }));
+    EXPECT_CALL(mockLibvirt, domainLookupByName(testing::_, testing::_)).WillOnce(
+        testing::Return(reinterpret_cast<virDomainPtr>(1)));
+    EXPECT_CALL(mockLibvirt, domainGetInfo(testing::_, testing::_)).WillOnce(testing::Invoke(
+        [](virDomainPtr _, virDomainInfo& domainInfo)
+        {
+            domainInfo.memory = 454;
+            domainInfo.state = 5;
+            return 0;
+        }));
+    EXPECT_CALL(mockLibvirt, getDomainUUID(testing::_, testing::_)).WillOnce(testing::Invoke(
+        [](virDomainPtr _, std::string& uuid)
+        {
+            uuid = "testUuid";
+            return 0;
+        }));
 
     manager.initializeConnection("test:///testing");
     auto info = manager.getInfoAboutVirtualMachine("test");
 
     EXPECT_STREQ(info.uuid, "testUuid");
+    EXPECT_STREQ(info.name, "test");
     EXPECT_EQ(info.state, 5);
     EXPECT_EQ(info.usedMemory, 454);
 }
 
+TEST_F(VirtualMachineManagerTests,
+       getListOfVirtualMachinesWithInfo_WhenErrorWhileRetrievingListOfVirtualMachines_ShouldThrowException)
+{
+    EXPECT_CALL(mockLibvirt, connectOpen(testing::StrEq("test:///testing"))).WillOnce(
+        testing::Return(reinterpret_cast<virConnectPtr>(0x1234)));
+    EXPECT_CALL(mockLibvirt, getListOfAllDomains(testing::_, testing::_)).WillOnce(
+        testing::Invoke([](virConnectPtr _, virDomainPtr** domains)
+        {
+            domains = nullptr;
 
+            return -1;
+        }));
+
+    manager.initializeConnection("test:///testing");
+    TestingUtils::expectThrowWithMessage([this]
+    {
+        manager.getListOfVirtualMachinesWithInfo();
+    }, "Error retrieving the list of virtual machines.");
+}
+
+TEST_F(VirtualMachineManagerTests,
+       getListOfVirtualMachinesWithInfo_WhenRecievedListOfVirtualMachines_ShouldReturnListOfVirtualMachines)
+{
+    VirtualMachineManagerMockGetInfoAboutVirtualMachine mockManager(&mockLibvirt);
+
+    EXPECT_CALL(mockLibvirt, connectOpen(testing::StrEq("test:///testing"))).WillOnce(
+        testing::Return(reinterpret_cast<virConnectPtr>(0x1234)));
+    EXPECT_CALL(mockLibvirt, getListOfAllDomains(testing::_, testing::_)).WillOnce(
+        testing::Invoke([](virConnectPtr, virDomainPtr** domains)
+        {
+            auto* domainArray = new virDomainPtr[2];
+            domainArray[0] = reinterpret_cast<virDomainPtr>(0x1);
+            domainArray[1] = reinterpret_cast<virDomainPtr>(0x2);
+
+            *domains = domainArray;
+            return 2;
+        })
+    );
+    EXPECT_CALL(mockLibvirt, getDomainName(testing::_)).WillRepeatedly(testing::Invoke([](virDomainPtr)
+    {
+        static int vmNumber = 1;
+        return std::format("test{}", vmNumber++);
+    }));
+    EXPECT_CALL(mockManager, getInfoAboutVirtualMachine(testing::_)).WillRepeatedly(testing::Invoke([](std::string name)
+    {
+        auto vmInfo = VirtualMachineInfo{
+            .uuid = {},
+            .usedMemory = 123,
+            .state = 1
+        };
+        strcpy(vmInfo.uuid, name.c_str());
+
+        return vmInfo;
+    }));
+    EXPECT_CALL(mockLibvirt, freeDomain(testing::_)).WillRepeatedly(testing::Return());
+
+    mockManager.initializeConnection("test:///testing");
+    const auto vms = mockManager.getListOfVirtualMachinesWithInfo();
+
+    EXPECT_EQ(vms.size(), 2);
+    EXPECT_STREQ(vms.at(0).uuid, "test1");
+    EXPECT_STREQ(vms.at(1).uuid, "test2");
+}

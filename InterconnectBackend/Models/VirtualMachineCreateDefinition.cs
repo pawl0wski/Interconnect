@@ -6,5 +6,10 @@
         public required uint Memory { get; set; }
         public required uint VirtualCpus { get; set; }
         public required string BootableDiskPath { get; set; }
+    
+        public string GetVirtualMachineNameWithPrefix(string prefix)
+        {
+            return $"{prefix}_{Name}";
+        }
     }
 }

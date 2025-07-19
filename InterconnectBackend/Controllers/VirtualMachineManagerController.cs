@@ -40,5 +40,13 @@ namespace Controllers
 
             return Ok(BaseResponse<VirtualMachineInfo>.WithSuccess(vmInfo));
         }
+
+        [HttpGet]
+        public ActionResult<BaseResponse<List<VirtualMachineInfo>>> GetListOfVirtualMachines()
+        {
+            var vms = _vmManagerService.GetListOfVirtualMachines();
+
+            return Ok(BaseResponse<List<VirtualMachineInfo>>.WithSuccess(vms));
+        }
     }
 }
