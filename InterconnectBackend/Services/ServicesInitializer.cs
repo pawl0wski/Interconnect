@@ -7,6 +7,7 @@ namespace Services
     {
         public static void Initialize(IServiceCollection serviceCollection)
         {
+            serviceCollection.AddSingleton<IHypervisorConnectionService, HypervisorConnectionService>();
             serviceCollection.AddSingleton<IVirtualMachineManagerService, VirtualMachineManagerService>();
             serviceCollection.AddSingleton<IInfoService, InfoService>();
         }

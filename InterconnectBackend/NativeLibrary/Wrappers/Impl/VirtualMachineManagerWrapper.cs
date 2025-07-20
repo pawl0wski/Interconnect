@@ -16,7 +16,7 @@ namespace NativeLibrary.Wrappers.Impl
         {
             NativeExecutionInfo executionInfo = new();
 
-            InteropVirtualMachineManager.VirtualMachineManager_InitializeConnection(ref executionInfo, _manager, connectionUrl);
+            InteropVirtualMachineManager.VirtualMachineManager_InitializeConnection(out executionInfo, _manager, connectionUrl);
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
         }
@@ -25,7 +25,7 @@ namespace NativeLibrary.Wrappers.Impl
             NativeExecutionInfo executionInfo = new();
             NativeConnectionInfo info = new();
 
-            InteropVirtualMachineManager.VirtualMachineManager_GetConnectionInfo(ref executionInfo, _manager, ref info);
+            InteropVirtualMachineManager.VirtualMachineManager_GetConnectionInfo(out executionInfo, _manager, out info);
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
             return info;
@@ -35,7 +35,7 @@ namespace NativeLibrary.Wrappers.Impl
         {
             NativeExecutionInfo executionInfo = new();
 
-            InteropVirtualMachineManager.VirtualMachineManager_CreateVirtualMachine(ref executionInfo, _manager, xmlDefinition);
+            InteropVirtualMachineManager.VirtualMachineManager_CreateVirtualMachine(out executionInfo, _manager, xmlDefinition);
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
         }
@@ -45,7 +45,7 @@ namespace NativeLibrary.Wrappers.Impl
             NativeExecutionInfo executionInfo = new();
             NativeVirtualMachineInfo info = new();
 
-            InteropVirtualMachineManager.VirtualMachineManager_GetInfoAboutVirtualMachine(ref executionInfo, _manager, name, ref info);
+            InteropVirtualMachineManager.VirtualMachineManager_GetInfoAboutVirtualMachine(out executionInfo, _manager, name, out info);
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
 
@@ -58,11 +58,23 @@ namespace NativeLibrary.Wrappers.Impl
             IntPtr listOfVirtualMachines;
             int numberOfVirtualMachines;
 
-            InteropVirtualMachineManager.VirtualMachineManager_GetListOfVirtualMachinesWithInfo(in executionInfo, _manager, out listOfVirtualMachines, out numberOfVirtualMachines);
+            InteropVirtualMachineManager.VirtualMachineManager_GetListOfVirtualMachinesWithInfo(out executionInfo, _manager, out listOfVirtualMachines, out numberOfVirtualMachines);
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
 
             return new NativeList<NativeVirtualMachineInfo>(listOfVirtualMachines, numberOfVirtualMachines);
+        }
+
+        public bool IsConnectionAlive()
+        {
+            NativeExecutionInfo executionInfo = new();
+            bool isConnectionAlive;
+
+            InteropVirtualMachineManager.VirtualMachineManager_IsConnectionAlive(out executionInfo, _manager, out isConnectionAlive);
+
+            ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
+
+            return isConnectionAlive;
         }
     }
 }

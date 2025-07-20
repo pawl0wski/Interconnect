@@ -1,6 +1,5 @@
 #ifndef INTERCONNECTLIBRARYEXTERN_H
 #define INTERCONNECTLIBRARYEXTERN_H
-#include <cstring>
 
 #include "VirtualMachineManager.h"
 #include "utils/ExecutionInfoObtainer.h"
@@ -61,24 +60,28 @@ void VirtualMachineManager_GetInfoAboutVirtualMachine(ExecutionInfo* executionIn
     });
 }
 
-void VirtualMachineManager_GetNumberOfVirtualMachines(ExecutionInfo* executionInfo, VirtualMachineManager* manager, int* numberOfVirtualMachines)
-{
-    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [manager, numberOfVirtualMachines]
-    {
-       *numberOfVirtualMachines = manager->getNumberOfVirtualMachines();
-    });
-}
-
 void VirtualMachineManager_GetListOfVirtualMachinesWithInfo(ExecutionInfo* executionInfo,
                                                             VirtualMachineManager* manager,
                                                             VirtualMachineInfo** arrayOfVirtualMachines,
                                                             int* numberOfVirtualMachines)
 {
-    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [manager, arrayOfVirtualMachines, numberOfVirtualMachines]
+    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo,
+                                                     [manager, arrayOfVirtualMachines, numberOfVirtualMachines]
+                                                     {
+                                                         static auto vectorOfVirtualMachines = manager->
+                                                             getListOfVirtualMachinesWithInfo();
+                                                         *arrayOfVirtualMachines = vectorOfVirtualMachines.data();
+                                                         *numberOfVirtualMachines = static_cast<int>(
+                                                             vectorOfVirtualMachines.size());
+                                                     });
+}
+
+void VirtualMachineManager_IsConnectionAlive(ExecutionInfo* executionInfo, VirtualMachineManager* manager,
+                                             bool* isAlive)
+{
+    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [manager, isAlive]
     {
-        static auto vectorOfVirtualMachines = manager->getListOfVirtualMachinesWithInfo();
-        *arrayOfVirtualMachines = vectorOfVirtualMachines.data();
-        *numberOfVirtualMachines = static_cast<int>(vectorOfVirtualMachines.size());
+        *isAlive = manager->isConnectionAlive();
     });
 }
 }

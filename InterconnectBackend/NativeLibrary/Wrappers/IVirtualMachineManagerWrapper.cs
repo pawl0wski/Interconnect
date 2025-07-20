@@ -10,5 +10,6 @@ namespace NativeLibrary.Wrappers
         public void CreateVirtualMachine(string xmlDefinition);
         public NativeVirtualMachineInfo GetVirtualMachineInfo(string name);
         public INativeList<NativeVirtualMachineInfo> GetListOfVirtualMachines();
+        public bool IsConnectionAlive();
     }
 }

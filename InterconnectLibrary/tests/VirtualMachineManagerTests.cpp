@@ -357,3 +357,48 @@ TEST_F(VirtualMachineManagerTests,
     EXPECT_STREQ(vms.at(0).uuid, "test1");
     EXPECT_STREQ(vms.at(1).uuid, "test2");
 }
+
+TEST_F(VirtualMachineManagerTests, isConnectionAlive_WhenConnectionIsNull_ShouldReturnFalse)
+{
+    EXPECT_CALL(mockLibvirt, connectionIsAlive(testing::_)).Times(0).WillOnce(testing::Return(-1));
+
+    const auto connectionStatus = manager.isConnectionAlive();
+
+    EXPECT_EQ(connectionStatus, false);
+}
+
+TEST_F(VirtualMachineManagerTests, isConnectionAlive_WhenWhileRetrievingStatusErrorOccured_ShouldThrowException)
+{
+    EXPECT_CALL(mockLibvirt, connectOpen(testing::StrEq("test:///testing"))).WillOnce(
+        testing::Return(reinterpret_cast<virConnectPtr>(0x1234)));
+    EXPECT_CALL(mockLibvirt, connectionIsAlive(testing::_)).WillOnce(testing::Return(-1));
+
+    manager.initializeConnection("test:///testing");
+
+    TestingUtils::expectThrowWithMessage([this]
+    {
+        manager.isConnectionAlive();
+    }, "Error while retrieving connection status");
+}
+
+TEST_F(VirtualMachineManagerTests, isConnectionAlive_WhenConnectionIsDead_ShouldReturnFalse)
+{
+    EXPECT_CALL(mockLibvirt, connectOpen(testing::StrEq("test:///testing"))).WillOnce(
+        testing::Return(reinterpret_cast<virConnectPtr>(0x1234)));
+    EXPECT_CALL(mockLibvirt, connectionIsAlive(testing::_)).WillOnce(testing::Return(0));
+
+    manager.initializeConnection("test:///testing");
+
+    EXPECT_EQ(manager.isConnectionAlive(), false);
+}
+
+TEST_F(VirtualMachineManagerTests, isConnectionAlive_WhenConnectionIsAlive_ShouldReturnTrue)
+{
+    EXPECT_CALL(mockLibvirt, connectOpen(testing::StrEq("test:///testing"))).WillOnce(
+    testing::Return(reinterpret_cast<virConnectPtr>(0x1234)));
+    EXPECT_CALL(mockLibvirt, connectionIsAlive(testing::_)).WillOnce(testing::Return(1));
+
+    manager.initializeConnection("test:///testing");
+
+    EXPECT_EQ(manager.isConnectionAlive(), true);
+}

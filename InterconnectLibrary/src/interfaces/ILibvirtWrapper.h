@@ -45,6 +45,8 @@ public:
     virtual std::string getDomainName(virDomainPtr domain) = 0;
 
     virtual void freeDomain(virDomainPtr domain) = 0;
+
+    virtual int connectionIsAlive(virConnectPtr conn) = 0;
 };
 
 

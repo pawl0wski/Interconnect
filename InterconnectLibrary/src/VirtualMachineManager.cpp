@@ -136,3 +136,20 @@ std::vector<VirtualMachineInfo> VirtualMachineManager::getListOfVirtualMachinesW
     free(domains);
     return virtualMachines;
 }
+
+bool VirtualMachineManager::isConnectionAlive() const
+{
+    if (conn == nullptr)
+    {
+        return false;
+    }
+
+    const auto connectionStatus = libvirt->connectionIsAlive(conn);
+
+    if (connectionStatus == -1)
+    {
+        throw VirtualMachineManagerException("Error while retrieving connection status");
+    }
+
+    return connectionStatus;
+}

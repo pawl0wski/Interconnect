@@ -63,9 +63,9 @@ public:
      */
     virtual VirtualMachineInfo getInfoAboutVirtualMachine(const std::string& name);
 
-    int getNumberOfVirtualMachines() const;
-
     std::vector<VirtualMachineInfo> getListOfVirtualMachinesWithInfo();
+
+    bool isConnectionAlive() const;
 };
 
 #endif //VIRTUALMACHINEMANAGER_H

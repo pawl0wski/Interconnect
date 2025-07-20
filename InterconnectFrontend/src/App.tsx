@@ -1,11 +1,14 @@
-import Counter from "./components/Counter.tsx";
+import "@mantine/core/styles.css";
+import InterconnectProviders from "./InterconnectProviders.tsx";
+import InterconnectRoutes from "./InterconnectRoutes.tsx";
+import { MantineProvider } from "@mantine/core";
 
-function App() {
-    return (
-        <div>
-            <Counter />
-        </div>
-    );
-}
+const App = () => (
+    <MantineProvider>
+        <InterconnectProviders>
+            <InterconnectRoutes />
+        </InterconnectProviders>
+    </MantineProvider>
+);
 
 export default App;

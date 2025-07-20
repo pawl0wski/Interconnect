@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Options;
 using Models;
 using Models.Config;
-using NativeLibrary.Structs;
 using NativeLibrary.Wrappers;
 using Services.Utils;
 
@@ -17,18 +16,6 @@ namespace Services.Impl
         {
             _vmManager = vmManager;
             _config = config.Value;
-        }
-
-        public void InitializeConnection(string? connectionUrl)
-        {
-            _vmManager.InitializeConnection(connectionUrl ?? "qemu:///session");
-        }
-
-        public ConnectionInfo GetConnectionInfo()
-        {
-            var nativeConnectionInfo = _vmManager.GetConnectionInfo();
-
-            return NativeConnectionInfoToConnectionInfoMapper.Map(nativeConnectionInfo);
         }
 
         public VirtualMachineInfo CreateVirtualMachine(VirtualMachineCreateDefinition definition)

@@ -92,3 +92,8 @@ void LibvirtWrapper::freeDomain(virDomainPtr domain)
         throw std::runtime_error("freeDomain failed");
     }
 }
+
+int LibvirtWrapper::connectionIsAlive(const virConnectPtr conn)
+{
+    return virConnectIsAlive(conn);
+}

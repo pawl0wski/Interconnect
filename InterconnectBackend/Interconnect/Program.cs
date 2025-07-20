@@ -23,6 +23,18 @@ namespace Interconnect
             builder.Services.Configure<InterconnectConfig>(
                 builder.Configuration.GetSection("Interconnect"));
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowLocalFrontend",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:5173")
+                              .AllowAnyHeader()
+                              .AllowAnyMethod()
+                              .AllowCredentials();
+                    });
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -37,6 +49,8 @@ namespace Interconnect
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+
+            app.UseCors("AllowLocalFrontend");
 
             app.MapControllers();
 

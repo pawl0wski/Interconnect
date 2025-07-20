@@ -59,6 +59,8 @@ public:
     std::string getDomainName(virDomainPtr domain) override;
 
     void freeDomain(virDomainPtr domain) override;
+
+    virtual int connectionIsAlive(virConnectPtr conn);
 };
 
 
