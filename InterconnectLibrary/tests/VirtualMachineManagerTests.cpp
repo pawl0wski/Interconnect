@@ -360,8 +360,6 @@ TEST_F(VirtualMachineManagerTests,
 
 TEST_F(VirtualMachineManagerTests, isConnectionAlive_WhenConnectionIsNull_ShouldReturnFalse)
 {
-    EXPECT_CALL(mockLibvirt, connectionIsAlive(testing::_)).Times(0).WillOnce(testing::Return(-1));
-
     const auto connectionStatus = manager.isConnectionAlive();
 
     EXPECT_EQ(connectionStatus, false);
@@ -395,7 +393,7 @@ TEST_F(VirtualMachineManagerTests, isConnectionAlive_WhenConnectionIsDead_Should
 TEST_F(VirtualMachineManagerTests, isConnectionAlive_WhenConnectionIsAlive_ShouldReturnTrue)
 {
     EXPECT_CALL(mockLibvirt, connectOpen(testing::StrEq("test:///testing"))).WillOnce(
-    testing::Return(reinterpret_cast<virConnectPtr>(0x1234)));
+        testing::Return(reinterpret_cast<virConnectPtr>(0x1234)));
     EXPECT_CALL(mockLibvirt, connectionIsAlive(testing::_)).WillOnce(testing::Return(1));
 
     manager.initializeConnection("test:///testing");

@@ -2,7 +2,7 @@
 {
     public class InformationModel
     {
-        public string OsDescription { get; set; } 
-        public string OsArch { get; set; }
+        public required string OsDescription { get; set; } 
+        public required string OsArch { get; set; }
     }
 }
