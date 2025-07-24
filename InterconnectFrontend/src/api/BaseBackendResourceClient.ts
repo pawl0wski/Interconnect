@@ -9,9 +9,20 @@ abstract class BaseBackendResourceClient {
     >(
         url: string,
         method: string,
-        request: TRequest
+        request: TRequest | null
     ): Promise<TResponse> {
-        const fetchResponse = await fetch(this.prepareBackendUrl(url), { method, body: JSON.stringify(request) });
+        let fetchParams: RequestInit = { method };
+        if (method !== "GET") {
+            fetchParams = {
+                ...fetchParams,
+                body: JSON.stringify(request),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            };
+        }
+
+        const fetchResponse = await fetch(this.prepareBackendUrl(url), fetchParams);
 
         const response = await fetchResponse.json() as BaseResponse<object>;
         if (!response.success) {

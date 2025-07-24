@@ -18,7 +18,7 @@ namespace ServicesTests
         public void SetUp()
         {
             _managerWrapper = new Mock<IVirtualMachineManagerWrapper>();
-            _interconnectConfig = Options.Create(new InterconnectConfig { VmPrefix = "test" });
+            _interconnectConfig = Options.Create(new InterconnectConfig { VmPrefix = "test", HypervisorUrl = "test:///test" });
         }
 
         [Test]

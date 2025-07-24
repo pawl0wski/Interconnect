@@ -1,24 +1,20 @@
-import { AppShell, Burger } from "@mantine/core";
+import { AppShell } from "@mantine/core";
+import Footer from "../components/Footer/Footer.tsx";
+import ConnectionInfoModalContainer from "../components/Modals/ConnectionInfoModalContainer.tsx";
 
 const HomePage = () => {
-    // const connectionStatus = useConnectionStore((state) => state.connectionStatus);
-
     return <AppShell
         header={{ height: 60 }}
-        navbar={{
-            width: 300,
-            breakpoint: "sm",
-        }}
         padding="md"
     >
         <AppShell.Header>
-            <Burger />
-            <div>Logo</div>
+            <div>Interconnect</div>
         </AppShell.Header>
 
-        <AppShell.Navbar p="md">Navbar</AppShell.Navbar>
-
         <AppShell.Main>Main</AppShell.Main>
+
+        <Footer />
+        <ConnectionInfoModalContainer />
     </AppShell>;
 };
 

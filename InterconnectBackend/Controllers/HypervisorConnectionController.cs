@@ -18,20 +18,10 @@ namespace Controllers
             _hypervisorConnectionService = hypervisorConnectionService;
         }
 
-        [HttpPost]
-        public ActionResult<BaseResponse<object>> InitializeConnection(InitializeConnectionRequest req)
+        [HttpGet]
+        public ActionResult<BaseResponse<string>> Ping()
         {
-            _hypervisorConnectionService.InitializeConnection(req.ConnectionUrl);
-
-            return Ok(BaseResponse<object>.WithEmptySuccess());
-        }
-
-        [HttpPost]
-        public ActionResult<BaseResponse<ConnectionStatus>> ConnectionStatus()
-        {
-            var connectionStatus = _hypervisorConnectionService.GetConnectionStatus();
-
-            return Ok(BaseResponse<object>.WithSuccess(connectionStatus));
+            return Ok(BaseResponse<string>.WithSuccess("pong"));
         }
 
         [HttpGet]

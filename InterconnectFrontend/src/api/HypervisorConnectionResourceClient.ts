@@ -1,14 +1,14 @@
 import BaseBackendResourceClient from "./BaseBackendResourceClient.ts";
-import { InitializeConnectionResponse } from "./responses/InitializeConnectionResponse.ts";
-import { ConnectionStatusResponse } from "./responses/ConnectionStatusResponse.ts";
+import BaseResponse from "./responses/BaseResponse.ts";
+import ConnectionInfo from "../models/ConnectionInfo.ts";
 
 class HypervisorConnectionResourceClient extends BaseBackendResourceClient {
-    public async initializeConnection(connectionUrl: string | null): Promise<InitializeConnectionResponse> {
-        return await this.sendBackendRequest("InitializeConnection", "POST", { connectionUrl });
+    public async ping(): Promise<BaseResponse<string>> {
+        return await this.sendBackendRequest("Ping", "GET", {});
     }
 
-    public async connectionStatus(): Promise<ConnectionStatusResponse> {
-        return await this.sendBackendRequest("ConnectionStatus", "POST", {});
+    public async connectionInfo(): Promise<BaseResponse<ConnectionInfo>> {
+        return await this.sendBackendRequest("ConnectionInfo", "GET", {});
     }
 
     protected getResourceName(): string {
@@ -18,4 +18,4 @@ class HypervisorConnectionResourceClient extends BaseBackendResourceClient {
 
 const hypervisorConnectionClient = new HypervisorConnectionResourceClient();
 
-export { hypervisorConnectionClient};
+export { hypervisorConnectionClient };

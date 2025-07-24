@@ -1,0 +1,26 @@
+$alive-color: green;
+$dead-color: red;
+
+.connection-status-indicator {
+  &__text {
+    &--is-alive {
+      color: $alive-color;
+    }
+
+    &--is-dead {
+      color: $dead-color;
+    }
+  }
+
+  &__icon {
+    font-size: 1.5rem;
+
+    &--is-alive {
+      color: $alive-color;
+    }
+
+    &--is-dead {
+      color: $dead-color;
+    }
+  }
+}

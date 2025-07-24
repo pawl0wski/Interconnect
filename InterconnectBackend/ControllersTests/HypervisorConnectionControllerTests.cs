@@ -1,8 +1,6 @@
 ﻿using Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using Models.Enums;
-using Models.Requests;
 using Models.Responses;
 using Moq;
 using Services;
@@ -21,15 +19,14 @@ namespace ControllersTests
         }
 
         [Test]
-        public void InitializeConnection_WhenInvoked_ShouldCallForConnectionInitialize()
+        public void Ping_WhenInvoked_ShouldReturnPong()
         {
             var controller = new HypervisorConnectionController(_hypervisorConnectionService.Object);
-            var response = controller.InitializeConnection(new InitializeConnectionRequest { ConnectionUrl = null });
-            var baseResponse = ((OkObjectResult)response.Result).Value as BaseResponse<object>;
 
-            Assert.That(baseResponse?.Success, Is.True);
-            Assert.That(baseResponse?.ErrorMessage, Is.Null);
-            _hypervisorConnectionService.Verify(s => s.InitializeConnection(null), Times.Once());
+            var result = controller.Ping().Result as ObjectResult;
+            var response = result!.Value as BaseResponse<string>;
+
+            Assert.That(response!.Data, Is.EqualTo("pong"));
         }
 
         [Test]
@@ -50,17 +47,6 @@ namespace ControllersTests
             var response = controller.ConnectionInfo();
 
             _hypervisorConnectionService.Verify(m => m.GetConnectionInfo(), Times.Once);
-        }
-
-        [Test]
-        public void ConnectionStatus_WhenInvoked_ShouldGetConnectionStatus()
-        {
-            var controller = new HypervisorConnectionController(_hypervisorConnectionService.Object);
-            _hypervisorConnectionService.Setup(m => m.GetConnectionStatus()).Returns(ConnectionStatus.ALIVE);
-
-            var response = controller.ConnectionStatus();
-
-            _hypervisorConnectionService.Verify(m => m.GetConnectionStatus());
         }
     }
 }

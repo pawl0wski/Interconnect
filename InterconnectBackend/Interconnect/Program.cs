@@ -1,8 +1,8 @@
-
 using NativeLibrary;
 using Services;
 using Interconnect.Middlewares;
 using Models.Config;
+using Services.Impl;
 
 namespace Interconnect
 {
@@ -22,6 +22,8 @@ namespace Interconnect
             builder.Services.AddSwaggerGen();
             builder.Services.Configure<InterconnectConfig>(
                 builder.Configuration.GetSection("Interconnect"));
+
+            builder.Services.AddHostedService<InitializationService>();
 
             builder.Services.AddCors(options =>
             {

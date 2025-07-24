@@ -10,11 +10,17 @@ interface ConnectionStoreState {
 const useConnectionStore = create<ConnectionStoreState>()((set) => ({
     connectionStatus: ConnectionStatus.Unknown,
     updateConnectionStatus: async () => {
-        const status = await hypervisorConnectionClient.connectionStatus();
+        let connectionStatus: ConnectionStatus;
+        try {
+            await hypervisorConnectionClient.ping();
+            connectionStatus = ConnectionStatus.Alive;
+        } catch {
+            connectionStatus = ConnectionStatus.Dead;
+        }
         set({
-            connectionStatus: status.data ? ConnectionStatus.Alive : ConnectionStatus.Dead,
+            connectionStatus
         });
-    },
+    }
 }));
 
 export { useConnectionStore };

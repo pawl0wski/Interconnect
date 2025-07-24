@@ -5,8 +5,12 @@ import BaseResponse from "./responses/BaseResponse.ts";
 type TestResponse = BaseResponse<string>;
 
 class TestBaseResourceClient extends BaseBackendResourceClient {
+    public async postTest(): Promise<TestResponse> {
+        return this.sendBackendRequest("testMethod", "POST", { test: true });
+    }
+
     public async getTest(): Promise<TestResponse> {
-        return this.sendBackendRequest("testMethod", "POST", {test: true});
+        return this.sendBackendRequest("testMethod", "GET", null);
     }
 
     protected getResourceName(): string {
@@ -32,11 +36,14 @@ describe("BaseBackend", () => {
         }));
         const client = new TestBaseResourceClient();
 
-        await client.getTest();
+        await client.postTest();
 
         expect(fetch).toHaveBeenCalledWith("http://test/Test/testMethod", {
             method: "POST",
-            body: JSON.stringify({ test: true })
+            body: JSON.stringify({ test: true }),
+            headers: {
+                "Content-Type": "application/json"
+            }
         });
     });
 
@@ -51,6 +58,24 @@ describe("BaseBackend", () => {
         }));
         const client = new TestBaseResourceClient();
 
-        await expect(client.getTest()).rejects.toThrow("Mock error");
+        await expect(client.postTest()).rejects.toThrow("Mock error");
+    });
+
+    test("should not send body when method is GET", async () => {
+        // @ts-ignore
+        global.fetch = vi.fn(() => Promise.resolve({
+            json: () => Promise.resolve({
+                success: true,
+                message: null,
+                data: {}
+            })
+        }));
+        const client = new TestBaseResourceClient();
+
+        await client.getTest();
+
+        expect(fetch).toHaveBeenCalledWith("http://test/Test/testMethod", {
+            method: "GET"
+        });
     });
 });
