@@ -64,4 +64,29 @@ describe("ConnectionStatusIndicator", () => {
 
         expect(mockOpen).toHaveBeenCalled();
     });
+
+    test.each([
+        {
+            status: ConnectionStatus.Dead,
+            text: "Brak połączenia"
+        },
+        {
+            status: ConnectionStatus.Dead,
+            text: "Brak połączenia"
+        }])("should not open connection info modal when user press at connection status while status is dead or unknown",
+        async ({ status, text }) => {
+            const mockOpen = vi.fn();
+            mockUseConnectionStore.mockReturnValue(status);
+            mockUseConnectionInfoModalStore.mockReturnValue({
+                open: mockOpen
+            });
+
+            const screen = render(<MantineProvider>
+                <ConnectionStatusIndicatorContainer />
+            </MantineProvider>);
+
+            await userEvent.click(screen.getByText(text));
+
+            expect(mockOpen).not.toHaveBeenCalled();
+        });
 });

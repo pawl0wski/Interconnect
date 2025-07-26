@@ -68,7 +68,8 @@ void VirtualMachineManager_GetListOfVirtualMachinesWithInfo(ExecutionInfo* execu
     ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo,
                                                      [manager, arrayOfVirtualMachines, numberOfVirtualMachines]
                                                      {
-                                                         static auto vectorOfVirtualMachines = manager->
+                                                         static std::vector<VirtualMachineInfo> vectorOfVirtualMachines;
+                                                         vectorOfVirtualMachines = manager->
                                                              getListOfVirtualMachinesWithInfo();
                                                          *arrayOfVirtualMachines = vectorOfVirtualMachines.data();
                                                          *numberOfVirtualMachines = static_cast<int>(
