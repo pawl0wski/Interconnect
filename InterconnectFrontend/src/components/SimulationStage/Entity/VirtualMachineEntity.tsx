@@ -2,20 +2,33 @@ import { Circle, Group, Image, Text } from "react-konva";
 import virtualMachineImage from "../../../static/virtual_machine.svg";
 import useImage from "use-image";
 import { VirtualMachineEntityModel } from "../../../models/VirtualMachineEntityModel.ts";
+import { KonvaEventObject } from "konva/lib/Node";
 
 interface VirtualMachineEntityProps {
     entity: VirtualMachineEntityModel;
-    onDragEnd: (x: number, y: number) => void;
+    onDragMove: (e: KonvaEventObject<DragEvent>) => void;
+    onDragEnd: (e: KonvaEventObject<DragEvent>) => void;
+    onMouseOver: (e: KonvaEventObject<MouseEvent>) => void;
+    onMouseOut: (e: KonvaEventObject<MouseEvent>) => void;
 }
 
-const VirtualMachineEntity = ({ entity, onDragEnd }: VirtualMachineEntityProps) => {
+const VirtualMachineEntity = ({
+                                  entity,
+                                  onDragEnd,
+                                  onDragMove,
+                                  onMouseOver,
+                                  onMouseOut
+                              }: VirtualMachineEntityProps) => {
     const { name, x, y } = entity;
     const [virtualMachineImageElement] = useImage(virtualMachineImage);
 
     return <Group
         x={x}
         y={y}
-        onDragEnd={(e) => onDragEnd(e.target.x(), e.target.y())}
+        onMouseOver={onMouseOver}
+        onMouseOut={onMouseOut}
+        onDragMove={onDragMove}
+        onDragEnd={onDragEnd}
         draggable={true}
     >
         <Image
