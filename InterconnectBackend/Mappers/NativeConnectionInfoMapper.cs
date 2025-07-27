@@ -3,9 +3,9 @@ using NativeLibrary.Structs;
 
 namespace Mappers
 {
-    public static class NativeConnectionInfoToConnectionInfoMapper
+    public static class NativeConnectionInfoMapper
     {
-        public static ConnectionInfo Map(NativeConnectionInfo info)
+        public static ConnectionInfo MapToConnectionInfo(NativeConnectionInfo info)
         {
             return new ConnectionInfo
             {

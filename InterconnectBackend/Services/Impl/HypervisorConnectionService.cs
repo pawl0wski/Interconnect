@@ -32,7 +32,7 @@ namespace Services.Impl
         {
             var nativeConnectionInfo = _vmManager.GetConnectionInfo();
 
-            return NativeConnectionInfoToConnectionInfoMapper.Map(nativeConnectionInfo);
+            return NativeConnectionInfoMapper.MapToConnectionInfo(nativeConnectionInfo);
         }
     }
 }

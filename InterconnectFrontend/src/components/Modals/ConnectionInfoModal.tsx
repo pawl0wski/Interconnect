@@ -1,9 +1,9 @@
-import ConnectionInfo from "../../models/ConnectionInfo.ts";
+import ConnectionInfoModel from "../../models/ConnectionInfoModel.ts";
 import { Center, Loader, Modal, Table } from "@mantine/core";
 
 interface ConnectionInfoModalProps {
     opened: boolean;
-    connectionInfo: ConnectionInfo | null;
+    connectionInfo: ConnectionInfoModel | null;
     closeModal: () => void;
 }
 

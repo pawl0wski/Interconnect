@@ -1,9 +1,9 @@
 import { create } from "zustand/react";
 import { hypervisorConnectionClient } from "../api/HypervisorConnectionResourceClient.ts";
-import ConnectionInfo from "../models/ConnectionInfo.ts";
+import ConnectionInfoModel from "../models/ConnectionInfoModel.ts";
 
 interface ConnectionInfoStore {
-    connectionInfo: ConnectionInfo | null;
+    connectionInfo: ConnectionInfoModel | null;
 
     updateConnectionInfo: () => Promise<void>;
     clearConnectionInfo: () => void;

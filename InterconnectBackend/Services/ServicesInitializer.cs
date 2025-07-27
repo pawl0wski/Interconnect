@@ -10,6 +10,8 @@ namespace Services
             serviceCollection.AddSingleton<IHypervisorConnectionService, HypervisorConnectionService>();
             serviceCollection.AddSingleton<IVirtualMachineManagerService, VirtualMachineManagerService>();
             serviceCollection.AddSingleton<IInfoService, InfoService>();
+            
+            serviceCollection.AddScoped<IVirtualMachineEntityService, VirtualMachineEntityService>();
         }
     }
 }

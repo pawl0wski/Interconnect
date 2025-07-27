@@ -1,4 +1,4 @@
-interface ConnectionInfo {
+interface ConnectionInfoModel {
     cpuCount: number;
     cpuFreq: number;
     totalMemory: number;
@@ -9,4 +9,4 @@ interface ConnectionInfo {
     connectionInfoFetched: boolean;
 }
 
-export default ConnectionInfo;
+export default ConnectionInfoModel;

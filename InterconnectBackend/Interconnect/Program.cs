@@ -1,7 +1,10 @@
+using Database;
+using Interconnect.Middlewares;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Models.Config;
 using NativeLibrary;
 using Services;
-using Interconnect.Middlewares;
-using Models.Config;
 using Services.Impl;
 
 namespace Interconnect
@@ -35,6 +38,12 @@ namespace Interconnect
                               .AllowAnyMethod()
                               .AllowCredentials();
                     });
+            });
+
+            builder.Services.AddDbContext<InterconnectDbContext>((serviceProvider, options) =>
+            {
+                var config = serviceProvider.GetRequiredService<IOptions<InterconnectConfig>>();
+                options.UseNpgsql(config.Value.DatabaseConnectionUrl);
             });
 
             var app = builder.Build();

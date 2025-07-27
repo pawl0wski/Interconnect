@@ -30,14 +30,14 @@ namespace Services.Impl
             _vmManager.CreateVirtualMachine(xmlDefinition);
             var vmInfo = _vmManager.GetVirtualMachineInfo(name);
 
-            return NativeVirtualMachineInfoToVirtualMachineInfo.Map(vmInfo);
+            return NativeVirtualMachineInfoMapper.MapToVirtualMachineInfo(vmInfo);
         }
 
         public List<VirtualMachineInfo> GetListOfVirtualMachines()
         {
             var virtualMachines = _vmManager.GetListOfVirtualMachines();
 
-            return [.. virtualMachines.Select(NativeVirtualMachineInfoToVirtualMachineInfo.Map)];
+            return [.. virtualMachines.Select(NativeVirtualMachineInfoMapper.MapToVirtualMachineInfo)];
         }
     }
 }

@@ -1,14 +1,21 @@
 import { Circle, Group, Image, Text } from "react-konva";
 import virtualMachineImage from "../../../static/virtual_machine.svg";
 import useImage from "use-image";
+import { VirtualMachineEntityModel } from "../../../models/VirtualMachineEntityModel.ts";
 
 interface VirtualMachineEntityProps {
-    name: string;
+    entity: VirtualMachineEntityModel;
+    onDragEnd: (x: number, y: number) => void;
 }
 
-const VirtualMachineEntity = ({ name }: VirtualMachineEntityProps) => {
+const VirtualMachineEntity = ({ entity, onDragEnd }: VirtualMachineEntityProps) => {
+    const { name, x, y } = entity;
     const [virtualMachineImageElement] = useImage(virtualMachineImage);
+
     return <Group
+        x={x}
+        y={y}
+        onDragEnd={(e) => onDragEnd(e.target.x(), e.target.y())}
         draggable={true}
     >
         <Image

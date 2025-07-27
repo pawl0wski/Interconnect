@@ -1,15 +1,15 @@
 import { Layer, Stage } from "react-konva";
-import "./SimulationStage.component.scss";
-import VirtualMachineEntity from "./Entity/VirtualMachineEntity.tsx";
+import classes from "./SimulationStage.module.scss";
+import VirtualMachineEntryRenderer from "./Renderers/VirtualMachineEntryRenderer.tsx";
 
 const SimulationStage = () => {
     const stageHeight = 2000;
     const stageWidth = 3000;
 
-    return <div className="simulation-stage">
+    return <div className={classes["simulation-stage"]}>
         <Stage width={stageWidth} height={stageHeight}>
             <Layer>
-                <VirtualMachineEntity name={"VM-1"} />
+                <VirtualMachineEntryRenderer />
             </Layer>
         </Stage>
     </div>;

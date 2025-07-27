@@ -6,6 +6,7 @@ using NativeLibrary.Structs;
 using NativeLibrary.Utils;
 using NativeLibrary.Wrappers;
 using Services.Impl;
+using TestUtils;
 
 namespace ServicesTests
 {
@@ -18,7 +19,7 @@ namespace ServicesTests
         public void SetUp()
         {
             _managerWrapper = new Mock<IVirtualMachineManagerWrapper>();
-            _interconnectConfig = Options.Create(new InterconnectConfig { VmPrefix = "test", HypervisorUrl = "test:///test" });
+            _interconnectConfig = TestMocks.GetMockConfig();
         }
 
         [Test]
@@ -37,7 +38,7 @@ namespace ServicesTests
             });
 
             _managerWrapper.Verify(w => w.CreateVirtualMachine(It.IsAny<string>()), Times.Once());
-            _managerWrapper.Verify(w => w.GetVirtualMachineInfo("test_test"));
+            _managerWrapper.Verify(w => w.GetVirtualMachineInfo("interconnect_test"));
             Assert.That(info.Uuid, Is.EqualTo("testUuid"));
         }
 

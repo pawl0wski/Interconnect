@@ -3,9 +3,9 @@ using NativeLibrary.Structs;
 
 namespace Mappers
 {
-    public static class NativeVirtualMachineInfoToVirtualMachineInfo
+    public static class NativeVirtualMachineInfoMapper
     {
-        public static VirtualMachineInfo Map(NativeVirtualMachineInfo virtualMachineInfo)
+        public static VirtualMachineInfo MapToVirtualMachineInfo(NativeVirtualMachineInfo virtualMachineInfo)
         {
             return new VirtualMachineInfo
             {

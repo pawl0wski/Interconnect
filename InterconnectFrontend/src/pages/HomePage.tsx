@@ -2,10 +2,12 @@ import { AppShell } from "@mantine/core";
 import Footer from "../components/Footer/Footer.tsx";
 import ConnectionInfoModalContainer from "../components/Modals/ConnectionInfoModalContainer.tsx";
 import SimulationStage from "../components/SimulationStage/SimulationStage.tsx";
+import Tray from "../components/Tray/Tray.tsx";
 
 const HomePage = () => {
     const headerHeight = 60;
     const footerHeight = 40;
+    const trayHeight = 70;
 
     return <AppShell
         header={{ height: headerHeight }}
@@ -16,11 +18,13 @@ const HomePage = () => {
             <div>Interconnect</div>
         </AppShell.Header>
 
-        <AppShell.Main h={`calc( 100vh - ${headerHeight}px - ${footerHeight}px)`} pt={`${headerHeight}px`}
-                       pb={`${footerHeight}px`} px={0}>
+        <AppShell.Main h={`calc( 100vh - ${headerHeight + footerHeight + trayHeight}px)`}
+                       pt={`${headerHeight}px`}
+                       pb={`${footerHeight + trayHeight}px`} px={0}>
             <SimulationStage />
         </AppShell.Main>
 
+        <Tray />
         <Footer />
         <ConnectionInfoModalContainer />
     </AppShell>;

@@ -1,0 +1,17 @@
+@use "../../styles/variables/tray" as t;
+
+.tray {
+  height: t.$tray-height;
+  width: 100%;
+  padding-block: 0.5rem;
+
+  position: fixed;
+  bottom: 40px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  border-top: 1px solid var(--app-shell-border-color);
+}

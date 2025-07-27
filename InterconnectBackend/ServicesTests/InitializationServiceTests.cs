@@ -3,6 +3,7 @@ using Models.Config;
 using Moq;
 using Services;
 using Services.Impl;
+using TestUtils;
 
 namespace ServicesTests
 {
@@ -15,7 +16,7 @@ namespace ServicesTests
         public void SetUp()
         {
             _connService = new Mock<IHypervisorConnectionService>();
-            _interconnectConfig = Options.Create(new InterconnectConfig { VmPrefix = "test", HypervisorUrl = "test:///test" });
+            _interconnectConfig = TestMocks.GetMockConfig();
         }
 
         [Test]
@@ -25,7 +26,7 @@ namespace ServicesTests
 
             initializationService.Initialize();
 
-            _connService.Verify((c) => c.InitializeConnection(It.Is<string>((v) => v == "test:///test")), Times.Once());
+            _connService.Verify((c) => c.InitializeConnection(It.Is<string>((v) => v == "test:///testing")), Times.Once());
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿using NativeLibrary.Wrappers;
+﻿using Microsoft.Extensions.DependencyInjection;
+using NativeLibrary.Wrappers;
 using NativeLibrary.Wrappers.Impl;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace NativeLibrary
 {
