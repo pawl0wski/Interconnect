@@ -45,5 +45,14 @@ namespace Controllers
 
             return Ok(BaseResponse<VirtualMachineEntityDTO>.WithSuccess(updatedEntity));
         }
+
+
+        [HttpGet]
+        public async Task<ActionResult<BaseResponse<List<BootableDiskModelDTO>>>> GetAvailableBootableDisks()
+        {
+            var bootableDisks = await _bootableDiskProviderService.GetAvailableBootableDiskModels();
+
+            return Ok(BaseResponse<List<BootableDiskModelDTO>>.WithSuccess(bootableDisks));
+        }
     }
 }

@@ -4,8 +4,8 @@ import { useBootableDisksStore } from "./bootableDisksStore.ts";
 
 const mockGetAvailableBootableDisks = vi.hoisted(() => vi.fn());
 
-vi.mock("../api/VirtualMachineManagerResourceClient.ts", () => ({
-    virtualMachineManagerResourceClient: {
+vi.mock("../api/VirtualMachineResourceClient.ts", () => ({
+    virtualMachineResourceClient: {
         getAvailableBootableDisks: mockGetAvailableBootableDisks
     }
 }));

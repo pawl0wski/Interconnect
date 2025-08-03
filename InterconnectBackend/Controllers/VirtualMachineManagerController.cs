@@ -11,12 +11,10 @@ namespace Controllers
     public sealed class VirtualMachineManagerController : ControllerBase
     {
         private readonly IVirtualMachineManagerService _vmManagerService;
-        private readonly IBootableDiskProviderService _bootableDiskProviderService;
 
-        public VirtualMachineManagerController(IVirtualMachineManagerService vmManagerService, IBootableDiskProviderService bootableDiskProviderService)
+        public VirtualMachineManagerController(IVirtualMachineManagerService vmManagerService)
         {
             _vmManagerService = vmManagerService;
-            _bootableDiskProviderService = bootableDiskProviderService;
         }
 
         [HttpPost]
@@ -33,14 +31,6 @@ namespace Controllers
             var vms = _vmManagerService.GetListOfVirtualMachines();
 
             return Ok(BaseResponse<List<VirtualMachineInfo>>.WithSuccess(vms));
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<BaseResponse<List<BootableDiskModelDTO>>>> GetAvailableBootableDisks()
-        {
-            var bootableDisks = await _bootableDiskProviderService.GetAvailableBootableDiskModels();
-
-            return Ok(BaseResponse<List<BootableDiskModelDTO>>.WithSuccess(bootableDisks));
         }
     }
 }

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { BootableDiskModel } from "../models/BootableDiskModel.ts";
-import { virtualMachineManagerResourceClient } from "../api/VirtualMachineManagerResourceClient.ts";
+import { virtualMachineResourceClient } from "../api/VirtualMachineResourceClient.ts";
 
 interface BootableDisksStore {
     bootableDisks: BootableDiskModel[];
@@ -15,7 +15,7 @@ const useBootableDisksStore = create<BootableDisksStore>()((set) => ({
         set({
             isFetching: true
         });
-        const bootableDisks = await virtualMachineManagerResourceClient.getAvailableBootableDisks();
+        const bootableDisks = await virtualMachineResourceClient.getAvailableBootableDisks();
         set({
             bootableDisks: bootableDisks.data,
             isFetching: false
