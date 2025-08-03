@@ -5,7 +5,6 @@ import { virtualMachineEntityResourceClient } from "../api/VirtualMachineEntityR
 interface VirtualMachineEntitiesStore {
     entities: VirtualMachineEntityModel[];
     fetchEntities: () => Promise<void>;
-    createNewEntity: (name: string, x: number, y: number) => Promise<void>;
     updateEntityPosition: (id: number, x: number, y: number) => Promise<void>;
     clearEntities: () => void;
 }
@@ -18,12 +17,6 @@ const useVirtualMachineEntitiesStore = create<VirtualMachineEntitiesStore>()((se
         set({
             entities: resp.data
         });
-    },
-    createNewEntity: async (name: string, x: number, y: number) => {
-        const newEntity = (await virtualMachineEntityResourceClient.createEntity(name, x, y)).data;
-        set((state) => ({
-            entities: [newEntity, ...state.entities]
-        }));
     },
     updateEntityPosition: async (id: number, x: number, y: number) => {
         const foundEntity = get().entities.find((e) => e.id === id);

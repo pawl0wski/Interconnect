@@ -3,10 +3,6 @@ import { VirtualMachineEntityModel } from "../models/VirtualMachineEntityModel.t
 import BaseResponse from "./responses/BaseResponse.ts";
 
 class VirtualMachineEntityResourceClient extends BaseBackendResourceClient {
-    public async createEntity(name: string, x: number, y: number): Promise<BaseResponse<VirtualMachineEntityModel>> {
-        return await this.sendBackendRequest("CreateVirtualMachineEntity", "POST", { name, x, y });
-    }
-
     public async updateEntityPosition(id: number, x: number, y: number): Promise<BaseResponse<VirtualMachineEntityModel>> {
         return await this.sendBackendRequest("UpdateVirtualMachineEntityPosition", "POST", { id, x, y });
     }

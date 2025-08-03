@@ -1,8 +1,9 @@
 import { AppShell } from "@mantine/core";
 import Footer from "../components/Footer/Footer.tsx";
-import ConnectionInfoModalContainer from "../components/Modals/ConnectionInfoModalContainer.tsx";
 import SimulationStage from "../components/SimulationStage/SimulationStage.tsx";
 import Tray from "../components/Tray/Tray.tsx";
+import ConnectionInfoModalContainer from "../components/Modals/ConnectionInfoModalContainer.tsx";
+import VirtualMachineCreateModalContainer from "../components/Modals/VirtualMachineCreateModalContainer.tsx";
 
 const HomePage = () => {
     const headerHeight = 60;
@@ -26,6 +27,7 @@ const HomePage = () => {
 
         <Tray />
         <Footer />
+        <VirtualMachineCreateModalContainer />
         <ConnectionInfoModalContainer />
     </AppShell>;
 };

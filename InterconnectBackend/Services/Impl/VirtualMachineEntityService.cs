@@ -58,5 +58,18 @@ namespace Services.Impl
 
             return VirtualMachineEntityMapper.MapToDTO(entity);
         }
+
+        public async Task<VirtualMachineEntityDTO> UpdateEntityVmUUID(int id, string uuid)
+        {
+            var entity = await _context.VirtualMachineEntityModels
+                   .Where((e) => e.Id == id)
+                   .SingleAsync();
+
+            entity.VmUuid = Guid.Parse(uuid);
+            _context.VirtualMachineEntityModels.Update(entity);
+            await _context.SaveChangesAsync();
+
+            return VirtualMachineEntityMapper.MapToDTO(entity);
+        }
     }
 }

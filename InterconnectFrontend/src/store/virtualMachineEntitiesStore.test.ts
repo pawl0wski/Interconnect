@@ -3,13 +3,11 @@ import { VirtualMachineEntityModel } from "../models/VirtualMachineEntityModel.t
 import { act, renderHook } from "@testing-library/react";
 import { useVirtualMachineEntitiesStore } from "./virtualMachineEntitiesStore.ts";
 
-const mockCreateEntity = vi.hoisted(() => vi.fn());
 const mockUpdateEntityPosition = vi.hoisted(() => vi.fn());
 const mockGetListOfEntities = vi.hoisted(() => vi.fn());
 
 vi.mock("../api/VirtualMachineEntityResourceClient.ts", () => ({
     virtualMachineEntityResourceClient: {
-        createEntity: mockCreateEntity,
         updateEntityPosition: mockUpdateEntityPosition,
         getListOfEntities: mockGetListOfEntities
     }
@@ -17,7 +15,6 @@ vi.mock("../api/VirtualMachineEntityResourceClient.ts", () => ({
 
 describe("virtualMachineEntitiesStore", () => {
     beforeEach(() => {
-        mockCreateEntity.mockReset();
         mockUpdateEntityPosition.mockReset();
         mockGetListOfEntities.mockReset();
 
@@ -60,44 +57,25 @@ describe("virtualMachineEntitiesStore", () => {
         expect(result.current.entities[1].name).toBe("Test2");
     });
 
-    test("should create new entity when createNewEntity is invoked", async () => {
-        mockCreateEntity.mockReturnValueOnce({
-            data: {
-                id: 1,
-                vmUuid: null,
-                name: "Test",
-                x: 12,
-                y: 54
-            }
-        });
-        const { result } = renderHook(() => useVirtualMachineEntitiesStore());
-
-        await act(async () => {
-            await result.current.createNewEntity("Test", 12, 54);
-        });
-        const { name, x, y } = result.current.entities[0];
-
-        expect(mockCreateEntity).toHaveBeenCalled();
-        expect(name).toBe("Test");
-        expect(x).toBe(12);
-        expect(y).toBe(54);
-    });
-
     test("should update entity position when updateEntityPosition is invoked", async () => {
-        mockCreateEntity.mockReturnValueOnce({
-            data: {
-                id: 1,
-                vmUuid: null,
-                name: "Test",
-                x: 12,
-                y: 54
+        mockGetListOfEntities.mockReturnValueOnce(
+            {
+                data: [
+                    {
+                        id: 1,
+                        vmUuid: null,
+                        name: "Test1",
+                        x: 12,
+                        y: 54
+                    }
+                ] as VirtualMachineEntityModel[]
             }
-        });
+        );
         mockUpdateEntityPosition.mockReturnValueOnce({
             data: {
                 id: 1,
                 vmUuid: null,
-                name: "Test",
+                name: "Test1",
                 x: 54,
                 y: 33
             }
@@ -105,13 +83,13 @@ describe("virtualMachineEntitiesStore", () => {
         const { result } = renderHook(() => useVirtualMachineEntitiesStore());
 
         await act(async () => {
-            await result.current.createNewEntity("Test", 12, 54);
+            await result.current.fetchEntities();
             await result.current.updateEntityPosition(1, 54, 33);
         });
         const { name, id, x, y } = result.current.entities[0];
 
         expect(mockUpdateEntityPosition).toHaveBeenCalledWith(1, 54, 33);
-        expect(name).toBe("Test");
+        expect(name).toBe("Test1");
         expect(id).toBe(1);
         expect(x).toBe(54);
         expect(y).toBe(33);

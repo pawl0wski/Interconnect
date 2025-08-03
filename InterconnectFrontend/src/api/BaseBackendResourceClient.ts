@@ -1,6 +1,6 @@
 import BaseResponse from "./responses/BaseResponse.ts";
 import BaseRequest from "./requests/BaseRequest.ts";
-import { getConfiguration } from "../Configuration.ts";
+import { getConfiguration } from "../configuration.ts";
 
 abstract class BaseBackendResourceClient {
     protected async sendBackendRequest<
@@ -35,7 +35,7 @@ abstract class BaseBackendResourceClient {
     protected prepareBackendUrl(methodName: string): string {
         const config = getConfiguration();
 
-        const backendUrl = new URL(config.BackendUrl);
+        const backendUrl = new URL(config.backendUrl);
         backendUrl.pathname = `/${this.getResourceName()}/${methodName}`;
 
         return backendUrl.toString();

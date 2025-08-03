@@ -18,14 +18,6 @@ namespace Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BaseResponse<VirtualMachineEntityDTO>>> CreateVirtualMachineEntity(CreateVirtualMachineEntityRequest req)
-        {
-            var entity = await _entityService.CreateEntity(req.Name, req.X, req.Y);
-
-            return Ok(BaseResponse<VirtualMachineEntityDTO>.WithSuccess(entity));
-        }
-
-        [HttpPost]
         public async Task<ActionResult<BaseResponse<VirtualMachineEntityDTO>>> UpdateVirtualMachineEntityPosition(UpdateVirtualMachineEntityPositionRequest req)
         {
             var entity = await _entityService.UpdateEntityPosition(req.Id, req.X, req.Y);

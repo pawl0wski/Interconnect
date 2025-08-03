@@ -1,7 +1,8 @@
 import config from "../config/appsettings.json";
 
 interface Configuration {
-    BackendUrl: string;
+    backendUrl: string;
+    maxSafeVirtualMachineMemoryPercent: number;
 }
 
 const getConfiguration = (): Configuration => {

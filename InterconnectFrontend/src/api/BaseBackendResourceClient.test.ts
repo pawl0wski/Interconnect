@@ -20,8 +20,8 @@ class TestBaseResourceClient extends BaseBackendResourceClient {
 
 describe("BaseBackend", () => {
     vi.mock(
-        "../Configuration.ts", () => ({
-            getConfiguration: () => ({ BackendUrl: "http://test/" })
+        "../configuration.ts", () => ({
+            getConfiguration: () => ({ backendUrl: "http://test/" })
         })
     );
 

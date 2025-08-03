@@ -18,6 +18,12 @@ namespace ServicesTests
             _service = new VirtualMachineEntityService(_context);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            _context?.Dispose();
+        }
+
         [Test]
         public async Task CreateEntity_WhenInvoked_ShouldReturnEntity()
         {
@@ -135,10 +141,24 @@ namespace ServicesTests
             Assert.ThrowsAsync<InvalidOperationException>(async () => await _service.UpdateEntityPosition(1, 100, 500));
         }
 
-        [TearDown]
-        public void TearDown()
+        [Test]
+        public async Task UpdateEntityVmUUID_WhenInvoked_ShouldUpdateEntityVmUUID()
         {
-            _context?.Dispose();
+            var testGuid = Guid.NewGuid();
+            _context.VirtualMachineEntityModels.Add(new VirtualMachineEntityModel
+            {
+                Id = 0,
+                Name = "TestEntity1",
+                X = 10,
+                Y = 43,
+                VmUuid = null,
+            });
+            await _context.SaveChangesAsync();
+
+            await _service.UpdateEntityVmUUID(1, testGuid.ToString());
+
+            var editedEntity = await _context.VirtualMachineEntityModels.FirstAsync(m => m.Id == 1);
+            Assert.That(editedEntity.VmUuid, Is.EqualTo(testGuid));
         }
     }
 }

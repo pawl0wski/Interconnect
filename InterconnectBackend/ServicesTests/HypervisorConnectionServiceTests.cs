@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using Models.Config;
-using Models.Enums;
+﻿using Models.Enums;
 using Moq;
 using NativeLibrary.Structs;
 using NativeLibrary.Wrappers;

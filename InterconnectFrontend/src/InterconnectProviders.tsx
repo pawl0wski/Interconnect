@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import ConnectionStatusProvider from "./providers/ConnectionStatusProvider";
+import ConnectionInfoProvider from "./providers/ConnectionInfoProvider.tsx";
 
 interface ProviderProps {
     children: ReactNode;
@@ -7,7 +8,9 @@ interface ProviderProps {
 
 const InterconnectProviders = ({ children }: ProviderProps) => (
     <ConnectionStatusProvider>
-        {children}
+        <ConnectionInfoProvider>
+            {children}
+        </ConnectionInfoProvider>
     </ConnectionStatusProvider>
 );
 

@@ -12,6 +12,7 @@ namespace Services
             serviceCollection.AddSingleton<IInfoService, InfoService>();
             
             serviceCollection.AddScoped<IVirtualMachineEntityService, VirtualMachineEntityService>();
+            serviceCollection.AddScoped<IBootableDiskProviderService, BootableDiskProviderService>();
         }
     }
 }

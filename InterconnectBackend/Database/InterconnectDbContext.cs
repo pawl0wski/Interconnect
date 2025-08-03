@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Models.Config;
 using Models.Database;
 
 namespace Database
@@ -20,6 +18,7 @@ namespace Database
         }
 
         public DbSet<VirtualMachineEntityModel> VirtualMachineEntityModels { get; set; }
+        public DbSet<BootableDiskModel> BootableDiskModels { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

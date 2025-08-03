@@ -12,7 +12,7 @@ const VirtualMachineEntityContainer = ({ entity }: VirtualMachineEntityContainer
 
     const changeCursor = (e: KonvaEventObject<any>, cursor: string) => {
         const stage = e.target.getStage();
-        if (stage === null) {
+        if (!stage) {
             return;
         }
         stage.container().style.cursor = cursor;

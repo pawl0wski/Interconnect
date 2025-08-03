@@ -1,10 +1,11 @@
 import { Box } from "@mantine/core";
 import classes from "./Tray.module.scss";
-import VirtualMachineCreateEntitiesTrayContainer from "./VirtualMachineCreateEntitiesTrayContainer.tsx";
+import VirtualMachineCreateEntityTrayButtonContainer
+    from "./Buttons/VirtualMachineCreateEntityTrayButtonContainer.tsx";
 
 const Tray = () => {
     return <Box className={classes["tray"]}>
-        <VirtualMachineCreateEntitiesTrayContainer />
+        <VirtualMachineCreateEntityTrayButtonContainer />
     </Box>;
 };
 

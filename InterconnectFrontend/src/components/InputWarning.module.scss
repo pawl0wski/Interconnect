@@ -1,0 +1,15 @@
+@use "../styles/variables/colors" as colors;
+
+.input-warning {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  color: colors.$warning-color;
+
+  padding-block: 0.25rem;
+
+  &__icon {
+    display: flex;
+    align-items: center;
+  }
+}

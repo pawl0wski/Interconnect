@@ -18,51 +18,6 @@ namespace ControllersTests
         }
 
         [Test]
-        public async Task CreateVirtualMachineEntity_WhenInvoked_ShouldCreateVirtualMachineEntity()
-        {
-            _mockService
-                .Setup(s => s.CreateEntity(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()));
-            var controller = new VirtualMachineEntityController(_mockService.Object);
-
-            await controller.CreateVirtualMachineEntity(new CreateVirtualMachineEntityRequest
-            {
-                Name = "Test",
-                X = 10,
-                Y = 50,
-            });
-
-            _mockService.Verify(s => s.CreateEntity("Test", 10, 50), Times.Once());
-        }
-
-        [Test]
-        public async Task CreateVirtualMachineEntity_WhenInvoked_ShouldReturnCreatedVirtualMachineEntity()
-        {
-            _mockService.Setup(s => s.CreateEntity(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(new VirtualMachineEntityDTO
-            {
-                Id = 1,
-                Name = "Test",
-                X = 10,
-                Y = 50
-            });
-            var controller = new VirtualMachineEntityController(_mockService.Object);
-
-            var response = await controller.CreateVirtualMachineEntity(new CreateVirtualMachineEntityRequest
-            {
-                Name = "Test",
-                X = 10,
-                Y = 50
-            });
-            var extractedResponse = ResponseExtractor.ExtractControllerResponse(response);
-            var extractedData = extractedResponse?.Data;
-
-            Assert.IsNotNull(extractedData);
-            Assert.That(extractedData?.Id, Is.EqualTo(1));
-            Assert.That(extractedData?.Name, Is.EqualTo("Test"));
-            Assert.That(extractedData?.X, Is.EqualTo(10));
-            Assert.That(extractedData?.Y, Is.EqualTo(50));
-        }
-
-        [Test]
         public async Task UpdateVirtualMachineEntityPosition_WhenInvoked_ShouldUpdatePosition()
         {
             _mockService.Setup(s => s.UpdateEntityPosition(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()));
