@@ -1,4 +1,5 @@
 const pl = {
+    "errorOccurred": "Wystąpił błąd",
     "virtualMachine": {
         "addVirtualMachine": "Dodaj maszynę wirtualną",
         "configuration": "Konfiguracja maszyny wirtualnej",

@@ -1,5 +1,7 @@
-import { useForm } from "@mantine/form";
 import VirtualMachineCreateForm from "./VirtualMachineCreateForm.tsx";
+import { LoadingOverlay } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useVirtualMachineCreateStore } from "../../store/virtualMachineCreateStore.ts";
 import { useVirtualMachineEntitiesStore } from "../../store/virtualMachineEntitiesStore.ts";
@@ -18,6 +20,7 @@ export interface VirtualMachineCreateFormValues {
 const VirtualMachineCreateFormContainer = ({ onFormSubmitted }: VirtualMachineCreateFormContainerProps) => {
     const virtualMachineCreateStore = useVirtualMachineCreateStore();
     const virtualMachineEntityStore = useVirtualMachineEntitiesStore();
+    const [isCreating, setIsCreating] = useState(false);
     const { t } = useTranslation();
 
     const form = useForm<VirtualMachineCreateFormValues>({
@@ -53,13 +56,21 @@ const VirtualMachineCreateFormContainer = ({ onFormSubmitted }: VirtualMachineCr
     });
 
     const handleCreateVirtualMachine = async () => {
-        virtualMachineCreateStore.update({ ...form.values, bootableDiskId: parseInt(form.values.bootableDiskId!) });
-        await virtualMachineCreateStore.createVirtualMachine();
-        await virtualMachineEntityStore.fetchEntities();
-        onFormSubmitted();
+        setIsCreating(true);
+        try {
+            virtualMachineCreateStore.update({ ...form.values, bootableDiskId: parseInt(form.values.bootableDiskId!) });
+            await virtualMachineCreateStore.createVirtualMachine();
+            await virtualMachineEntityStore.fetchEntities();
+            onFormSubmitted();
+        } finally {
+            setIsCreating(false);
+        }
     };
 
-    return <VirtualMachineCreateForm form={form} onFormSubmit={handleCreateVirtualMachine} />;
+    return <>
+        <LoadingOverlay visible={isCreating} />
+        <VirtualMachineCreateForm form={form} onFormSubmit={handleCreateVirtualMachine} />
+    </>;
 };
 
 export default VirtualMachineCreateFormContainer;
