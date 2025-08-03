@@ -21,6 +21,8 @@ const useVirtualMachineEntitiesStore = create<VirtualMachineEntitiesStore>()((se
     updateEntityPosition: async (id: number, x: number, y: number) => {
         const foundEntity = get().entities.find((e) => e.id === id);
 
+        [x, y] = [Math.floor(x), Math.floor(y)];
+
         if (!foundEntity) {
             return;
         }
