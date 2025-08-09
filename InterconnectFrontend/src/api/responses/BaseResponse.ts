@@ -1,6 +1,6 @@
 interface BaseResponse<TData> {
     success: boolean;
-    message: string;
+    errorMessage: string | null;
     data: TData;
 }
 

@@ -44,4 +44,16 @@ describe("errorStore", () => {
         expect(result.current.error).toBeNull();
         expect(result.current.stackTrace).toBeNull();
     });
+
+    test("should not store stacktrace when showStackTrace is false", () => {
+        const error = new Error("TestError");
+        error.stack = "TestStackTrace";
+        const { result } = renderHook(() => useErrorStore());
+
+        act(() => {
+            result.current.setError(error, { showStackTrace: false });
+        });
+
+        expect(result.current.stackTrace).toBeNull();
+    });
 });

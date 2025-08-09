@@ -42,4 +42,17 @@ describe("ErrorModalContainer", () => {
 
         expect(screen.queryByText("Wystąpił błąd")).not.toBeInTheDocument();
     });
+
+    test("should not show textarea when stack trace is not null", () => {
+        mockUseErrorStore.mockReturnValue({
+            error: "TestError",
+            stackTrace: null
+        });
+
+        const screen = render(<MantineProvider>
+            <ErrorModalContainer />
+        </MantineProvider>);
+
+        expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
+    });
 });

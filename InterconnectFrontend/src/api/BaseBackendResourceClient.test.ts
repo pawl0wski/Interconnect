@@ -30,9 +30,9 @@ describe("BaseBackend", () => {
         global.fetch = vi.fn(() => Promise.resolve({
             json: () => Promise.resolve({
                 success: true,
-                message: null,
+                errorMessage: null,
                 data: {}
-            })
+            } as BaseResponse<string>)
         }));
         const client = new TestBaseResourceClient();
 
@@ -52,9 +52,9 @@ describe("BaseBackend", () => {
         global.fetch = vi.fn(() => Promise.resolve({
             json: () => Promise.resolve({
                 success: false,
-                message: "Mock error",
+                errorMessage: "Mock error",
                 data: {}
-            })
+            } as BaseResponse<string>)
         }));
         const client = new TestBaseResourceClient();
 
@@ -66,9 +66,9 @@ describe("BaseBackend", () => {
         global.fetch = vi.fn(() => Promise.resolve({
             json: () => Promise.resolve({
                 success: true,
-                message: null,
+                errorMessage: null,
                 data: {}
-            })
+            } as BaseResponse<string>)
         }));
         const client = new TestBaseResourceClient();
 

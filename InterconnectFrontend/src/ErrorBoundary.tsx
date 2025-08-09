@@ -8,7 +8,6 @@ interface ErrorBoundaryProps {
 const ErrorBoundary = ({ children }: ErrorBoundaryProps) => {
     const errorStore = useErrorStore();
 
-
     useEffect(() => {
         const onError = (event: ErrorEvent) => {
             errorStore.setError(event.error);

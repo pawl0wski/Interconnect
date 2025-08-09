@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useVirtualMachineCreateStore } from "../../store/virtualMachineCreateStore.ts";
 import { useVirtualMachineEntitiesStore } from "../../store/virtualMachineEntitiesStore.ts";
+import { useErrorStore } from "../../store/errorStore.ts";
 
 interface VirtualMachineCreateFormContainerProps {
     onFormSubmitted: () => void;
@@ -19,6 +20,7 @@ export interface VirtualMachineCreateFormValues {
 
 const VirtualMachineCreateFormContainer = ({ onFormSubmitted }: VirtualMachineCreateFormContainerProps) => {
     const virtualMachineCreateStore = useVirtualMachineCreateStore();
+    const errorStore = useErrorStore();
     const virtualMachineEntityStore = useVirtualMachineEntitiesStore();
     const [isCreating, setIsCreating] = useState(false);
     const { t } = useTranslation();
@@ -62,6 +64,8 @@ const VirtualMachineCreateFormContainer = ({ onFormSubmitted }: VirtualMachineCr
             await virtualMachineCreateStore.createVirtualMachine();
             await virtualMachineEntityStore.fetchEntities();
             onFormSubmitted();
+        } catch (error: any) {
+            errorStore.setError(error, { showStackTrace: false });
         } finally {
             setIsCreating(false);
         }

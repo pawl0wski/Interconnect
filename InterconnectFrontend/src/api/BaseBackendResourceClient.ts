@@ -26,7 +26,7 @@ abstract class BaseBackendResourceClient {
 
         const response = await fetchResponse.json() as BaseResponse<object>;
         if (!response.success) {
-            throw Error(response.message);
+            throw Error(response.errorMessage ?? undefined);
         }
 
         return response as TResponse;
