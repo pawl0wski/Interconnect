@@ -52,7 +52,7 @@ namespace InterconnectTests
             {
                 PropertyNameCaseInsensitive = true
             };
-            var response = JsonSerializer.Deserialize<BaseResponse<object>>(responseText, options);
+            var response = JsonSerializer.Deserialize<ExceptionResponse>(responseText, options);
 
             Assert.That(context.Response.StatusCode, Is.EqualTo(500));
             Assert.IsNotNull(response);

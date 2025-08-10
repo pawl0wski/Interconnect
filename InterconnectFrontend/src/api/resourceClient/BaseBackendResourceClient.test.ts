@@ -1,6 +1,6 @@
 import { describe, expect } from "vitest";
 import BaseBackendResourceClient from "./BaseBackendResourceClient.ts";
-import BaseResponse from "./responses/BaseResponse.ts";
+import BaseResponse from "../responses/BaseResponse.ts";
 
 type TestResponse = BaseResponse<string>;
 
@@ -20,7 +20,7 @@ class TestBaseResourceClient extends BaseBackendResourceClient {
 
 describe("BaseBackend", () => {
     vi.mock(
-        "../configuration.ts", () => ({
+        "../../configuration.ts", () => ({
             getConfiguration: () => ({ backendUrl: "http://test/" })
         })
     );

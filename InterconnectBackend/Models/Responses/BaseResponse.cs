@@ -1,25 +1,25 @@
 ﻿namespace Models.Responses
 {
-    public class BaseResponse<TResponse>
+    public abstract class BaseResponse<TResponse, TSelf> where TSelf : BaseResponse<TResponse, TSelf>, new()
     {
         public bool Success { get; set; }
         public string? ErrorMessage { get; set; }
         public TResponse? Data { get; set; }
 
-        public static BaseResponse<TResponse> WithSuccess(TResponse data)
+        public static TSelf WithSuccess(TResponse data)
         {
-            return new BaseResponse<TResponse>
+            return new TSelf
             {
                 Success = true,
                 Data = data
             };
         }
-        public static BaseResponse<object> WithEmptySuccess()
+        public static TSelf WithEmptySuccess()
         {
-            return new BaseResponse<object>
+            return new TSelf
             {
                 Success = true,
-                Data = new object()
+                Data = default
             };
         }
     }

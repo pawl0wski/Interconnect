@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models;
-using Models.DTO;
 using Models.Responses;
 using Services;
 
@@ -18,19 +17,19 @@ namespace Controllers
         }
 
         [HttpPost]
-        public ActionResult<BaseResponse<VirtualMachineInfo>> CreateVirtualMachine(VirtualMachineCreateDefinition def)
+        public ActionResult<VirtualMachineInfoResponse> CreateVirtualMachine(VirtualMachineCreateDefinition def)
         {
             var vmInfo = _vmManagerService.CreateVirtualMachine(def);
 
-            return Ok(BaseResponse<VirtualMachineInfo>.WithSuccess(vmInfo));
+            return Ok(VirtualMachineInfoResponse.WithSuccess(vmInfo));
         }
 
         [HttpGet]
-        public ActionResult<BaseResponse<List<VirtualMachineInfo>>> GetListOfVirtualMachines()
+        public ActionResult<VirtualMachinesInfoResponse> GetListOfVirtualMachines()
         {
             var vms = _vmManagerService.GetListOfVirtualMachines();
 
-            return Ok(BaseResponse<List<VirtualMachineInfo>>.WithSuccess(vms));
+            return Ok(VirtualMachinesInfoResponse.WithSuccess(vms));
         }
     }
 }

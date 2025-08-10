@@ -6,7 +6,7 @@ import { useVirtualMachineEntitiesStore } from "./virtualMachineEntitiesStore.ts
 const mockUpdateEntityPosition = vi.hoisted(() => vi.fn());
 const mockGetListOfEntities = vi.hoisted(() => vi.fn());
 
-vi.mock("../api/VirtualMachineEntityResourceClient.ts", () => ({
+vi.mock("../api/resourceClient/VirtualMachineEntityResourceClient.ts", () => ({
     virtualMachineEntityResourceClient: {
         updateEntityPosition: mockUpdateEntityPosition,
         getListOfEntities: mockGetListOfEntities

@@ -23,7 +23,7 @@ namespace Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BaseResponse<VirtualMachineEntityDTO>>> CreateVirtualMachine(CreateVirtualMachineRequest req)
+        public async Task<ActionResult<VirtualMachineEntityResponse>> CreateVirtualMachine(CreateVirtualMachineRequest req)
         {
             var bootableDiskPath = await _bootableDiskProviderService.GetBootableDiskPathById(req.BootableDiskId);
             if (bootableDiskPath == null)
@@ -43,16 +43,16 @@ namespace Controllers
             var entity = await _entityService.CreateEntity(req.Name, 25, 25);
             var updatedEntity = await _entityService.UpdateEntityVmUUID(entity.Id, vmInfo.Uuid);
 
-            return Ok(BaseResponse<VirtualMachineEntityDTO>.WithSuccess(updatedEntity));
+            return Ok(VirtualMachineEntityResponse.WithSuccess(updatedEntity));
         }
 
 
         [HttpGet]
-        public async Task<ActionResult<BaseResponse<List<BootableDiskModelDTO>>>> GetAvailableBootableDisks()
+        public async Task<ActionResult<BootableDisksResponse>> GetAvailableBootableDisks()
         {
             var bootableDisks = await _bootableDiskProviderService.GetAvailableBootableDiskModels();
 
-            return Ok(BaseResponse<List<BootableDiskModelDTO>>.WithSuccess(bootableDisks));
+            return Ok(BootableDisksResponse.WithSuccess(bootableDisks));
         }
     }
 }

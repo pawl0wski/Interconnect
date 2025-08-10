@@ -1,6 +1,6 @@
 import { create } from "zustand/react";
 import { VirtualMachineEntityModel } from "../models/VirtualMachineEntityModel.ts";
-import { virtualMachineEntityResourceClient } from "../api/VirtualMachineEntityResourceClient.ts";
+import { virtualMachineEntityResourceClient } from "../api/resourceClient/VirtualMachineEntityResourceClient.ts";
 
 interface VirtualMachineEntitiesStore {
     entities: VirtualMachineEntityModel[];

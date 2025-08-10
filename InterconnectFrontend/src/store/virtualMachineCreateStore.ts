@@ -1,5 +1,5 @@
 import { create } from "zustand/react";
-import { virtualMachineResourceClient } from "../api/VirtualMachineResourceClient.ts";
+import { virtualMachineResourceClient } from "../api/resourceClient/VirtualMachineResourceClient.ts";
 
 interface VirtualMachineCreateStore {
     name: string,

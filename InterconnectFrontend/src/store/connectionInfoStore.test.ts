@@ -3,7 +3,7 @@ import { act, renderHook } from "@testing-library/react";
 import { useConnectionInfoStore } from "./connectionInfoStore.ts";
 
 const mockConnectionInfo = vi.hoisted(() => vi.fn());
-vi.mock("../api/HypervisorConnectionResourceClient.ts", () => ({
+vi.mock("../api/resourceClient/HypervisorConnectionResourceClient.ts", () => ({
     hypervisorConnectionClient: {
         connectionInfo: mockConnectionInfo
     }

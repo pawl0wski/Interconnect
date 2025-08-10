@@ -19,17 +19,6 @@ namespace ControllersTests
         }
 
         [Test]
-        public void Ping_WhenInvoked_ShouldReturnPong()
-        {
-            var controller = new HypervisorConnectionController(_hypervisorConnectionService.Object);
-
-            var result = controller.Ping().Result as ObjectResult;
-            var response = result!.Value as BaseResponse<string>;
-
-            Assert.That(response!.Data, Is.EqualTo("pong"));
-        }
-
-        [Test]
         public void ConnectionInfo_WhenInvoked_ShouldGetConnectionInfo()
         {
             var controller = new HypervisorConnectionController(_hypervisorConnectionService.Object);

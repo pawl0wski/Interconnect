@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Models;
 using Models.Responses;
 using Services;
 
@@ -17,17 +16,11 @@ namespace Controllers
         }
 
         [HttpGet]
-        public ActionResult<BaseResponse<string>> Ping()
-        {
-            return Ok(BaseResponse<string>.WithSuccess("pong"));
-        }
-
-        [HttpGet]
-        public ActionResult<BaseResponse<ConnectionInfo>> ConnectionInfo()
+        public ActionResult<ConnectionInfoResponse> ConnectionInfo()
         {
             var connectionInfo = _hypervisorConnectionService.GetConnectionInfo();
 
-            return Ok(BaseResponse<ConnectionInfo>.WithSuccess(connectionInfo));
+            return Ok(ConnectionInfoResponse.WithSuccess(connectionInfo));
         }
     }
 }

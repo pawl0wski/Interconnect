@@ -1,13 +1,8 @@
 import BaseBackendResourceClient from "./BaseBackendResourceClient.ts";
-import BaseResponse from "./responses/BaseResponse.ts";
-import ConnectionInfoModel from "../models/ConnectionInfoModel.ts";
+import ConnectionInfoResponse from "../responses/ConnectionInfoResponse.ts";
 
 class HypervisorConnectionResourceClient extends BaseBackendResourceClient {
-    public async ping(): Promise<BaseResponse<string>> {
-        return await this.sendBackendRequest("Ping", "GET", {});
-    }
-
-    public async connectionInfo(): Promise<BaseResponse<ConnectionInfoModel>> {
+    public async connectionInfo(): Promise<ConnectionInfoResponse> {
         return await this.sendBackendRequest("ConnectionInfo", "GET", {});
     }
 

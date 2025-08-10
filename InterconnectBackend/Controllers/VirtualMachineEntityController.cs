@@ -1,6 +1,5 @@
 ﻿using Controllers.Requests;
 using Microsoft.AspNetCore.Mvc;
-using Models.DTO;
 using Models.Responses;
 using Services;
 
@@ -18,19 +17,19 @@ namespace Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BaseResponse<VirtualMachineEntityDTO>>> UpdateVirtualMachineEntityPosition(UpdateVirtualMachineEntityPositionRequest req)
+        public async Task<ActionResult<VirtualMachineEntityResponse>> UpdateVirtualMachineEntityPosition(UpdateVirtualMachineEntityPositionRequest req)
         {
             var entity = await _entityService.UpdateEntityPosition(req.Id, req.X, req.Y);
 
-            return Ok(BaseResponse<VirtualMachineEntityDTO>.WithSuccess(entity));
+            return Ok(VirtualMachineEntityResponse.WithSuccess(entity));
         }
 
         [HttpGet]
-        public async Task<ActionResult<BaseResponse<List<VirtualMachineEntityDTO>>>> GetVirtualMachineEntities()
+        public async Task<ActionResult<VirtualMachinesEntitiesResponse>> GetVirtualMachineEntities()
         {
             var entities = await _entityService.GetEntities();
 
-            return Ok(BaseResponse<List<VirtualMachineEntityDTO>>.WithSuccess(entities));
+            return Ok(VirtualMachinesEntitiesResponse.WithSuccess(entities));
         }
     }
 }

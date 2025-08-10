@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { BootableDiskModel } from "../models/BootableDiskModel.ts";
-import { virtualMachineResourceClient } from "../api/VirtualMachineResourceClient.ts";
+import { virtualMachineResourceClient } from "../api/resourceClient/VirtualMachineResourceClient.ts";
 
 interface BootableDisksStore {
     bootableDisks: BootableDiskModel[];

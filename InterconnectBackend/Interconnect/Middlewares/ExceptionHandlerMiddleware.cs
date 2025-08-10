@@ -22,7 +22,7 @@ namespace Interconnect.Middlewares
                 context.Response.StatusCode = 500;
                 context.Response.ContentType = "application/json";
 
-                var response = new BaseResponse<object>
+                var response = new ExceptionResponse
                 {
                     Success = false,
                     ErrorMessage = ex.Message,

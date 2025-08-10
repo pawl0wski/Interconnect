@@ -1,6 +1,7 @@
 ﻿using Controllers;
 using Controllers.Requests;
 using Models.DTO;
+using Models.Responses;
 using Moq;
 using Services;
 using TestUtils;
@@ -51,7 +52,7 @@ namespace ControllersTests
                 X = 10,
                 Y = 50,
             });
-            var extractedData = ResponseExtractor.ExtractControllerResponse(response)?.Data;
+            var extractedData = ResponseExtractor.ExtractControllerResponse<VirtualMachineEntityResponse, VirtualMachineEntityDTO>(response)?.Data;
 
             Assert.IsNotNull(extractedData);
             Assert.That(extractedData?.Id, Is.EqualTo(1));
@@ -83,7 +84,7 @@ namespace ControllersTests
             var controller = new VirtualMachineEntityController(_mockService.Object);
 
             var response = await controller.GetVirtualMachineEntities();
-            var extractedData = ResponseExtractor.ExtractControllerResponse(response)?.Data;
+            var extractedData = ResponseExtractor.ExtractControllerResponse<VirtualMachinesEntitiesResponse, List<VirtualMachineEntityDTO>>(response)?.Data;
 
             Assert.IsNotNull(extractedData);
             Assert.That(extractedData.Count(), Is.EqualTo(2));

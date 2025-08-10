@@ -1,6 +1,6 @@
 import { create } from "zustand/react";
 import { ConnectionStatus } from "../models/enums/ConnectionStatus.ts";
-import { hypervisorConnectionClient } from "../api/HypervisorConnectionResourceClient.ts";
+import { connectionStatusHubClient } from "../api/hubClient/ConnectionStatusHubClient.ts";
 
 interface ConnectionStoreState {
     connectionStatus: ConnectionStatus;
@@ -12,8 +12,12 @@ const useConnectionStore = create<ConnectionStoreState>()((set) => ({
     updateConnectionStatus: async () => {
         let connectionStatus: ConnectionStatus;
         try {
-            await hypervisorConnectionClient.ping();
-            connectionStatus = ConnectionStatus.Alive;
+            const resp = await connectionStatusHubClient.ping();
+            if (resp.data !== "Pong") {
+                connectionStatus = ConnectionStatus.Dead;
+            } else {
+                connectionStatus = ConnectionStatus.Alive;
+            }
         } catch {
             connectionStatus = ConnectionStatus.Dead;
         }

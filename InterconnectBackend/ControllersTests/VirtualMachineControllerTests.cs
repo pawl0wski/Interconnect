@@ -2,6 +2,7 @@
 using Controllers.Requests;
 using Models;
 using Models.DTO;
+using Models.Responses;
 using Moq;
 using Services;
 using TestUtils;
@@ -108,7 +109,7 @@ namespace ControllersTests
         {
             var resp = await _controller.CreateVirtualMachine(_testCreateVirtualMachineRequest);
 
-            var extractedResponse = ResponseExtractor.ExtractControllerResponse<VirtualMachineEntityDTO>(resp);
+            var extractedResponse = ResponseExtractor.ExtractControllerResponse<VirtualMachineEntityResponse, VirtualMachineEntityDTO>(resp);
 
             Assert.That(extractedResponse?.Data?.Id, Is.EqualTo(1));
             Assert.That(extractedResponse?.Data?.Name, Is.EqualTo("Test"));

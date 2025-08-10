@@ -1,4 +1,5 @@
 using Database;
+using Hubs;
 using Interconnect.Middlewares;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -23,6 +24,7 @@ namespace Interconnect
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddSignalR();
             builder.Services.Configure<InterconnectConfig>(
                 builder.Configuration.GetSection("Interconnect"));
 
@@ -54,6 +56,8 @@ namespace Interconnect
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.MapHub<ConnectionStatusHub>("/ConnectionStatusHub");
 
             app.UseExceptionMiddleware();
 

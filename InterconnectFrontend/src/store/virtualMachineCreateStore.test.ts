@@ -4,7 +4,7 @@ import { useVirtualMachineCreateStore } from "./virtualMachineCreateStore.ts";
 
 const mockCreateVirtualMachine = vi.hoisted(() => vi.fn());
 
-vi.mock("../api/VirtualMachineResourceClient.ts", () => ({
+vi.mock("../api/resourceClient/VirtualMachineResourceClient.ts", () => ({
     virtualMachineResourceClient: {
         createVirtualMachine: mockCreateVirtualMachine
     }
