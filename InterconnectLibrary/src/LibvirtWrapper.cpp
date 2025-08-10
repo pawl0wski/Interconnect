@@ -87,7 +87,7 @@ std::string LibvirtWrapper::getDomainName(const virDomainPtr domain)
 
 void LibvirtWrapper::freeDomain(virDomainPtr domain)
 {
-    if ( virDomainFree(domain) != 0)
+    if (virDomainFree(domain) != 0)
     {
         throw std::runtime_error("freeDomain failed");
     }
@@ -96,4 +96,19 @@ void LibvirtWrapper::freeDomain(virDomainPtr domain)
 int LibvirtWrapper::connectionIsAlive(const virConnectPtr conn)
 {
     return virConnectIsAlive(conn);
+}
+
+virStreamPtr LibvirtWrapper::openStream(const virConnectPtr conn)
+{
+    return virStreamNew(conn, 0);
+}
+
+int LibvirtWrapper::openDomainConsole(const virDomainPtr domain, const virStreamPtr stream)
+{
+    return virDomainOpenConsole(domain, nullptr, stream, 0);
+}
+
+virDomainPtr LibvirtWrapper::domainLookupByUuid(const virConnectPtr conn, std::string& uuid)
+{
+    return virDomainLookupByUUIDString(conn, uuid.c_str());
 }

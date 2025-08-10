@@ -66,6 +66,8 @@ public:
     std::vector<VirtualMachineInfo> getListOfVirtualMachinesWithInfo();
 
     bool isConnectionAlive() const;
+
+    void openVirtualMachineConsole(std::string& vmUuid);
 };
 
 #endif //VIRTUALMACHINEMANAGER_H

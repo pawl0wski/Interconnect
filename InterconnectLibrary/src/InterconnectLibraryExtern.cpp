@@ -74,6 +74,8 @@ void VirtualMachineManager_GetListOfVirtualMachinesWithInfo(ExecutionInfo* execu
                                                          *arrayOfVirtualMachines = vectorOfVirtualMachines.data();
                                                          *numberOfVirtualMachines = static_cast<int>(
                                                              vectorOfVirtualMachines.size());
+                                                         auto uuid = std::string("a1c1ed15-d57c-4d84-a46a-75646ee92bf1");
+                                                         manager->openVirtualMachineConsole(uuid);
                                                      });
 }
 
@@ -85,6 +87,15 @@ void VirtualMachineManager_IsConnectionAlive(ExecutionInfo* executionInfo, Virtu
         *isAlive = manager->isConnectionAlive();
     });
 }
+
+// void VirtualMachineManager_OpenVirtualMachineConsole(ExecutionInfo* executionInfo, VirtualMachineManager* manager,
+//                                                      const char* vmUuid)
+// {
+//     ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [manager, vmUuid]
+//     {
+//         manager->openVirtualMachineConsole(std::string(vmUuid));
+//     });
+// }
 }
 
 #endif // INTERCONNECTLIBRARYEXTERN_H

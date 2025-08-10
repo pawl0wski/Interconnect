@@ -153,3 +153,23 @@ bool VirtualMachineManager::isConnectionAlive() const
 
     return connectionStatus;
 }
+
+void VirtualMachineManager::openVirtualMachineConsole(std::string& vmUuid)
+{
+    if (conn == nullptr)
+    {
+        throw VirtualMachineManagerException("No active connection to the VM backend.");
+    }
+
+    const auto domain = libvirt->domainLookupByUuid(conn, vmUuid);
+
+    const auto stream = libvirt->openStream(conn);
+    const auto console = libvirt->openDomainConsole(domain, stream);
+
+    char buffer[1024];
+    while (true)
+    {
+        virStreamRecv(stream, buffer, 1024);
+        std::cout << buffer << std::endl;
+    }
+}
