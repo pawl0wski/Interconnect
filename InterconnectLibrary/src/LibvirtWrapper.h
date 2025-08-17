@@ -66,11 +66,11 @@ public:
 
     int openDomainConsole(virDomainPtr domain, virStreamPtr stream) override;
 
-    virDomainPtr domainLookupByUuid(virConnectPtr conn, std::string& uuid) override;
+    virDomainPtr domainLookupByUuid(virConnectPtr conn, const std::string& uuid) override;
 
     int receiveDataFromStream(virStreamPtr stream, char* buffer, int bufferSize) override;
 
-    void sendDataToStream(virStreamPtr stream, char* buffer, int bufferSize) override;
+    void sendDataToStream(virStreamPtr stream, const char* buffer, int bufferSize) override;
 
     void finishAndFreeStream(virStreamPtr stream) override;
 };

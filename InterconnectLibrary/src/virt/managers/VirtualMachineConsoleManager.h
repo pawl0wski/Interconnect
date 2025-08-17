@@ -30,7 +30,7 @@ public:
 
     void updateConnection(virConnectPtr conn);
 
-    int openVirtualMachineConsole(std::string& vmUuid);
+    int openVirtualMachineConsole(const std::string& vmUuid);
 
     void removeStream(int streamId);
 
@@ -38,8 +38,8 @@ public:
 
     void sendDataToStream(int streamId, const char* data, int dataSize) const;
 
-private:
-    virStreamPtr getStreamById(int streamId) const;
+protected:
+    virtual virStreamPtr getStreamById(int streamId) const;
     int addNewStream(virStreamPtr stream);
 };
 

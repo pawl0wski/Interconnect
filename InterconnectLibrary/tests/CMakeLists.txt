@@ -21,6 +21,8 @@ set(UTIL_FILES
         TestingUtils.cpp
         TestingUtils.h
         ConnectionManagerTests.cpp
+        VirtualMachineConsoleManager.cpp
+        mocks/VirtualMachineConsoleManagerMockedStreams.h
 )
 
 add_executable(

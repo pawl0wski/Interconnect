@@ -108,7 +108,7 @@ int LibvirtWrapper::openDomainConsole(const virDomainPtr domain, const virStream
     return virDomainOpenConsole(domain, nullptr, stream, 0);
 }
 
-virDomainPtr LibvirtWrapper::domainLookupByUuid(const virConnectPtr conn, std::string& uuid)
+virDomainPtr LibvirtWrapper::domainLookupByUuid(const virConnectPtr conn, const std::string& uuid)
 {
     return virDomainLookupByUUIDString(conn, uuid.c_str());
 }
@@ -118,7 +118,7 @@ int LibvirtWrapper::receiveDataFromStream(const virStreamPtr stream, char* buffe
     return virStreamRecv(stream, buffer, bufferSize);
 }
 
-void LibvirtWrapper::sendDataToStream(const virStreamPtr stream, char* buffer, const int bufferSize)
+void LibvirtWrapper::sendDataToStream(const virStreamPtr stream, const char* buffer, const int bufferSize)
 {
     virStreamSend(stream, buffer, bufferSize);
 }

@@ -7,7 +7,7 @@ void VirtualMachineConsoleManager::updateConnection(const virConnectPtr conn)
     this->conn = conn;
 }
 
-int VirtualMachineConsoleManager::openVirtualMachineConsole(std::string& vmUuid)
+int VirtualMachineConsoleManager::openVirtualMachineConsole(const std::string& vmUuid)
 {
     if (conn == nullptr)
     {
@@ -15,6 +15,10 @@ int VirtualMachineConsoleManager::openVirtualMachineConsole(std::string& vmUuid)
     }
 
     const auto domain = libvirt->domainLookupByUuid(conn, vmUuid);
+    if (domain == nullptr)
+    {
+        throw VirtualMachineManagerException("Can not find domain");
+    }
 
     const auto stream = libvirt->createNewStream(conn);
     if (libvirt->openDomainConsole(domain, stream))
@@ -34,20 +38,21 @@ int VirtualMachineConsoleManager::addNewStream(const virStreamPtr stream)
 
 void VirtualMachineConsoleManager::removeStream(const int streamId)
 {
+    const auto stream = getStreamById(streamId);
     this->streams.erase(this->streams.begin() + (streamId - 1));
-
+    libvirt->finishAndFreeStream(stream);
 }
 
 void VirtualMachineConsoleManager::getDataFromStream(const int streamId, char* data, const int dataSize) const
 {
     const auto stream = getStreamById(streamId);
-    virStreamRecv(stream, data, dataSize);
+    libvirt->receiveDataFromStream(stream, data, dataSize);
 }
 
 void VirtualMachineConsoleManager::sendDataToStream(const int streamId, const char* data, const int dataSize) const
 {
     const auto stream = getStreamById(streamId);
-    virStreamSend(stream, data, dataSize);
+    libvirt->sendDataToStream(stream, data, dataSize);
 }
 
 virStreamPtr VirtualMachineConsoleManager::getStreamById(const int streamId) const

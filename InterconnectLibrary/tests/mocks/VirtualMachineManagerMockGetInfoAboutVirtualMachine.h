@@ -4,7 +4,6 @@
 
 #include "virt/managers/VirtualMachineManager.h"
 
-
 class VirtualMachineManagerMockGetInfoAboutVirtualMachine final : public VirtualMachineManager
 {
 public:

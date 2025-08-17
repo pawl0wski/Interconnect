@@ -52,11 +52,11 @@ public:
 
     virtual int openDomainConsole(virDomainPtr domain, virStreamPtr stream) = 0;
 
-    virtual virDomainPtr domainLookupByUuid(virConnectPtr conn, std::string& uuid) = 0;
+    virtual virDomainPtr domainLookupByUuid(virConnectPtr conn, const std::string& uuid) = 0;
 
     virtual int receiveDataFromStream(virStreamPtr stream, char* buffer, int bufferSize) = 0;
 
-    virtual void sendDataToStream(virStreamPtr stream, char* buffer, int bufferSize) = 0;
+    virtual void sendDataToStream(virStreamPtr stream, const char* buffer, int bufferSize) = 0;
 
     virtual void finishAndFreeStream(virStreamPtr stream) = 0;
 };
