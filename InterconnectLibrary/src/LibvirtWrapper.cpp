@@ -85,9 +85,9 @@ std::string LibvirtWrapper::getDomainName(const virDomainPtr domain)
     return {name};
 }
 
-void LibvirtWrapper::freeDomain(virDomainPtr domain)
+void LibvirtWrapper::freeDomain(const virDomainPtr domain)
 {
-    if ( virDomainFree(domain) != 0)
+    if (virDomainFree(domain) != 0)
     {
         throw std::runtime_error("freeDomain failed");
     }
@@ -96,4 +96,35 @@ void LibvirtWrapper::freeDomain(virDomainPtr domain)
 int LibvirtWrapper::connectionIsAlive(const virConnectPtr conn)
 {
     return virConnectIsAlive(conn);
+}
+
+virStreamPtr LibvirtWrapper::createNewStream(const virConnectPtr conn)
+{
+    return virStreamNew(conn, 0);
+}
+
+int LibvirtWrapper::openDomainConsole(const virDomainPtr domain, const virStreamPtr stream)
+{
+    return virDomainOpenConsole(domain, nullptr, stream, 0);
+}
+
+virDomainPtr LibvirtWrapper::domainLookupByUuid(const virConnectPtr conn, std::string& uuid)
+{
+    return virDomainLookupByUUIDString(conn, uuid.c_str());
+}
+
+int LibvirtWrapper::receiveDataFromStream(const virStreamPtr stream, char* buffer, const int bufferSize)
+{
+    return virStreamRecv(stream, buffer, bufferSize);
+}
+
+void LibvirtWrapper::sendDataToStream(const virStreamPtr stream, char* buffer, const int bufferSize)
+{
+    virStreamSend(stream, buffer, bufferSize);
+}
+
+void LibvirtWrapper::finishAndFreeStream(const virStreamPtr stream)
+{
+    virStreamFinish(stream);
+    virStreamFree(stream);
 }

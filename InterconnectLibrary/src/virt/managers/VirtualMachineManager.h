@@ -1,14 +1,12 @@
 #ifndef VIRTUALMACHINEMANAGER_H
 #define VIRTUALMACHINEMANAGER_H
-#include <optional>
 #include <string>
 #include <vector>
 #include <libvirt/libvirt.h>
 
-#include "LibvirtWrapper.h"
-#include "interfaces/ILibvirtWrapper.h"
-#include "models/ConnectionInfo.h"
-#include "models/VirtualMachineInfo.h"
+#include "../../LibvirtWrapper.h"
+#include "../../interfaces/ILibvirtWrapper.h"
+#include "../../models/VirtualMachineInfo.h"
 
 /**
  * @brief Manages virtual machines.
@@ -38,15 +36,7 @@ public:
         libvirt = new LibvirtWrapper();
     }
 
-    /**
-     * @brief Initializes the connection to the libvirt backend.
-     *
-     * @param customConnectionUrl Optional URL for a custom hypervisor connection.
-     *                           If not provided, default connection is used.
-     */
-    void initializeConnection(const std::optional<std::string>& customConnectionUrl = std::nullopt);
-
-    ConnectionInfo getConnectionInfo() const;
+    void updateConnection(virConnectPtr conn);
 
     /**
      * @brief Creates a virtual machine based on an XML configuration.
@@ -64,8 +54,6 @@ public:
     virtual VirtualMachineInfo getInfoAboutVirtualMachine(const std::string& name);
 
     std::vector<VirtualMachineInfo> getListOfVirtualMachinesWithInfo();
-
-    bool isConnectionAlive() const;
 };
 
 #endif //VIRTUALMACHINEMANAGER_H

@@ -60,7 +60,19 @@ public:
 
     void freeDomain(virDomainPtr domain) override;
 
-    virtual int connectionIsAlive(virConnectPtr conn);
+    int connectionIsAlive(virConnectPtr conn) override;
+
+    virStreamPtr createNewStream(virConnectPtr conn) override;
+
+    int openDomainConsole(virDomainPtr domain, virStreamPtr stream) override;
+
+    virDomainPtr domainLookupByUuid(virConnectPtr conn, std::string& uuid) override;
+
+    int receiveDataFromStream(virStreamPtr stream, char* buffer, int bufferSize) override;
+
+    void sendDataToStream(virStreamPtr stream, char* buffer, int bufferSize) override;
+
+    void finishAndFreeStream(virStreamPtr stream) override;
 };
 
 

@@ -1,90 +1,86 @@
 #ifndef INTERCONNECTLIBRARYEXTERN_H
 #define INTERCONNECTLIBRARYEXTERN_H
 
-#include "VirtualMachineManager.h"
+#include "models/ConnectionInfo.h"
 #include "utils/ExecutionInfoObtainer.h"
-
-ConnectionInfo info;
+#include "virt/VirtualizationFacade.h"
 
 extern "C" {
-VirtualMachineManager* VirtualMachineManager_Create()
+VirtualizationFacade* VirtualizationFacade_Create()
 {
-    return new VirtualMachineManager();
+    return new VirtualizationFacade();
 }
 
-void VirtualMachineManager_Destroy(const VirtualMachineManager* manager)
+void VirtualizationFacade_Destroy(const VirtualizationFacade* virtualization)
 {
-    delete manager;
+    delete virtualization;
 }
 
-void VirtualMachineManager_InitializeConnection(ExecutionInfo* executionInfo, VirtualMachineManager* manager,
+void VirtualMachineManager_InitializeConnection(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization,
                                                 const char* customConnectionUrl)
 {
-    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [manager, customConnectionUrl]
+    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, customConnectionUrl]
     {
-        std::optional<std::string> connectionUrl = std::nullopt;
-
-        if (customConnectionUrl != nullptr)
-        {
-            connectionUrl = std::make_optional(std::string(customConnectionUrl));
-        }
-
-        manager->initializeConnection(connectionUrl);
+        virtualization->initializeConnection(customConnectionUrl);
     });
 }
 
-void VirtualMachineManager_GetConnectionInfo(ExecutionInfo* executionInfo, VirtualMachineManager* manager,
+void VirtualMachineManager_GetConnectionInfo(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization,
                                              ConnectionInfo* infoPtr)
 {
-    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [infoPtr, manager]
+    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [infoPtr, virtualization]
     {
-        *infoPtr = manager->getConnectionInfo();
+        virtualization->getConnectionInfo(infoPtr);
     });
 }
 
-void VirtualMachineManager_CreateVirtualMachine(ExecutionInfo* executionInfo, VirtualMachineManager* manager,
+void VirtualMachineManager_CreateVirtualMachine(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization,
                                                 const char* virtualMachineXml)
 {
-    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [manager, virtualMachineXml]
+    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, virtualMachineXml]
     {
-        manager->createVirtualMachine(virtualMachineXml);
+        virtualization->createVirtualMachine(virtualMachineXml);
     });
 }
 
-void VirtualMachineManager_GetInfoAboutVirtualMachine(ExecutionInfo* executionInfo, VirtualMachineManager* manager,
+void VirtualMachineManager_GetInfoAboutVirtualMachine(ExecutionInfo* executionInfo,
+                                                      VirtualizationFacade* virtualization,
                                                       const char* name, VirtualMachineInfo* vmInfo)
 {
-    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [manager, name, vmInfo]
+    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, name, vmInfo]
     {
-        *vmInfo = manager->getInfoAboutVirtualMachine(name);
+        virtualization->getInfoAboutVirtualMachine(vmInfo, name);
     });
 }
 
 void VirtualMachineManager_GetListOfVirtualMachinesWithInfo(ExecutionInfo* executionInfo,
-                                                            VirtualMachineManager* manager,
-                                                            VirtualMachineInfo** arrayOfVirtualMachines,
-                                                            int* numberOfVirtualMachines)
+                                                            VirtualizationFacade* virtualization,
+                                                            VirtualMachineInfo** arrayOfVms,
+                                                            int* numberOfVms)
 {
-    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo,
-                                                     [manager, arrayOfVirtualMachines, numberOfVirtualMachines]
-                                                     {
-                                                         static std::vector<VirtualMachineInfo> vectorOfVirtualMachines;
-                                                         vectorOfVirtualMachines = manager->
-                                                             getListOfVirtualMachinesWithInfo();
-                                                         *arrayOfVirtualMachines = vectorOfVirtualMachines.data();
-                                                         *numberOfVirtualMachines = static_cast<int>(
-                                                             vectorOfVirtualMachines.size());
-                                                     });
-}
-
-void VirtualMachineManager_IsConnectionAlive(ExecutionInfo* executionInfo, VirtualMachineManager* manager,
-                                             bool* isAlive)
-{
-    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [manager, isAlive]
+    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, arrayOfVms, numberOfVms]
     {
-        *isAlive = manager->isConnectionAlive();
+        virtualization->getListOfVirtualMachinesWithInfo(arrayOfVms, numberOfVms);
     });
 }
+
+void VirtualMachineManager_IsConnectionAlive(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization,
+                                             bool* isAlive)
+{
+    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, isAlive]
+    {
+        virtualization->isConnectionAlive(isAlive);
+    });
+}
+
+// void VirtualMachineManager_OpenVirtualMachineConsole(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization,
+//                                                      const char* vmUuid)
+// {
+//     ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, vmUuid]
+//     {
+//         virtualization->openVirtualMachineConsole(vmUuid);
+//     });
+// }
 }
 
 #endif // INTERCONNECTLIBRARYEXTERN_H

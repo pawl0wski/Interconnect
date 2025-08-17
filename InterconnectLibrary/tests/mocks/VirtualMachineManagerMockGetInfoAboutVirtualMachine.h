@@ -2,12 +2,15 @@
 #define VIRTUALMACHINEMANAGERMOCKGETINFOABOUTVIRTUALMACHINE_H
 #include <gmock/gmock-function-mocker.h>
 
-#include "VirtualMachineManager.h"
+#include "virt/managers/VirtualMachineManager.h"
 
-class VirtualMachineManagerMockGetInfoAboutVirtualMachine final : public VirtualMachineManager {
+
+class VirtualMachineManagerMockGetInfoAboutVirtualMachine final : public VirtualMachineManager
+{
 public:
-    explicit VirtualMachineManagerMockGetInfoAboutVirtualMachine(ILibvirtWrapper *libvirt)
-        : VirtualMachineManager(libvirt) {
+    explicit VirtualMachineManagerMockGetInfoAboutVirtualMachine(ILibvirtWrapper* libvirt)
+        : VirtualMachineManager(libvirt)
+    {
     }
 
     MOCK_METHOD(VirtualMachineInfo, getInfoAboutVirtualMachine, (const std::string &uuid), (override));
