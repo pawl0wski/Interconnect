@@ -1,5 +1,6 @@
 set(SOURCE_FILES
-        VirtualMachineManager.cpp
+        virt/managers/VirtualMachineManager.cpp
+        virt/managers/VirtualMachineConsoleManager.cpp
         LibvirtWrapper.cpp
         InterconnectLibraryExtern.cpp
         utils/VersionUtils.cpp
@@ -10,11 +11,13 @@ set(SOURCE_FILES
 set(HEADER_FILES
         interfaces/ILibvirtWrapper.h
         LibvirtWrapper.h
-        VirtualMachineManager.h
+        virt/managers/VirtualMachineManager.h
+        virt/managers/VirtualMachineConsoleManager.h
         models/VirtualMachineInfo.h
         models/Version.h
         models/ConnectionInfo.h
         models/ExecutionInfo.h
+        models/IdentifiedStream.h
         exceptions/VirtualMachineManagerException.h
         utils/VersionUtils.h
         utils/StringUtils.h
@@ -28,6 +31,11 @@ add_library(interconnect STATIC
         ${HEADER_FILES}
         ${SOURCE_FILES}
         ${EXTERN_FILES}
+        models/IdentifiedStream.h
+        virt/VirtualizationFacade.cpp
+        virt/VirtualizationFacade.h
+        virt/managers/ConnectionManager.cpp
+        virt/managers/ConnectionManager.h
 )
 
 add_library(interconnect_shared SHARED

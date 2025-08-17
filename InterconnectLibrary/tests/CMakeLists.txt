@@ -6,6 +6,7 @@ find_package(GTest REQUIRED)
 
 set(TEST_FILES
         VirtualMachineManagerTests.cpp
+        ConnectionManagerTests.cpp
         utils/VersionUtilsTests.cpp
         utils/StringUtilsTests.cpp
         utils/ExecutionInfoObtainerTests.cpp
@@ -19,6 +20,7 @@ set(MOCK_FILES
 set(UTIL_FILES
         TestingUtils.cpp
         TestingUtils.h
+        ConnectionManagerTests.cpp
 )
 
 add_executable(
