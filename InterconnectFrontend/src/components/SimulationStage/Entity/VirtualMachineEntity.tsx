@@ -10,6 +10,7 @@ interface VirtualMachineEntityProps {
     onDragEnd: (e: KonvaEventObject<DragEvent>) => void;
     onMouseOver: (e: KonvaEventObject<MouseEvent>) => void;
     onMouseOut: (e: KonvaEventObject<MouseEvent>) => void;
+    onClick: (e: KonvaEventObject<MouseEvent>) => void;
 }
 
 const VirtualMachineEntity = ({
@@ -17,7 +18,8 @@ const VirtualMachineEntity = ({
                                   onDragEnd,
                                   onDragMove,
                                   onMouseOver,
-                                  onMouseOut
+                                  onMouseOut,
+                                  onClick
                               }: VirtualMachineEntityProps) => {
     const { name, x, y } = entity;
     const [virtualMachineImageElement] = useImage(virtualMachineImage);
@@ -29,6 +31,7 @@ const VirtualMachineEntity = ({
         onMouseOut={onMouseOut}
         onDragMove={onDragMove}
         onDragEnd={onDragEnd}
+        onClick={onClick}
         draggable={true}
     >
         <Image

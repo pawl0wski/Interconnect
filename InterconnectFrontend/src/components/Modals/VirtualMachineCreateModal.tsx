@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 interface VirtualMachineCreateModalProps {
     opened: boolean;
+
     onClose: () => void;
 }
 
@@ -14,6 +15,7 @@ const VirtualMachineCreateModal = ({ opened, onClose }: VirtualMachineCreateModa
         title={t("virtualMachine.configuration")}
         opened={opened}
         onClose={onClose}
+        centered
     >
         <VirtualMachineCreateFormContainer onFormSubmitted={onClose} />
     </Modal>;

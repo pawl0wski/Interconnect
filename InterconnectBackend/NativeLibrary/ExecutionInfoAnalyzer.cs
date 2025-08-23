@@ -2,7 +2,7 @@
 
 namespace NativeLibrary
 {
-    public static class ExecutionInfoAnalyzer
+    internal static class ExecutionInfoAnalyzer
     {
         public static void ThrowIfErrorOccurred(NativeExecutionInfo executionInfo)
         {

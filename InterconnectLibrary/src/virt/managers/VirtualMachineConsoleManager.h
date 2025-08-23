@@ -1,16 +1,13 @@
 #ifndef VIRTUALMACHINECONSOLEMANAGER_H
 #define VIRTUALMACHINECONSOLEMANAGER_H
-#include <vector>
-
 #include "../../LibvirtWrapper.h"
 #include "../../interfaces/ILibvirtWrapper.h"
-#include "../../models/IdentifiedStream.h"
+#include "../../models/StreamData.h"
 
 class VirtualMachineConsoleManager
 {
     ILibvirtWrapper* libvirt;
     virConnectPtr conn;
-    std::vector<IdentifiedStream> streams;
 
 public:
     virtual ~VirtualMachineConsoleManager() = default;
@@ -19,28 +16,24 @@ public:
      * @param libvirt Reference to an ILibvirtWrapper implementation.
      */
     explicit VirtualMachineConsoleManager(ILibvirtWrapper* libvirt)
-        : libvirt(libvirt)
+        : libvirt(libvirt), conn(nullptr)
     {
     }
 
-    explicit VirtualMachineConsoleManager()
+    explicit VirtualMachineConsoleManager(): conn(nullptr)
     {
         libvirt = new LibvirtWrapper();
     }
 
     void updateConnection(virConnectPtr conn);
 
-    int openVirtualMachineConsole(const std::string& vmUuid);
+    virStreamPtr openVirtualMachineConsole(const std::string& vmUuid) const;
 
-    void removeStream(int streamId);
+    void getDataFromStream(virStreamPtr stream, StreamData* streamData) const;
 
-    void getDataFromStream(int streamId, char* data, int dataSize) const;
+    void sendDataToStream(virStreamPtr stream, const char* data, int dataSize) const;
 
-    void sendDataToStream(int streamId, const char* data, int dataSize) const;
-
-protected:
-    virtual virStreamPtr getStreamById(int streamId) const;
-    int addNewStream(virStreamPtr stream);
+    void closeStream(virStreamPtr stream) const;
 };
 
 

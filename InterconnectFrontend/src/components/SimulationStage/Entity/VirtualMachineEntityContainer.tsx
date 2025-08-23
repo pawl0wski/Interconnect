@@ -2,6 +2,8 @@ import { useVirtualMachineEntitiesStore } from "../../../store/virtualMachineEnt
 import VirtualMachineEntity from "./VirtualMachineEntity.tsx";
 import { VirtualMachineEntityModel } from "../../../models/VirtualMachineEntityModel.ts";
 import { KonvaEventObject } from "konva/lib/Node";
+import { useCurrentVirtualMachineModalStore } from "../../../store/modals/currentVirtualMachineModalStore.ts";
+import { useCurrentVirtualMachineStore } from "../../../store/currentVirtualMachineStore.ts";
 
 interface VirtualMachineEntityContainerProps {
     entity: VirtualMachineEntityModel;
@@ -9,6 +11,8 @@ interface VirtualMachineEntityContainerProps {
 
 const VirtualMachineEntityContainer = ({ entity }: VirtualMachineEntityContainerProps) => {
     const virtualMachineEntityStore = useVirtualMachineEntitiesStore();
+    const currentVirtualMachineStore = useCurrentVirtualMachineStore();
+    const currentVirtualMachineModalStore = useCurrentVirtualMachineModalStore();
 
     const changeCursor = (e: KonvaEventObject<any>, cursor: string) => {
         const stage = e.target.getStage();
@@ -35,12 +39,18 @@ const VirtualMachineEntityContainer = ({ entity }: VirtualMachineEntityContainer
         changeCursor(e, "move");
     };
 
+    const handleOnClick = () => {
+        currentVirtualMachineStore.setUuid(entity.vmUuid!);
+        currentVirtualMachineModalStore.open();
+    };
+
     return <VirtualMachineEntity
         entity={entity}
         onMouseOver={handleOnMouseOver}
         onMouseOut={handleOnMouseOut}
         onDragEnd={handleDragEnd}
         onDragMove={handleDragMove}
+        onClick={handleOnClick}
     />;
 };
 

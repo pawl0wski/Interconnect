@@ -1,23 +1,26 @@
 #ifndef INTERCONNECTLIBRARYEXTERN_H
 #define INTERCONNECTLIBRARYEXTERN_H
 
+#include <iostream>
+
 #include "models/ConnectionInfo.h"
+#include "models/StreamData.h"
 #include "utils/ExecutionInfoObtainer.h"
 #include "virt/VirtualizationFacade.h"
 
 extern "C" {
-VirtualizationFacade* VirtualizationFacade_Create()
+VirtualizationFacade* Create()
 {
     return new VirtualizationFacade();
 }
 
-void VirtualizationFacade_Destroy(const VirtualizationFacade* virtualization)
+void Destroy(const VirtualizationFacade* virtualization)
 {
     delete virtualization;
 }
 
-void VirtualMachineManager_InitializeConnection(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization,
-                                                const char* customConnectionUrl)
+void InitializeConnection(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization,
+                          const char* customConnectionUrl)
 {
     ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, customConnectionUrl]
     {
@@ -25,8 +28,8 @@ void VirtualMachineManager_InitializeConnection(ExecutionInfo* executionInfo, Vi
     });
 }
 
-void VirtualMachineManager_GetConnectionInfo(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization,
-                                             ConnectionInfo* infoPtr)
+void GetConnectionInfo(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization,
+                       ConnectionInfo* infoPtr)
 {
     ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [infoPtr, virtualization]
     {
@@ -34,8 +37,8 @@ void VirtualMachineManager_GetConnectionInfo(ExecutionInfo* executionInfo, Virtu
     });
 }
 
-void VirtualMachineManager_CreateVirtualMachine(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization,
-                                                const char* virtualMachineXml)
+void CreateVirtualMachine(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization,
+                          const char* virtualMachineXml)
 {
     ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, virtualMachineXml]
     {
@@ -43,9 +46,9 @@ void VirtualMachineManager_CreateVirtualMachine(ExecutionInfo* executionInfo, Vi
     });
 }
 
-void VirtualMachineManager_GetInfoAboutVirtualMachine(ExecutionInfo* executionInfo,
-                                                      VirtualizationFacade* virtualization,
-                                                      const char* name, VirtualMachineInfo* vmInfo)
+void GetInfoAboutVirtualMachine(ExecutionInfo* executionInfo,
+                                VirtualizationFacade* virtualization,
+                                const char* name, VirtualMachineInfo* vmInfo)
 {
     ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, name, vmInfo]
     {
@@ -53,10 +56,10 @@ void VirtualMachineManager_GetInfoAboutVirtualMachine(ExecutionInfo* executionIn
     });
 }
 
-void VirtualMachineManager_GetListOfVirtualMachinesWithInfo(ExecutionInfo* executionInfo,
-                                                            VirtualizationFacade* virtualization,
-                                                            VirtualMachineInfo** arrayOfVms,
-                                                            int* numberOfVms)
+void GetListOfVirtualMachinesWithInfo(ExecutionInfo* executionInfo,
+                                      VirtualizationFacade* virtualization,
+                                      VirtualMachineInfo** arrayOfVms,
+                                      int* numberOfVms)
 {
     ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, arrayOfVms, numberOfVms]
     {
@@ -64,8 +67,8 @@ void VirtualMachineManager_GetListOfVirtualMachinesWithInfo(ExecutionInfo* execu
     });
 }
 
-void VirtualMachineManager_IsConnectionAlive(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization,
-                                             bool* isAlive)
+void IsConnectionAlive(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization,
+                       bool* isAlive)
 {
     ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, isAlive]
     {
@@ -73,14 +76,40 @@ void VirtualMachineManager_IsConnectionAlive(ExecutionInfo* executionInfo, Virtu
     });
 }
 
-// void VirtualMachineManager_OpenVirtualMachineConsole(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization,
-//                                                      const char* vmUuid)
-// {
-//     ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, vmUuid]
-//     {
-//         virtualization->openVirtualMachineConsole(vmUuid);
-//     });
-// }
+void OpenVirtualMachineConsole(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization, virStreamPtr* stream,
+                               const char* vmUuid)
+{
+    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, stream, vmUuid]
+    {
+        *stream = virtualization->openVirtualMachineConsole(vmUuid);
+    });
+}
+
+void ReceiveDataFromConsole(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization, virStreamPtr stream,
+                            StreamData* streamData)
+{
+    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, stream, streamData]
+    {
+        virtualization->receiveDataFromConsole(stream, streamData);
+    });
+}
+
+void SendDataToConsole(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization, virStreamPtr stream,
+                       const char* data)
+{
+    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, stream, data]
+    {
+        virtualization->sendDataToConsole(stream, data);
+    });
+}
+
+void CloseStream(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization, virStreamPtr stream)
+{
+    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, stream]
+    {
+        virtualization->closeStream(stream);
+    });
+}
 }
 
 #endif // INTERCONNECTLIBRARYEXTERN_H

@@ -1,18 +1,17 @@
-﻿using Database;
-using Mappers;
-using Microsoft.EntityFrameworkCore;
+﻿using Mappers;
 using Models.Database;
 using Models.DTO;
+using Repositories;
 
 namespace Services.Impl
 {
     public class VirtualMachineEntityService : IVirtualMachineEntityService
     {
-        private readonly InterconnectDbContext _context;
+        private readonly IVirtualMachineEntityRepository _repository;
 
-        public VirtualMachineEntityService(InterconnectDbContext context)
+        public VirtualMachineEntityService(IVirtualMachineEntityRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         public async Task<VirtualMachineEntityDTO> CreateEntity(string name, int x, int y)
@@ -24,50 +23,43 @@ namespace Services.Impl
                 Y = y
             };
 
-            _context.VirtualMachineEntityModels.Add(entity);
-            await _context.SaveChangesAsync();
+            await _repository.Add(entity);
 
             return VirtualMachineEntityMapper.MapToDTO(entity);
         }
 
-        public Task<List<VirtualMachineEntityDTO>> GetEntities()
+        public async Task<List<VirtualMachineEntityDTO>> GetEntities()
         {
-            return _context.VirtualMachineEntityModels
-                .Select((m) => VirtualMachineEntityMapper.MapToDTO(m))
-                .ToListAsync();
+            var entities = await _repository.GetAll();
+
+            return [.. entities.Select(VirtualMachineEntityMapper.MapToDTO)];
         }
 
         public async Task<VirtualMachineEntityDTO> GetEntityById(int id)
         {
-            var entity = await _context.VirtualMachineEntityModels.Where((e) => e.Id == id).SingleAsync();
+            var entity = await _repository.GetById(id);
 
             return VirtualMachineEntityMapper.MapToDTO(entity);
         }
 
         public async Task<VirtualMachineEntityDTO> UpdateEntityPosition(int id, int x, int y)
         {
-            var entity = await _context.VirtualMachineEntityModels
-                .Where((e) => e.Id == id)
-                .SingleAsync();
+            var entity = await _repository.GetById(id);
 
             entity.X = x;
             entity.Y = y;
 
-            _context.VirtualMachineEntityModels.Update(entity);
-            await _context.SaveChangesAsync();
+            await _repository.Update(entity);
 
             return VirtualMachineEntityMapper.MapToDTO(entity);
         }
 
         public async Task<VirtualMachineEntityDTO> UpdateEntityVmUUID(int id, string uuid)
         {
-            var entity = await _context.VirtualMachineEntityModels
-                   .Where((e) => e.Id == id)
-                   .SingleAsync();
+            var entity = await _repository.GetById(id);
 
             entity.VmUuid = Guid.Parse(uuid);
-            _context.VirtualMachineEntityModels.Update(entity);
-            await _context.SaveChangesAsync();
+            await _repository.Update(entity);
 
             return VirtualMachineEntityMapper.MapToDTO(entity);
         }

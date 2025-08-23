@@ -1,22 +1,21 @@
-﻿using Database;
+﻿using Repositories;
 using Mappers;
-using Microsoft.EntityFrameworkCore;
 using Models.DTO;
 
 namespace Services.Impl
 {
     public class BootableDiskProviderService : IBootableDiskProviderService
     {
-        private InterconnectDbContext _context { get; set; }
+        private readonly IBootableDiskRepository _repository;
 
-        public BootableDiskProviderService(InterconnectDbContext context)
+        public BootableDiskProviderService(IBootableDiskRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         public async Task<List<BootableDiskModelDTO>> GetAvailableBootableDiskModels()
         {
-            var bootableDisks = await _context.BootableDiskModels.Where(m => m.Path != null).ToListAsync();
+            var bootableDisks = await _repository.GetOnlyWithNotNullablePath();
 
             bootableDisks = [.. bootableDisks.Where(m => File.Exists(m.Path))];
 
@@ -25,7 +24,7 @@ namespace Services.Impl
 
         public async Task<string?> GetBootableDiskPathById(int id)
         {
-            var bootableDisk = await _context.BootableDiskModels.FirstAsync(m => m.Id == id);
+            var bootableDisk = await _repository.GetById(id);
 
             return bootableDisk.Path;
         }

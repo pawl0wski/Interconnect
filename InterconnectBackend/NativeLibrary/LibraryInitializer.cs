@@ -8,7 +8,7 @@ namespace NativeLibrary
     {
         public static void Initialize(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<IVirtualMachineManagerWrapper, VirtualMachineManagerWrapper>();
+            serviceCollection.AddSingleton<IVirtualizationWrapper, VirtualizationWrapper>();
         }
     }
 }

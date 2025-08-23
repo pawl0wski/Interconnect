@@ -13,7 +13,8 @@ namespace TestUtils
             {
                 DatabaseConnectionUrl = "",
                 HypervisorUrl = "test:///testing",
-                VmPrefix = "interconnect"
+                VmPrefix = "interconnect",
+                MaxConsoleDataHistory = 1024,
             });
         }
 

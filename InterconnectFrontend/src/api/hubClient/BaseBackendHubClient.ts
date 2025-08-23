@@ -4,11 +4,18 @@ import { getConfiguration } from "../../configuration.ts";
 abstract class BaseBackendHubClient {
     protected connection?: HubConnection;
 
-    public async connect() {
+    async connect() {
         this.connection = new HubConnectionBuilder()
             .withUrl(this.prepareBackendUrl())
+            .withAutomaticReconnect()
             .build();
         await this.connection.start();
+    }
+
+    protected startListeningForMessages<T>(methodName: string, onMessage: (response: T) => void) {
+        this.connection?.on(methodName, (message: string) => {
+            onMessage(JSON.parse(message));
+        });
     }
 
     protected async sendHubRequest<TRequest, TResponse>(methodName: string, request?: TRequest): Promise<TResponse> {
@@ -24,17 +31,12 @@ abstract class BaseBackendHubClient {
         return response;
     }
 
-
     protected async reconnectIfThereIsNoConnectionEstablished() {
-        if (this.isConnectionEstablished()) {
+        if (this.connection) {
             return;
         }
 
         await this.connect();
-    }
-
-    protected isConnectionEstablished() {
-        return Boolean(this.connection?.connectionId);
     }
 
     private prepareBackendUrl(): string {
@@ -42,6 +44,7 @@ abstract class BaseBackendHubClient {
         const hubName = this.getHubName();
         return `${config.backendUrl}${hubName}`;
     }
+
 
     protected abstract getHubName(): string;
 }

@@ -8,12 +8,12 @@ namespace ServicesTests
 {
     public class HypervisorConnectionServiceTests
     {
-        private Mock<IVirtualMachineManagerWrapper> _managerWrapper;
+        private Mock<IVirtualizationWrapper> _managerWrapper;
 
         [SetUp]
         public void SetUp()
         {
-            _managerWrapper = new Mock<IVirtualMachineManagerWrapper>();
+            _managerWrapper = new Mock<IVirtualizationWrapper>();
         }
 
         [Test]

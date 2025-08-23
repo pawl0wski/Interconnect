@@ -1,14 +1,14 @@
 ﻿using System.Collections;
 using System.Runtime.InteropServices;
 
-namespace NativeLibrary.Utils
+namespace NativeLibrary.Utils.Impl
 {
     public class NativeList<T> : INativeList<T> where T : struct
     {
         private readonly T[] _managedArray;
         private readonly int _size;
 
-        public NativeList(IntPtr data, int size)
+        public NativeList(nint data, int size)
         {
             _size = size;
             _managedArray = new T[size];
@@ -17,7 +17,7 @@ namespace NativeLibrary.Utils
 
             for (int i = 0; i < size; i++)
             {
-                IntPtr ptr = IntPtr.Add(data, i * structSize);
+                nint ptr = nint.Add(data, i * structSize);
                 _managedArray[i] = Marshal.PtrToStructure<T>(ptr);
             }
         }

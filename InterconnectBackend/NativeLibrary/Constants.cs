@@ -1,6 +1,6 @@
 ﻿namespace NativeLibrary
 {
-    internal class Constants
+    internal static class Constants
     {
         public const string LIBRARY_NAME = "libinterconnect_shared.so";
     }

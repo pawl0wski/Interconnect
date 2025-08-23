@@ -1,8 +1,8 @@
 #include "ConnectionManager.h"
 
-#include "exceptions/VirtualMachineManagerException.h"
-#include "utils/StringUtils.h"
-#include "utils/VersionUtils.h"
+#include "../../exceptions/VirtualMachineManagerException.h"
+#include "../../utils/StringUtils.h"
+#include "../../utils/VersionUtils.h"
 
 void ConnectionManager::initializeConnection(const std::optional<std::string>& customConnectionUrl)
 {
