@@ -27,41 +27,42 @@ namespace Services.Utils
                 throw new Exception("There are not all the things needed to build the XML definition for the virtual machine");
             }
 
-            using var stringWriter = new StringWriter();
-            using (var writer = XmlWriter.Create(stringWriter, new XmlWriterSettings
+            using (var stringWriter = new StringWriter())
             {
-                OmitXmlDeclaration = true,
-                Indent = true
-            }))
-            {
-
-                writer.WriteStartDocument();
-
-                CreateDomainBlock(writer, w =>
+                using (var writer = XmlWriter.Create(stringWriter, new XmlWriterSettings
                 {
-                    CreateNameBlock(w, Name);
-                    CreateMemoryBlock(w, (uint)Memory);
-                    CreateVCPUBlock(w, (uint)VirtualCpus);
-                    CreateOsBlock(w, w =>
+                    OmitXmlDeclaration = true,
+                    Indent = true
+                }))
+                {
+                    writer.WriteStartDocument();
+
+                    CreateDomainBlock(writer, w =>
                     {
-                        CreateTypeBlock(w);
-                        CreateBootBlock(w);
+                        CreateNameBlock(w, Name);
+                        CreateMemoryBlock(w, (uint)Memory);
+                        CreateVCPUBlock(w, (uint)VirtualCpus);
+                        CreateOsBlock(w, w =>
+                        {
+                            CreateTypeBlock(w);
+                            CreateBootBlock(w);
+                        });
+
+                        CreateFeaturesBlock(w);
+                        CreateDevicesBlock(w, w =>
+                        {
+                            CreateIsoDiskBlock(w, BootableDiskPath);
+                            //CreateInterfaceBlock(w);
+                            CreateConsoleBlock(w);
+                            CreateSerialBlock(w);
+                        });
                     });
 
-                    CreateFeaturesBlock(w);
-                    CreateDevicesBlock(w, w =>
-                    {
-                        CreateIsoDiskBlock(w, BootableDiskPath);
-                        //CreateInterfaceBlock(w);
-                        CreateConsoleBlock(w);
-                        CreateSerialBlock(w);
-                    });
-                });
+                    writer.WriteEndDocument();
+                }
 
-                writer.WriteEndDocument();
+                return stringWriter.ToString();
             }
-
-            return stringWriter.ToString();
         }
 
         static private void CreateDomainBlock(XmlWriter writer, BuildingBlock blockFunc)
