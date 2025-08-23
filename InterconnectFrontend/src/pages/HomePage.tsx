@@ -1,4 +1,5 @@
 import ConnectionInfoModalContainer from "../components/Modals/ConnectionInfoModalContainer.tsx";
+import TerminalModalContainer from "../components/Modals/TerminalModelContainer.tsx";
 import ErrorModalContainer from "../components/Modals/ErrorModalContainer.tsx";
 import Footer from "../components/Footer/Footer.tsx";
 import SimulationStage from "../components/SimulationStage/SimulationStage.tsx";
@@ -30,6 +31,7 @@ const HomePage = () => {
         <Footer />
         <VirtualMachineCreateModalContainer />
         <ConnectionInfoModalContainer />
+        <TerminalModalContainer />
         <ErrorModalContainer />
     </AppShell>;
 };

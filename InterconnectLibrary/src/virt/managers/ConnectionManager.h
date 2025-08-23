@@ -9,7 +9,7 @@
 
 class ConnectionManager
 {
-    ILibvirtWrapper* libvirt = nullptr;
+    ILibvirtWrapper* libvirt;
     virConnectPtr conn = nullptr;
 
 public:

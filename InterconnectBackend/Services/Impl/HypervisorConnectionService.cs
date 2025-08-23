@@ -7,9 +7,9 @@ namespace Services.Impl
 {
     public class HypervisorConnectionService : IHypervisorConnectionService
     {
-        private readonly IVirtualMachineManagerWrapper _vmManager;
+        private readonly IVirtualizationWrapper _vmManager;
 
-        public HypervisorConnectionService(IVirtualMachineManagerWrapper vmManager)
+        public HypervisorConnectionService(IVirtualizationWrapper vmManager)
         {
             _vmManager = vmManager;
         }

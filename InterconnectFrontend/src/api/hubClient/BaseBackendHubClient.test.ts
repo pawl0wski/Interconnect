@@ -1,19 +1,21 @@
 import { describe, test, expect, vi, beforeEach } from "vitest";
 import BaseBackendHubClient from "./BaseBackendHubClient.ts";
 
-const { mockConnect, mockWithUrl, mockBuild, MockHubConnectionBuilder } = vi.hoisted(() => {
+const { mockConnect, mockWithUrl, mockWithAutomaticReconnect, mockBuild, MockHubConnectionBuilder } = vi.hoisted(() => {
     const mockConnect = vi.fn();
     const mockWithUrl = vi.fn();
+    const mockWithAutomaticReconnect = vi.fn();
     const mockBuild = vi.fn(() => ({
         start: mockConnect
     }));
 
     class MockHubConnectionBuilder {
         public withUrl = mockWithUrl.mockReturnThis();
+        public withAutomaticReconnect = mockWithUrl.mockReturnThis();
         public build = mockBuild;
     }
 
-    return { mockConnect, mockWithUrl, mockBuild, MockHubConnectionBuilder };
+    return { mockConnect, mockWithUrl, mockWithAutomaticReconnect, mockBuild, MockHubConnectionBuilder };
 });
 
 class TestBaseBackendHubClient extends BaseBackendHubClient {
@@ -44,6 +46,7 @@ describe("BaseBackendHubClient", () => {
     beforeEach(() => {
         mockConnect.mockReset();
         mockWithUrl.mockReset();
+        mockWithAutomaticReconnect.mockReset();
         mockBuild.mockReset();
     });
 

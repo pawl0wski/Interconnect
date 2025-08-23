@@ -9,13 +9,15 @@ namespace Services.Impl
 {
     public class VirtualMachineManagerService : IVirtualMachineManagerService
     {
-        private readonly IVirtualMachineManagerWrapper _vmManager;
+        private readonly IVirtualizationWrapper _vmManager;
+        private readonly IVirtualMachineConsoleService _vmConsoleService;
         private readonly InterconnectConfig _config;
 
-        public VirtualMachineManagerService(IVirtualMachineManagerWrapper vmManager, IOptions<InterconnectConfig> config)
+        public VirtualMachineManagerService(IVirtualizationWrapper vmManager, IOptions<InterconnectConfig> config, IVirtualMachineConsoleService vmConsoleService)
         {
             _vmManager = vmManager;
             _config = config.Value;
+            _vmConsoleService = vmConsoleService;
         }
 
         public VirtualMachineInfo CreateVirtualMachine(VirtualMachineCreateDefinition definition)
@@ -29,6 +31,8 @@ namespace Services.Impl
 
             _vmManager.CreateVirtualMachine(xmlDefinition);
             var vmInfo = _vmManager.GetVirtualMachineInfo(name);
+
+            _vmConsoleService.OpenVirtualMachineConsole(Guid.Parse(vmInfo.Uuid));
 
             return NativeVirtualMachineInfoMapper.MapToVirtualMachineInfo(vmInfo);
         }

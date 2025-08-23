@@ -1,6 +1,13 @@
 #include "VirtualizationFacade.h"
 
+#include <algorithm>
+#include <cstring>
+#include <iostream>
 #include <optional>
+
+#include "../utils/StringUtils.h"
+
+struct StreamInfo;
 
 VirtualizationFacade::VirtualizationFacade(ILibvirtWrapper* libvirt)
 {
@@ -11,10 +18,10 @@ VirtualizationFacade::VirtualizationFacade(ILibvirtWrapper* libvirt)
 
 VirtualizationFacade::VirtualizationFacade()
 {
-    const auto libvirt = new LibvirtWrapper();
-    vmManager = new VirtualMachineManager(libvirt);
-    vmConsoleManager = new VirtualMachineConsoleManager(libvirt);
-    connManager = new ConnectionManager(libvirt);
+    static auto libvirt = LibvirtWrapper();
+    vmManager = new VirtualMachineManager(&libvirt);
+    vmConsoleManager = new VirtualMachineConsoleManager(&libvirt);
+    connManager = new ConnectionManager(&libvirt);
 }
 
 void VirtualizationFacade::initializeConnection(const char* customConnectionUrl) const
@@ -29,7 +36,7 @@ void VirtualizationFacade::initializeConnection(const char* customConnectionUrl)
     connManager->initializeConnection(connectionUrl);
 
     const auto conn = connManager->getConnection();
-    vmConsoleManager->updateConnection(conn);
+    vmManager->updateConnection(conn);
     vmConsoleManager->updateConnection(conn);
 }
 
@@ -56,8 +63,7 @@ void VirtualizationFacade::getListOfVirtualMachinesWithInfo(VirtualMachineInfo**
     vectorOfVirtualMachines = vmManager->
         getListOfVirtualMachinesWithInfo();
     *arrayOfVirtualMachines = vectorOfVirtualMachines.data();
-    *numberOfVirtualMachines = static_cast<int>(
-        vectorOfVirtualMachines.size());
+    *numberOfVirtualMachines = static_cast<int>(vectorOfVirtualMachines.size());
 }
 
 void VirtualizationFacade::isConnectionAlive(bool* isAlive) const
@@ -65,9 +71,22 @@ void VirtualizationFacade::isConnectionAlive(bool* isAlive) const
     *isAlive = connManager->isConnectionAlive();
 }
 
-// void VirtualizationFacade::openVirtualMachineConsole(const char* vmUuid) const
-// {
-//     auto vmUuidStr = std::string(vmUuid);
-//     const auto stream = vmManager->openVirtualMachineConsole(vmUuidStr);
-//     vmConsoleManager->addNewStream(stream);
-// }
+virStreamPtr VirtualizationFacade::openVirtualMachineConsole(const std::string& vmUuid) const
+{
+    return vmConsoleManager->openVirtualMachineConsole(vmUuid);
+}
+
+void VirtualizationFacade::receiveDataFromConsole(virStreamPtr stream, StreamData* streamData) const
+{
+    vmConsoleManager->getDataFromStream(stream, streamData);
+}
+
+void VirtualizationFacade::sendDataToConsole(virStreamPtr stream, const std::string& data) const
+{
+    vmConsoleManager->sendDataToStream(stream, data.c_str(), data.length());
+}
+
+void VirtualizationFacade::closeStream(virStreamPtr stream) const
+{
+    vmConsoleManager->closeStream(stream);
+}

@@ -1,3 +1,4 @@
+using BackgroundServices;
 using Database;
 using Hubs;
 using Interconnect.Middlewares;
@@ -5,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Models.Config;
 using NativeLibrary;
+using Repositories;
 using Services;
 using Services.Impl;
 
@@ -18,7 +20,9 @@ namespace Interconnect
 
             // Add services to the container.
             LibraryInitializer.Initialize(builder.Services);
+            RepositoriesInitializer.Initialize(builder.Services);
             ServicesInitializer.Initialize(builder.Services);
+            BackgroundServicesInitializer.Initialize(builder.Services);
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -58,6 +62,7 @@ namespace Interconnect
             }
 
             app.MapHub<ConnectionStatusHub>("/ConnectionStatusHub");
+            app.MapHub<VirtualMachineConsoleHub>("/VirtualMachineConsoleHub");
 
             app.UseExceptionMiddleware();
 

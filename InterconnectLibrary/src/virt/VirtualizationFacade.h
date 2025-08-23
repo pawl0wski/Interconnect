@@ -3,6 +3,7 @@
 #include "managers/ConnectionManager.h"
 #include "managers/VirtualMachineConsoleManager.h"
 #include "managers/VirtualMachineManager.h"
+#include "../models/StreamData.h"
 
 class VirtualizationFacade
 {
@@ -33,7 +34,13 @@ public:
 
     void isConnectionAlive(bool* isAlive) const;
 
-    // void openVirtualMachineConsole(const char* vmUuid) const;
+    [[nodiscard]] virStreamPtr openVirtualMachineConsole(const std::string& vmUuid) const;
+
+    void receiveDataFromConsole(virStreamPtr stream, StreamData* streamData) const;
+
+    void sendDataToConsole(virStreamPtr stream, const std::string& data) const;
+
+    void closeStream(virStreamPtr stream) const;
 };
 
 #endif //VIRTUALIZATIONFACADE_H

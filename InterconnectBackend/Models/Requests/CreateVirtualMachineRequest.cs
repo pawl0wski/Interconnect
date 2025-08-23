@@ -1,4 +1,4 @@
-﻿namespace Controllers.Requests
+﻿namespace Models.Requests
 {
     public class CreateVirtualMachineRequest
     {

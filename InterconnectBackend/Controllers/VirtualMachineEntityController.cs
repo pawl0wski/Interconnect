@@ -1,5 +1,5 @@
-﻿using Controllers.Requests;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Models.Requests;
 using Models.Responses;
 using Services;
 

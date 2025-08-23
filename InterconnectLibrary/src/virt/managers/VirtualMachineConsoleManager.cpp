@@ -1,5 +1,7 @@
 #include "VirtualMachineConsoleManager.h"
 
+#include <iostream>
+
 #include "../../exceptions/VirtualMachineManagerException.h"
 
 void VirtualMachineConsoleManager::updateConnection(const virConnectPtr conn)
@@ -7,7 +9,7 @@ void VirtualMachineConsoleManager::updateConnection(const virConnectPtr conn)
     this->conn = conn;
 }
 
-int VirtualMachineConsoleManager::openVirtualMachineConsole(const std::string& vmUuid)
+virStreamPtr VirtualMachineConsoleManager::openVirtualMachineConsole(const std::string& vmUuid) const
 {
     if (conn == nullptr)
     {
@@ -21,41 +23,30 @@ int VirtualMachineConsoleManager::openVirtualMachineConsole(const std::string& v
     }
 
     const auto stream = libvirt->createNewStream(conn);
-    if (libvirt->openDomainConsole(domain, stream))
+    if (libvirt->openDomainConsole(domain, stream) == -1)
     {
         throw VirtualMachineManagerException("Cannot open console");
     }
 
-    return addNewStream(stream);
+    return stream;
 }
 
-int VirtualMachineConsoleManager::addNewStream(const virStreamPtr stream)
+void VirtualMachineConsoleManager::getDataFromStream(virStreamPtr stream, StreamData* streamData) const
 {
-    const auto streamId = static_cast<int>(this->streams.size() + 1);
-    this->streams.push_back(IdentifiedStream(streamId, stream));
-    return streamId;
+    streamData->isStreamBroken = false;
+    if (libvirt->receiveDataFromStream(stream, streamData->buffer, 255) <= 0)
+    {
+        streamData->isStreamBroken = true;
+    }
 }
 
-void VirtualMachineConsoleManager::removeStream(const int streamId)
+void VirtualMachineConsoleManager::sendDataToStream(virStreamPtr stream, const char* data,
+                                                    const int dataSize) const
 {
-    const auto stream = getStreamById(streamId);
-    this->streams.erase(this->streams.begin() + (streamId - 1));
-    libvirt->finishAndFreeStream(stream);
-}
-
-void VirtualMachineConsoleManager::getDataFromStream(const int streamId, char* data, const int dataSize) const
-{
-    const auto stream = getStreamById(streamId);
-    libvirt->receiveDataFromStream(stream, data, dataSize);
-}
-
-void VirtualMachineConsoleManager::sendDataToStream(const int streamId, const char* data, const int dataSize) const
-{
-    const auto stream = getStreamById(streamId);
     libvirt->sendDataToStream(stream, data, dataSize);
 }
 
-virStreamPtr VirtualMachineConsoleManager::getStreamById(const int streamId) const
+void VirtualMachineConsoleManager::closeStream(virStreamPtr stream) const
 {
-    return this->streams.at(streamId).stream;
+    libvirt->finishAndFreeStream(stream);
 }
