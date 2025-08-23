@@ -6,6 +6,8 @@ import SimulationStage from "../components/SimulationStage/SimulationStage.tsx";
 import Tray from "../components/Tray/Tray.tsx";
 import VirtualMachineCreateModalContainer from "../components/Modals/VirtualMachineCreateModalContainer.tsx";
 import { AppShell } from "@mantine/core";
+import Header from "../components/Header/Header.tsx";
+import ConnectionOverlay from "../components/Connection/ConnectionOverlay.tsx";
 
 const HomePage = () => {
     const headerHeight = 60;
@@ -17,8 +19,9 @@ const HomePage = () => {
         footer={{ height: footerHeight }}
         padding="md"
     >
+        <ConnectionOverlay />
         <AppShell.Header>
-            <div>Interconnect</div>
+            <Header />
         </AppShell.Header>
 
         <AppShell.Main h={`calc( 100vh - ${headerHeight + footerHeight + trayHeight}px)`}

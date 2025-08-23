@@ -1,7 +1,8 @@
 const pl = {
     "errorOccurred": "Wystąpił błąd",
+    "connectingToServer": "Łączenie z serwerem...",
     "virtualMachine": {
-        "addVirtualMachine": "Dodaj maszynę wirtualną",
+        "virtualMachine": "Maszyna wirtualna",
         "configuration": "Konfiguracja maszyny wirtualnej",
         "name": "Nazwa",
         "cpu": "CPU",

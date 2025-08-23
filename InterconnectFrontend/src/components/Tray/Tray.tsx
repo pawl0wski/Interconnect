@@ -4,7 +4,7 @@ import VirtualMachineCreateEntityTrayButtonContainer
     from "./Buttons/VirtualMachineCreateEntityTrayButtonContainer.tsx";
 
 const Tray = () => {
-    return <Box className={classes["tray"]}>
+    return <Box className={classes["tray"]} mx="lg">
         <VirtualMachineCreateEntityTrayButtonContainer />
     </Box>;
 };

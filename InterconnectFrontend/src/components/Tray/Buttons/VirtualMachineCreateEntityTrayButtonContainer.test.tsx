@@ -20,7 +20,7 @@ describe("VirtualMachineCreateEntityTrayButtonContainer", () => {
             <VirtualMachineCreateEntityTrayButtonContainer />
         </MantineProvider>);
 
-        const button = screen.getByText("Dodaj maszynę wirtualną");
+        const button = screen.getByText("Maszyna wirtualna");
         await userEvent.click(button);
 
         expect(mockOpenModal).toHaveBeenCalled();

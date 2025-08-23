@@ -1,5 +1,6 @@
-import { Button } from "@mantine/core";
 import { useTranslation } from "react-i18next";
+import { MdComputer } from "react-icons/md";
+import TrayButton from "./TrayButton.tsx";
 
 interface VirtualMachineCreateEntityTrayButtonProps {
     onClick: () => void;
@@ -8,7 +9,10 @@ interface VirtualMachineCreateEntityTrayButtonProps {
 const VirtualMachineCreateEntityTrayButton = ({ onClick }: VirtualMachineCreateEntityTrayButtonProps) => {
     const { t } = useTranslation();
 
-    return <Button onClick={onClick}>{t("virtualMachine.addVirtualMachine")}</Button>;
+    return <TrayButton
+        icon={<MdComputer size={30} />}
+        text={t("virtualMachine.virtualMachine")}
+        onClick={onClick} />;
 };
 
 export default VirtualMachineCreateEntityTrayButton;

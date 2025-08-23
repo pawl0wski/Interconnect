@@ -19,7 +19,11 @@ const ErrorModalTitle = () => {
 };
 
 const ErrorModal = ({ error, stackTrace, opened, onModalClose }: ErrorModalProps) => {
-    return <Modal title={<ErrorModalTitle />} opened={opened} onClose={onModalClose}>
+    return <Modal
+        title={<ErrorModalTitle />}
+        opened={opened}
+        onClose={onModalClose}
+        centered>
         <p>{error}</p>
         {
             stackTrace && <Textarea readOnly autosize maxRows={10} value={stackTrace} />
