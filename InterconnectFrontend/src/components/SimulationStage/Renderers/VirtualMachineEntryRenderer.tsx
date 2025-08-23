@@ -7,7 +7,7 @@ const VirtualMachineEntryRenderer = () => {
 
     useEffect(() => {
         virtualMachineEntitiesStore.fetchEntities();
-    }, []);
+    }, [virtualMachineEntitiesStore]);
 
     return virtualMachineEntitiesStore.entities.map((e) => {
         return <VirtualMachineEntityContainer key={e.id} entity={e} />;

@@ -26,7 +26,7 @@ describe("BaseBackend", () => {
     );
 
     test("should send request", async () => {
-        // @ts-ignore
+        // @ts-expect-error - Mocking global fetch for testing
         global.fetch = vi.fn(() => Promise.resolve({
             json: () => Promise.resolve({
                 success: true,
@@ -48,7 +48,7 @@ describe("BaseBackend", () => {
     });
 
     test("should throw error when backend return error", async () => {
-        // @ts-ignore
+        // @ts-expect-error - Mocking global fetch for testing
         global.fetch = vi.fn(() => Promise.resolve({
             json: () => Promise.resolve({
                 success: false,
@@ -62,7 +62,7 @@ describe("BaseBackend", () => {
     });
 
     test("should not send body when method is GET", async () => {
-        // @ts-ignore
+        // @ts-expect-error - Mocking global fetch for testing
         global.fetch = vi.fn(() => Promise.resolve({
             json: () => Promise.resolve({
                 success: true,

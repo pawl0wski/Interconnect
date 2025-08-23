@@ -5,7 +5,7 @@
 class StringUtils
 {
 public:
-    static void copyStringToCharArray(const std::string& src, char* charArray, int length);
+    static void copyStringToCharArray(const std::string& src, char* charArray, const int length);
 };
 
 

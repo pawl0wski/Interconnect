@@ -18,7 +18,7 @@ const BootableDiskSelectContainer = ({
 
     useEffect(() => {
         bootableDisksStore.fetchBootableDisks();
-    }, []);
+    }, [bootableDisksStore]);
 
     const bootableDiskComboboxItems = useMemo<ComboboxItem[]>(() => {
         return bootableDisksStore.bootableDisks.map((bootableDisk) => ({
