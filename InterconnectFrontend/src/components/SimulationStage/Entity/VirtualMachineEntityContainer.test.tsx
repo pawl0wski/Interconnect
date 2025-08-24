@@ -41,7 +41,7 @@ describe("VirtualMachineEntityContainer", () => {
     });
 
     test("should update current virtual machine and open modal when user click on entity", () => {
-        const mockSetUuid = vi.fn();
+        const mockSetEntity = vi.fn();
         const testEntity = {
             id: 1,
             name: "VM1",
@@ -53,7 +53,7 @@ describe("VirtualMachineEntityContainer", () => {
             entities: [testEntity]
         }));
         mockCurrentVirtualMachineStore.mockReturnValueOnce(({
-            setUuid: mockSetUuid
+            setCurrentEntity: mockSetEntity
         }));
 
         const screen = render(<Stage data-testid="test-canvas" width={1000} height={1000}>
@@ -66,6 +66,6 @@ describe("VirtualMachineEntityContainer", () => {
         fireEvent.mouseDown(canvas, { clientX: 12, clientY: 43 });
         fireEvent.mouseUp(canvas, { clientX: 12, clientY: 43 });
 
-        expect(mockSetUuid).toHaveBeenCalledWith("123-123");
+        expect(mockSetEntity).toHaveBeenCalledWith(testEntity);
     });
 });

@@ -1,22 +1,26 @@
 import { Modal } from "@mantine/core";
 import VirtualMachineTerminalView from "../VirtualMachineTerminalView.tsx";
+import { VirtualMachineEntityModel } from "../../models/VirtualMachineEntityModel.ts";
 
 interface TerminalModelProps {
+    entity: VirtualMachineEntityModel;
     opened: boolean;
-    uuid: string;
 
     onClose: () => void;
 }
 
-const TerminalModal = ({ opened, uuid, onClose }: TerminalModelProps) => {
+const TerminalModal = ({ opened, entity, onClose }: TerminalModelProps) => {
+    const { name, vmUuid } = entity;
+
     return <Modal
+        title={name}
         opened={opened}
         onClose={onClose}
         size="xl"
         closeOnEscape={false}
         centered
     >
-        <VirtualMachineTerminalView uuid={uuid} />
+        <VirtualMachineTerminalView uuid={vmUuid!} />
     </Modal>;
 };
 

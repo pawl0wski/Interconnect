@@ -10,9 +10,10 @@ const TerminalModelContainer = () => {
         currentVirtualMachineModalStore.close();
     };
 
-    return <TerminalModel opened={currentVirtualMachineModalStore.opened}
-                          onClose={handleModalClose}
-                          uuid={currentVirtualMachineStore.uuid!} />;
+    return currentVirtualMachineStore.currentEntity &&
+        <TerminalModel opened={currentVirtualMachineModalStore.opened}
+                       onClose={handleModalClose}
+                       entity={currentVirtualMachineStore.currentEntity!} />;
 };
 
 export default TerminalModelContainer;

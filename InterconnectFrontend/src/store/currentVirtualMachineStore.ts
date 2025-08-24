@@ -1,13 +1,14 @@
 import { create } from "zustand/react";
+import { VirtualMachineEntityModel } from "../models/VirtualMachineEntityModel.ts";
 
 interface CurrentVirtualMachineStore {
-    uuid: string | null;
-    setUuid: (uuid: string) => void;
+    currentEntity: VirtualMachineEntityModel | null;
+    setCurrentEntity: (entity: VirtualMachineEntityModel) => void;
 }
 
 const useCurrentVirtualMachineStore = create<CurrentVirtualMachineStore>((set) => ({
-    uuid: null,
-    setUuid: (uuid: string) => set({ uuid })
+    currentEntity: null,
+    setCurrentEntity: (entity: VirtualMachineEntityModel) => set({ currentEntity: entity })
 }));
 
 export { useCurrentVirtualMachineStore };

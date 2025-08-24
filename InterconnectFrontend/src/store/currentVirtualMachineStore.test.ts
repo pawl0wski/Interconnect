@@ -1,15 +1,17 @@
 import { act, renderHook } from "@testing-library/react";
 import { useCurrentVirtualMachineStore } from "./currentVirtualMachineStore.ts";
 import { expect } from "vitest";
+import { VirtualMachineEntityModel } from "../models/VirtualMachineEntityModel.ts";
 
 describe("currentVirtualMachineStore", () => {
-    test("should update uuid when updateUuid is called", async () => {
+    test("should update entity when updateEntity is called", async () => {
+        const entityToUpdate = { vmUuid: "123", name: "TestVm" } as VirtualMachineEntityModel;
         const { result } = renderHook(() => useCurrentVirtualMachineStore());
 
         act(() => {
-            result.current.setUuid("123");
+            result.current.setCurrentEntity(entityToUpdate);
         });
 
-        expect(result.current.uuid).equal("123");
+        expect(result.current.currentEntity).equal(entityToUpdate);
     });
 });

@@ -40,7 +40,7 @@ const VirtualMachineEntityContainer = ({ entity }: VirtualMachineEntityContainer
     };
 
     const handleOnClick = () => {
-        currentVirtualMachineStore.setUuid(entity.vmUuid!);
+        currentVirtualMachineStore.setCurrentEntity(entity);
         currentVirtualMachineModalStore.open();
     };
 
