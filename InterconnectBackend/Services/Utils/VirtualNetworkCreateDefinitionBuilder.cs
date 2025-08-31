@@ -9,7 +9,6 @@ namespace Services.Utils
         private string? _macAddress;
         private string? _ipAddress;
         private string? _netMask;
-        private bool _dhcpEnabled = false;
         private string? _dhcpStartRange;
         private string? _dhcpEndRange;
 
@@ -19,7 +18,6 @@ namespace Services.Utils
             _macAddress = definition.MacAddress;
             _ipAddress = definition.IpAddress;
             _netMask = definition.NetMask;
-            _dhcpEnabled = definition.DhcpEnabled;
             _dhcpStartRange = definition.DhcpStartRange;
             _dhcpEndRange = definition.DhcpEndRange;
 
@@ -27,7 +25,7 @@ namespace Services.Utils
         }
         public override string Build()
         {
-            CheckIsEverythingIsProvided(_networkName, _macAddress, _ipAddress, _netMask, _dhcpEnabled);
+            CheckIsEverythingIsProvided(_networkName);
 
             var (writer, stringWriter) = CreateXmlWriter();
 
@@ -37,15 +35,22 @@ namespace Services.Utils
 
                 CreateNetworkBlock(writer, w =>
                 {
+                    CreateBridgeBlock(writer);
                     CreateNetworkNameBlock(w, _networkName);
-                    CreateMacAddressBlock(w, _macAddress);
-                    CreateIpAddressBlock(w, _ipAddress, _netMask, w =>
+                    if (_macAddress is not null)
                     {
-                        if (_dhcpEnabled)
+                        CreateMacAddressBlock(w, _macAddress);
+                    }
+                    if (_ipAddress is not null && _netMask is not null)
+                    {
+                        CreateIpAddressBlock(w, _ipAddress, _netMask, w =>
                         {
-                            CreateDhcpAddressBlock(w, _dhcpStartRange, _dhcpEndRange);
-                        }
-                    });
+                            if (_dhcpStartRange is not null && _dhcpEndRange is not null)
+                            {
+                                CreateDhcpAddressBlock(w, _dhcpStartRange, _dhcpEndRange);
+                            }
+                        });
+                    }
                 });
 
                 writer.WriteEndDocument();
@@ -68,6 +73,15 @@ namespace Services.Utils
             writer.WriteStartElement("name");
 
             writer.WriteString(networkName);
+
+            writer.WriteEndElement();
+        }
+
+        static private void CreateBridgeBlock(XmlWriter writer)
+        {
+            writer.WriteStartElement("bridge");
+
+            writer.WriteAttributeString("name", "virbr2");
 
             writer.WriteEndElement();
         }

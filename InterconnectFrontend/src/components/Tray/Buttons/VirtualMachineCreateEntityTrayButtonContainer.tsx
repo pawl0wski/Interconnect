@@ -7,7 +7,7 @@ const VirtualMachineCreateEntityTrayButtonContainer = () => {
     const entityPlacementStore = useEntityPlacementStore();
 
     const handleCreateVirtualMachine = () => {
-        entityPlacementStore.setCurrentEntity(EntityType.VirtualMachine);
+        entityPlacementStore.setCurrentEntityType(EntityType.VirtualMachine);
     };
 
     const isActive = useMemo(() => (entityPlacementStore.currentEntityType == EntityType.VirtualMachine), [entityPlacementStore.currentEntityType]);

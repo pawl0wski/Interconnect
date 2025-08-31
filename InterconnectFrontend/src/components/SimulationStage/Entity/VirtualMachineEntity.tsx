@@ -10,6 +10,7 @@ import { VirtualMachineState } from "../../../models/enums/VirtualMachineState.t
 interface VirtualMachineEntityProps {
     entity: VirtualMachineEntityModel;
     shapeName: string;
+    draggable: boolean;
     onDragMove: (e: KonvaEventObject<DragEvent>) => void;
     onDragEnd: (e: KonvaEventObject<DragEvent>) => void;
     onMouseOver: (e: KonvaEventObject<MouseEvent>) => void;
@@ -20,6 +21,7 @@ interface VirtualMachineEntityProps {
 const VirtualMachineEntity = ({
                                   entity,
                                   shapeName,
+                                  draggable,
                                   onDragEnd,
                                   onDragMove,
                                   onMouseOver,
@@ -48,7 +50,7 @@ const VirtualMachineEntity = ({
         onDragMove={onDragMove}
         onDragEnd={onDragEnd}
         onClick={onClick}
-        draggable={true}
+        draggable={draggable}
     >
         <Image
             height={50}

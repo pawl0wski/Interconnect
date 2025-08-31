@@ -1,5 +1,6 @@
 set(SOURCE_FILES
         virt/VirtualizationFacade.cpp
+        virt/managers/BaseManagerWithConnection.cpp
         virt/managers/VirtualMachineManager.cpp
         virt/managers/VirtualMachineConsoleManager.cpp
         virt/managers/ConnectionManager.cpp
@@ -15,6 +16,7 @@ set(HEADER_FILES
         interfaces/ILibvirtWrapper.h
         LibvirtWrapper.h
         virt/VirtualizationFacade.h
+        virt/managers/BaseManagerWithConnection.h
         virt/managers/VirtualMachineManager.h
         virt/managers/VirtualMachineConsoleManager.h
         virt/managers/ConnectionManager.h

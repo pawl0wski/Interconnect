@@ -30,7 +30,7 @@ describe("entityPlacementStore", () => {
         const { result } = renderHook(() => useEntityPlacementStore());
 
         act(() => {
-            result.current.setCurrentEntity(EntityType.VirtualMachine);
+            result.current.setCurrentEntityType(EntityType.VirtualMachine);
         });
 
         expect(result.current.currentEntityType).toEqual(EntityType.VirtualMachine);
@@ -40,7 +40,7 @@ describe("entityPlacementStore", () => {
         const { result } = renderHook(() => useEntityPlacementStore());
 
         act(() => {
-            result.current.setCurrentEntity(EntityType.VirtualMachine);
+            result.current.setCurrentEntityType(EntityType.VirtualMachine);
         });
 
         act(() => {
@@ -56,7 +56,7 @@ describe("entityPlacementStore", () => {
         const { result } = renderHook(() => useEntityPlacementStore());
 
         act(() => {
-            result.current.setCurrentEntity(EntityType.VirtualMachine);
+            result.current.setCurrentEntityType(EntityType.VirtualMachine);
         });
 
         act(() => {

@@ -18,7 +18,6 @@ namespace ServicesTests.Utils
                 MacAddress = "D0-8C-DC-3F-5D-DE",
                 IpAddress = "192.153.231.123",
                 NetMask = "255.255.255.0",
-                DhcpEnabled = true,
                 DhcpStartRange = "192.0.0.1",
                 DhcpEndRange = "192.0.0.2",
             });
@@ -95,9 +94,8 @@ namespace ServicesTests.Utils
                 MacAddress = "D0-8C-DC-3F-5D-DE",
                 IpAddress = "192.153.231.123",
                 NetMask = "255.255.255.0",
-                DhcpEnabled = false,
-                DhcpStartRange = "192.0.0.1",
-                DhcpEndRange = "192.0.0.2",
+                DhcpStartRange = null,
+                DhcpEndRange = null,
             });
 
             var definition = _definitionBuilder.Build();
