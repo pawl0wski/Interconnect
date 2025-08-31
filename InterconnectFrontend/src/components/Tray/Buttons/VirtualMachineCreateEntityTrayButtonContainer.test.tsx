@@ -3,18 +3,21 @@ import VirtualMachineCreateEntityTrayButtonContainer from "./VirtualMachineCreat
 import userEvent from "@testing-library/user-event";
 import { MantineProvider } from "@mantine/core";
 import "../../../internalization/i18n.ts";
+import { expect } from "vitest";
+import { EntityType } from "../../../models/enums/EntityType.ts";
 
-const mockVirtualMachineCreateModalStore = vi.hoisted(() => vi.fn());
+const mockEntityPlacementStore = vi.hoisted(() => vi.fn());
 
-vi.mock("../../../store/modals/virtualMachineCreateModalStore.ts", () => ({
-    useVirtualMachineCreateModalStore: mockVirtualMachineCreateModalStore
+vi.mock("../../../store/entityPlacementStore.ts", () => ({
+    useEntityPlacementStore: mockEntityPlacementStore,
 }));
 
 describe("VirtualMachineCreateEntityTrayButtonContainer", () => {
-    test("should open virtual machine create modal when button is pressed", async () => {
-        const mockOpenModal = vi.fn();
-        mockVirtualMachineCreateModalStore.mockReturnValue({
-            open: mockOpenModal
+    test("should change current entity to create in store", async () => {
+        const mockSetCurrentEntity = vi.fn();
+        mockEntityPlacementStore.mockReturnValue({
+            setCurrentEntity: mockSetCurrentEntity,
+            currentEntityType: null,
         });
         const screen = render(<MantineProvider>
             <VirtualMachineCreateEntityTrayButtonContainer />
@@ -23,6 +26,6 @@ describe("VirtualMachineCreateEntityTrayButtonContainer", () => {
         const button = screen.getByText("Maszyna wirtualna");
         await userEvent.click(button);
 
-        expect(mockOpenModal).toHaveBeenCalled();
+        expect(mockSetCurrentEntity).toHaveBeenCalledWith(EntityType.VirtualMachine);
     });
 });

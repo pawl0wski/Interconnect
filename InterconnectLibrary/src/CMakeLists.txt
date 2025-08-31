@@ -3,6 +3,7 @@ set(SOURCE_FILES
         virt/managers/VirtualMachineManager.cpp
         virt/managers/VirtualMachineConsoleManager.cpp
         virt/managers/ConnectionManager.cpp
+        virt/managers/VirtualNetworkManager.cpp
         LibvirtWrapper.cpp
         InterconnectLibraryExtern.cpp
         utils/VersionUtils.cpp
@@ -17,6 +18,7 @@ set(HEADER_FILES
         virt/managers/VirtualMachineManager.h
         virt/managers/VirtualMachineConsoleManager.h
         virt/managers/ConnectionManager.h
+        virt/managers/VirtualNetworkManager.h
         models/VirtualMachineInfo.h
         models/Version.h
         models/ConnectionInfo.h
@@ -35,6 +37,8 @@ add_library(interconnect STATIC
         ${HEADER_FILES}
         ${SOURCE_FILES}
         ${EXTERN_FILES}
+        virt/managers/BaseManagerWithConnection.cpp
+        virt/managers/BaseManagerWithConnection.h
 )
 
 add_library(interconnect_shared SHARED

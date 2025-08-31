@@ -110,6 +110,24 @@ void CloseStream(ExecutionInfo* executionInfo, VirtualizationFacade* virtualizat
         virtualization->closeStream(stream);
     });
 }
+
+void CreateVirtualNetwork(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization, virNetworkPtr* network,
+                          const char* networkDefinition)
+{
+    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, network, networkDefinition]
+    {
+        *network = virtualization->createVirtualNetworkFromXml(networkDefinition);
+    });
+}
+
+void AttachDeviceToVirtualMachine(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization, const char* uuid,
+                      const char* deviceDefinition)
+{
+    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, uuid, deviceDefinition]
+    {
+        virtualization->attachDeviceToVm(uuid, deviceDefinition);
+    });
+}
 }
 
 #endif // INTERCONNECTLIBRARYEXTERN_H

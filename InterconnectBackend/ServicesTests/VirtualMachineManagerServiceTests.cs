@@ -90,5 +90,16 @@ namespace ServicesTests
 
             Assert.That(vms.Count, Is.EqualTo(2));
         }
+
+        [Test]
+        public void AttachVirtualNetworkInterfaceToVirtualMachine_WhenInvoked_ShouldAttachVirtualNetworkInterfaceToVirtualMachine()
+        {
+            _managerWrapper.Setup(m => m.GetVirtualMachineInfo(It.IsAny<string>())).Returns(
+                 new NativeVirtualMachineInfo { Uuid = "d5973a33-80a2-4569-af67-798a1ab70d1f" });
+
+            _managerService.AttachVirtualNetworkInterfaceToVirtualMachine("testVm", "testNetwork", "3A:5F:8C:1D:72:B4");
+
+            _managerWrapper.Verify(m => m.AttachDeviceToVirtualMachine(It.Is<Guid>(g => g == Guid.Parse("d5973a33-80a2-4569-af67-798a1ab70d1f")), It.IsAny<string>()));
+        }
     }
 }

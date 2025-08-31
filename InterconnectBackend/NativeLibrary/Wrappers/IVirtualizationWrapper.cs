@@ -15,5 +15,7 @@ namespace NativeLibrary.Wrappers
         public NativeStreamData GetDataFromStream(IntPtr stream);
         public void SendDataToStream(IntPtr stream, string data);
         public void CloseStream(IntPtr stream);
+        public IntPtr CreateVirtualNetwork(string networkDefinition);
+        public void AttachDeviceToVirtualMachine(Guid uuid, string deviceDefinition);
     }
 }

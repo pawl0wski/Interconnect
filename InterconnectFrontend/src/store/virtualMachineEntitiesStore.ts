@@ -7,6 +7,7 @@ interface VirtualMachineEntitiesStore {
     fetchEntities: () => Promise<void>;
     updateEntityPosition: (id: number, x: number, y: number) => Promise<void>;
     clearEntities: () => void;
+    getById: (id: number) => VirtualMachineEntityModel;
 }
 
 const useVirtualMachineEntitiesStore = create<VirtualMachineEntitiesStore>()((set, get) => ({
@@ -43,6 +44,9 @@ const useVirtualMachineEntitiesStore = create<VirtualMachineEntitiesStore>()((se
         set({
             entities: []
         });
+    },
+    getById: (id: number) => {
+        return get().entities.find((e) => e.id === id)!;
     }
 }));
 

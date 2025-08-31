@@ -14,6 +14,7 @@ VirtualizationFacade::VirtualizationFacade(ILibvirtWrapper* libvirt)
     vmManager = new VirtualMachineManager(libvirt);
     vmConsoleManager = new VirtualMachineConsoleManager(libvirt);
     connManager = new ConnectionManager(libvirt);
+    networkManager = new VirtualNetworkManager(libvirt);
 }
 
 VirtualizationFacade::VirtualizationFacade()
@@ -22,6 +23,7 @@ VirtualizationFacade::VirtualizationFacade()
     vmManager = new VirtualMachineManager(&libvirt);
     vmConsoleManager = new VirtualMachineConsoleManager(&libvirt);
     connManager = new ConnectionManager(&libvirt);
+    networkManager = new VirtualNetworkManager(&libvirt);
 }
 
 void VirtualizationFacade::initializeConnection(const char* customConnectionUrl) const
@@ -38,6 +40,7 @@ void VirtualizationFacade::initializeConnection(const char* customConnectionUrl)
     const auto conn = connManager->getConnection();
     vmManager->updateConnection(conn);
     vmConsoleManager->updateConnection(conn);
+    networkManager->updateConnection(conn);
 }
 
 void VirtualizationFacade::getConnectionInfo(ConnectionInfo* infoPtr) const
@@ -89,4 +92,14 @@ void VirtualizationFacade::sendDataToConsole(virStreamPtr stream, const std::str
 void VirtualizationFacade::closeStream(virStreamPtr stream) const
 {
     vmConsoleManager->closeStream(stream);
+}
+
+virNetworkPtr VirtualizationFacade::createVirtualNetworkFromXml(const std::string& networkDefinition) const
+{
+    return networkManager->createNetworkFromXml(networkDefinition);
+}
+
+void VirtualizationFacade::attachDeviceToVm(const std::string& uuid, const std::string& deviceDefinition) const
+{
+    vmManager->attachDeviceToVirtualMachine(uuid, deviceDefinition);
 }

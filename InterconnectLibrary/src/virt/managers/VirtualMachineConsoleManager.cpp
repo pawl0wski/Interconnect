@@ -4,17 +4,9 @@
 
 #include "../../exceptions/VirtualMachineManagerException.h"
 
-void VirtualMachineConsoleManager::updateConnection(const virConnectPtr conn)
-{
-    this->conn = conn;
-}
-
 virStreamPtr VirtualMachineConsoleManager::openVirtualMachineConsole(const std::string& vmUuid) const
 {
-    if (conn == nullptr)
-    {
-        throw VirtualMachineManagerException("No active connection to the VM backend");
-    }
+    checkIfConnectionIsSet();
 
     const auto domain = libvirt->domainLookupByUuid(conn, vmUuid);
     if (domain == nullptr)

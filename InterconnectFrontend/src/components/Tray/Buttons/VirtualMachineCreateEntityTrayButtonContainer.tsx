@@ -1,15 +1,18 @@
 import VirtualMachineCreateEntityTrayButton from "./VirtualMachineCreateEntityTrayButton.tsx";
-import { useVirtualMachineCreateModalStore } from "../../../store/modals/virtualMachineCreateModalStore.ts";
+import { useEntityPlacementStore } from "../../../store/entityPlacementStore.ts";
+import { EntityType } from "../../../models/enums/EntityType.ts";
+import { useMemo } from "react";
 
 const VirtualMachineCreateEntityTrayButtonContainer = () => {
-    const virtualMachineCreateModalStore = useVirtualMachineCreateModalStore();
-
+    const entityPlacementStore = useEntityPlacementStore();
 
     const handleCreateVirtualMachine = () => {
-        virtualMachineCreateModalStore.open();
+        entityPlacementStore.setCurrentEntity(EntityType.VirtualMachine);
     };
 
-    return <VirtualMachineCreateEntityTrayButton onClick={handleCreateVirtualMachine} />;
+    const isActive = useMemo(() => (entityPlacementStore.currentEntityType == EntityType.VirtualMachine), [entityPlacementStore.currentEntityType]);
+
+    return <VirtualMachineCreateEntityTrayButton active={isActive} onClick={handleCreateVirtualMachine} />;
 };
 
 export default VirtualMachineCreateEntityTrayButtonContainer;

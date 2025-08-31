@@ -27,7 +27,7 @@ TEST_F(VirtualMachineManagerTests, updateConnection_WhenCalled_ShouldUpdateConne
         {
             manager.createVirtualMachine("<xml>test</xml>");
         },
-        "No active connection to the VM backend."
+        "No active connection to the VM backend"
     );
 
     manager.updateConnection(reinterpret_cast<virConnectPtr>(0x123));
@@ -40,7 +40,7 @@ TEST_F(VirtualMachineManagerTests, createVirtualMachine_WhenNoBackendConnection_
     TestingUtils::expectThrowWithMessage([this]
     {
         manager.createVirtualMachine("<xml>test</xml>");
-    }, "No active connection to the VM backend.");
+    }, "No active connection to the VM backend");
 }
 
 
@@ -193,4 +193,49 @@ TEST_F(VirtualMachineManagerTests,
     EXPECT_EQ(vms.size(), 2);
     EXPECT_STREQ(vms.at(0).uuid, "test1");
     EXPECT_STREQ(vms.at(1).uuid, "test2");
+}
+
+TEST_F(VirtualMachineManagerTests, attachDeviceToVirtualMachine_WhenConnectionIsNotSet_ShouldThrowException)
+{
+    TestingUtils::expectThrowWithMessage([this]
+    {
+        manager.attachDeviceToVirtualMachine("test", "test");
+    }, "No active connection to the VM backend");
+}
+
+TEST_F(VirtualMachineManagerTests, attachDeviceToVirtualMachine_WhenCannotFindDevice_ShouldThrowException)
+{
+    const auto mockConn = reinterpret_cast<virConnectPtr>(0x123);
+    EXPECT_CALL(mockLibvirt, domainLookupByName(mockConn, "test")).WillOnce(testing::ReturnNull());
+
+    manager.updateConnection(mockConn);
+    TestingUtils::expectThrowWithMessage([this]
+    {
+        manager.attachDeviceToVirtualMachine("test", "test");
+    }, "Error while obtaining pointer to virtual machine");
+}
+
+TEST_F(VirtualMachineManagerTests, attachDeviceToVirtualMachine_WhenCannotAttachDeviceToVm_ShouldThrowException)
+{
+    const auto mockConn = reinterpret_cast<virConnectPtr>(0x123);
+    const auto mockDomain = reinterpret_cast<virDomainPtr>(0x456);
+    EXPECT_CALL(mockLibvirt, domainLookupByName(mockConn, "test")).WillOnce(testing::Return(mockDomain));
+    EXPECT_CALL(mockLibvirt, attachDeviceToVm(mockDomain, "test")).WillOnce(testing::Return(-1));
+
+    manager.updateConnection(mockConn);
+    TestingUtils::expectThrowWithMessage([this]
+    {
+        manager.attachDeviceToVirtualMachine("test", "test");
+    }, "Can't attach device");
+}
+
+TEST_F(VirtualMachineManagerTests, attachDeviceToVirtualMachine_WhenInvoked_ShouldAttachDeviceToVm)
+{
+    const auto mockConn = reinterpret_cast<virConnectPtr>(0x123);
+    const auto mockDomain = reinterpret_cast<virDomainPtr>(0x456);
+    EXPECT_CALL(mockLibvirt, domainLookupByName(mockConn, "test")).WillOnce(testing::Return(mockDomain));
+    EXPECT_CALL(mockLibvirt, attachDeviceToVm(mockDomain, "test")).WillOnce(testing::Return(0));
+
+    manager.updateConnection(mockConn);
+    manager.attachDeviceToVirtualMachine("test", "test");
 }

@@ -1,11 +1,15 @@
-import { Circle, Group, Image, Text } from "react-konva";
-import virtualMachineImage from "../../../static/virtual_machine.svg";
+import { useMemo } from "react";
 import useImage from "use-image";
-import { VirtualMachineEntityModel } from "../../../models/VirtualMachineEntityModel.ts";
 import { KonvaEventObject } from "konva/lib/Node";
+import { Circle, Group, Image, Text } from "react-konva";
+import virtualMachineImageDefault from "../../../static/virtual_machine.svg";
+import virtualMachineImageRunning from "../../../static/virtual_machine_running.svg";
+import { VirtualMachineEntityModel } from "../../../models/VirtualMachineEntityModel.ts";
+import { VirtualMachineState } from "../../../models/enums/VirtualMachineState.ts";
 
 interface VirtualMachineEntityProps {
     entity: VirtualMachineEntityModel;
+    shapeName: string;
     onDragMove: (e: KonvaEventObject<DragEvent>) => void;
     onDragEnd: (e: KonvaEventObject<DragEvent>) => void;
     onMouseOver: (e: KonvaEventObject<MouseEvent>) => void;
@@ -15,6 +19,7 @@ interface VirtualMachineEntityProps {
 
 const VirtualMachineEntity = ({
                                   entity,
+                                  shapeName,
                                   onDragEnd,
                                   onDragMove,
                                   onMouseOver,
@@ -22,11 +27,22 @@ const VirtualMachineEntity = ({
                                   onClick
                               }: VirtualMachineEntityProps) => {
     const { name, x, y } = entity;
-    const [virtualMachineImageElement] = useImage(virtualMachineImage);
+    const [virtualMachineDefaultImageElement] = useImage(virtualMachineImageDefault);
+    const [virtualMachineRunningImageElement] = useImage(virtualMachineImageRunning);
+
+    const virtualMachineImage = useMemo(() => {
+        switch (entity.state) {
+            case VirtualMachineState.Booted:
+                return virtualMachineRunningImageElement;
+            default:
+                return virtualMachineDefaultImageElement;
+        }
+    }, [entity.state, virtualMachineDefaultImageElement, virtualMachineRunningImageElement]);
 
     return <Group
         x={x}
         y={y}
+        name={shapeName}
         onMouseOver={onMouseOver}
         onMouseOut={onMouseOut}
         onDragMove={onDragMove}
@@ -37,7 +53,7 @@ const VirtualMachineEntity = ({
         <Image
             height={50}
             width={50}
-            image={virtualMachineImageElement}
+            image={virtualMachineImage}
         />
         <Circle />
         <Text y={60} fontStyle="bold" align="center" width={50} text={name} />

@@ -24,8 +24,8 @@ namespace Services.Impl
         {
             var name = definition.GetVirtualMachineNameWithPrefix(_config.VmPrefix);
 
-            var builder = new VirtualMachineCreateDefinitionBuilder();
-            builder.SetFromCreateDefinition(definition, _config.VmPrefix);
+            var builder = new VirtualMachineDefinitionBuilder();
+            builder.SetPrefix(_config.VmPrefix).SetFromCreateDefinition(definition);
 
             var xmlDefinition = builder.Build();
 
@@ -42,6 +42,23 @@ namespace Services.Impl
             var virtualMachines = _vmManager.GetListOfVirtualMachines();
 
             return [.. virtualMachines.Select(NativeVirtualMachineInfoMapper.MapToVirtualMachineInfo)];
+        }
+
+        public void AttachVirtualNetworkInterfaceToVirtualMachine(string name, string networkName, string macAddress)
+        {
+            var virtualMachine = _vmManager.GetVirtualMachineInfo(name);
+
+            var createDefinition = new VirtualNetworkInterfaceCreateDefinition
+            {
+                MacAddress = macAddress,
+                NetworkName = networkName,
+            };
+            var builder = new VirtualNetworkInterfaceCreateDefinitionBuilder()
+                .SetFromCreateDefinition(createDefinition);
+
+            var definition = builder.Build();
+
+            _vmManager.AttachDeviceToVirtualMachine(Guid.Parse(virtualMachine.Uuid), definition);
         }
     }
 }

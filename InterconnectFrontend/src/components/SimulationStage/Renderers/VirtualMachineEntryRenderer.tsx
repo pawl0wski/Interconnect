@@ -6,7 +6,9 @@ const VirtualMachineEntryRenderer = () => {
     const virtualMachineEntitiesStore = useVirtualMachineEntitiesStore();
 
     useEffect(() => {
-        virtualMachineEntitiesStore.fetchEntities();
+        (async () => {
+            await virtualMachineEntitiesStore.fetchEntities();
+        })();
     }, []);
 
     return virtualMachineEntitiesStore.entities.map((e) => {

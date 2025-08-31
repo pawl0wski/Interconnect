@@ -1,31 +1,14 @@
 #ifndef VIRTUALMACHINECONSOLEMANAGER_H
 #define VIRTUALMACHINECONSOLEMANAGER_H
+#include "BaseManagerWithConnection.h"
 #include "../../LibvirtWrapper.h"
 #include "../../interfaces/ILibvirtWrapper.h"
 #include "../../models/StreamData.h"
 
-class VirtualMachineConsoleManager
+class VirtualMachineConsoleManager : public BaseManagerWithConnection
 {
-    ILibvirtWrapper* libvirt;
-    virConnectPtr conn;
-
 public:
-    virtual ~VirtualMachineConsoleManager() = default;
-
-    /**
-     * @param libvirt Reference to an ILibvirtWrapper implementation.
-     */
-    explicit VirtualMachineConsoleManager(ILibvirtWrapper* libvirt)
-        : libvirt(libvirt), conn(nullptr)
-    {
-    }
-
-    explicit VirtualMachineConsoleManager(): conn(nullptr)
-    {
-        libvirt = new LibvirtWrapper();
-    }
-
-    void updateConnection(virConnectPtr conn);
+    using BaseManagerWithConnection::BaseManagerWithConnection;
 
     virStreamPtr openVirtualMachineConsole(const std::string& vmUuid) const;
 

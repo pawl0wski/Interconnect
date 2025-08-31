@@ -1,13 +1,26 @@
 import { Layer, Stage } from "react-konva";
 import classes from "./SimulationStage.module.scss";
 import VirtualMachineEntryRenderer from "./Renderers/VirtualMachineEntryRenderer.tsx";
+import classNames from "classnames";
+import { KonvaEventObject } from "konva/lib/Node";
+import { useMemo } from "react";
+import SimulationContextMenuProvider from "./ContextMenu/SimulationContextMenuProvider.tsx";
 
-const SimulationStage = () => {
+interface SimulationStageProps {
+    showPlacementCursor: boolean;
+    onClick: (e: KonvaEventObject<MouseEvent>) => void;
+    onContextMenu: (e: KonvaEventObject<PointerEvent>) => void;
+}
+
+const SimulationStage = ({ showPlacementCursor, onClick, onContextMenu }: SimulationStageProps) => {
     const stageHeight = 2000;
     const stageWidth = 3000;
 
-    return <div className={classes["simulation-stage"]}>
-        <Stage width={stageWidth} height={stageHeight}>
+    const divClasses = useMemo(() => (classNames(classes["simulation-stage"], showPlacementCursor ? classes["is-placing"] : "")), [showPlacementCursor]);
+
+    return <div className={divClasses}>
+        <SimulationContextMenuProvider />
+        <Stage width={stageWidth} height={stageHeight} onClick={onClick} onContextMenu={onContextMenu}>
             <Layer>
                 <VirtualMachineEntryRenderer />
             </Layer>

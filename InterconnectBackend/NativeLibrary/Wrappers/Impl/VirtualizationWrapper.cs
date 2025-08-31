@@ -119,5 +119,26 @@ namespace NativeLibrary.Wrappers.Impl
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
         }
+
+        public IntPtr CreateVirtualNetwork(string networkDefinition)
+        {
+            NativeExecutionInfo executionInfo = new();
+            IntPtr network;
+
+            InteropVirtualization.CreateVirtualNetwork(out executionInfo, _virtualizationFacade, out network, networkDefinition);
+
+            ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
+
+            return network;
+        }
+
+        public void AttachDeviceToVirtualMachine(Guid uuid, string deviceDefinition)
+        {
+            NativeExecutionInfo executionInfo = new();
+
+            InteropVirtualization.AttachDeviceToVirtualMachine(out executionInfo, _virtualizationFacade, uuid.ToString(), deviceDefinition);
+
+            ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
+        }
     }
 }

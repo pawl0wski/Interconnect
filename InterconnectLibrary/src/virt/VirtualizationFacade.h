@@ -4,12 +4,14 @@
 #include "managers/VirtualMachineConsoleManager.h"
 #include "managers/VirtualMachineManager.h"
 #include "../models/StreamData.h"
+#include "managers/VirtualNetworkManager.h"
 
 class VirtualizationFacade
 {
     ConnectionManager* connManager = nullptr;
     VirtualMachineManager* vmManager = nullptr;
     VirtualMachineConsoleManager* vmConsoleManager = nullptr;
+    VirtualNetworkManager* networkManager = nullptr;
 
 public:
     virtual ~VirtualizationFacade() = default;
@@ -41,6 +43,10 @@ public:
     void sendDataToConsole(virStreamPtr stream, const std::string& data) const;
 
     void closeStream(virStreamPtr stream) const;
+
+    [[nodiscard]] virNetworkPtr createVirtualNetworkFromXml(const std::string& networkDefinition) const;
+
+    void attachDeviceToVm(const std::string& uuid, const std::string& deviceDefinition) const;
 };
 
 #endif //VIRTUALIZATIONFACADE_H

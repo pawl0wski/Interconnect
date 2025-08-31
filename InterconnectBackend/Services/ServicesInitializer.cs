@@ -11,6 +11,7 @@ namespace Services
             serviceCollection.AddSingleton<IVirtualMachineConsoleService, VirtualMachineConsoleService>();
             serviceCollection.AddSingleton<IVirtualMachineManagerService, VirtualMachineManagerService>();
             serviceCollection.AddSingleton<IInfoService, InfoService>();
+            serviceCollection.AddSingleton<IVirtualNetworkService, VirtualNetworkService>();
 
             serviceCollection.AddScoped<IVirtualMachineEntityService, VirtualMachineEntityService>();
             serviceCollection.AddScoped<IBootableDiskProviderService, BootableDiskProviderService>();

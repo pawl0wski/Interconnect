@@ -8,10 +8,12 @@ namespace Services.Impl
     public class VirtualMachineEntityService : IVirtualMachineEntityService
     {
         private readonly IVirtualMachineEntityRepository _repository;
+        private readonly IVirtualMachineManagerService _machineManagerService;
 
-        public VirtualMachineEntityService(IVirtualMachineEntityRepository repository)
+        public VirtualMachineEntityService(IVirtualMachineEntityRepository repository, IVirtualMachineManagerService machineManagerService)
         {
             _repository = repository;
+            _machineManagerService = machineManagerService;
         }
 
         public async Task<VirtualMachineEntityDTO> CreateEntity(string name, int x, int y)
@@ -32,7 +34,21 @@ namespace Services.Impl
         {
             var entities = await _repository.GetAll();
 
-            return [.. entities.Select(VirtualMachineEntityMapper.MapToDTO)];
+            List<VirtualMachineEntityDTO> entitiesDto = [.. entities.Select(VirtualMachineEntityMapper.MapToDTO)];
+            var virtualMachines = _machineManagerService.GetListOfVirtualMachines();
+            entitiesDto = [.. entitiesDto.Select(e =>
+            {
+                var vm = virtualMachines.FirstOrDefault(v => v.Uuid == e.VmUuid.ToString());
+                if (vm is null)
+                {
+                    return e;
+                }
+
+                e.State = (Models.Enums.VirtualMachineState)vm.State;
+                return e;
+            })];
+
+            return entitiesDto;
         }
 
         public async Task<VirtualMachineEntityDTO> GetEntityById(int id)

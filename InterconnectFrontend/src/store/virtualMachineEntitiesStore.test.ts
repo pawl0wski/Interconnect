@@ -1,4 +1,4 @@
-import { beforeEach, vi } from "vitest";
+import { beforeEach, expect, vi } from "vitest";
 import { VirtualMachineEntityModel } from "../models/VirtualMachineEntityModel.ts";
 import { act, renderHook } from "@testing-library/react";
 import { useVirtualMachineEntitiesStore } from "./virtualMachineEntitiesStore.ts";
@@ -106,4 +106,35 @@ describe("virtualMachineEntitiesStore", () => {
         expect(result.current.entities).toHaveLength(0);
     });
 
+    test("should get entity by id", async () => {
+        mockGetListOfEntities.mockReturnValueOnce(
+            {
+                data: [
+                    {
+                        id: 1,
+                        vmUuid: null,
+                        name: "Test1",
+                        x: 12,
+                        y: 54
+                    },
+                    {
+                        id: 2,
+                        vmUuid: null,
+                        name: "Test2",
+                        x: 43,
+                        y: 52
+                    }
+                ] as VirtualMachineEntityModel[]
+            }
+        );
+        const { result } = renderHook(() => useVirtualMachineEntitiesStore());
+        let foundEntity: VirtualMachineEntityModel | undefined;
+
+        await act(async () => {
+            await result.current.fetchEntities();
+            foundEntity = result.current.getById(2);
+        });
+
+        expect(foundEntity?.name).toBe("Test2");
+    });
 });

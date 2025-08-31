@@ -5,17 +5,9 @@
 #include "../../exceptions/VirtualMachineManagerException.h"
 #include "../../utils/StringUtils.h"
 
-void VirtualMachineManager::updateConnection(const virConnectPtr conn)
-{
-    this->conn = conn;
-}
-
 void VirtualMachineManager::createVirtualMachine(const std::string& virtualMachineXml) const
 {
-    if (conn == nullptr)
-    {
-        throw VirtualMachineManagerException("No active connection to the VM backend.");
-    }
+    checkIfConnectionIsSet();
 
     const auto domain = libvirt->createVirtualMachineFromXml(conn, virtualMachineXml.c_str());
     if (domain == nullptr)
@@ -29,16 +21,9 @@ VirtualMachineInfo VirtualMachineManager::getInfoAboutVirtualMachine(const std::
     std::string virtualMachineUuid;
     auto domainInfo = virDomainInfo{};
 
-    if (conn == nullptr)
-    {
-        throw VirtualMachineManagerException("No active connection to the VM backend.");
-    }
+    checkIfConnectionIsSet();
 
-    const auto domainPtr = libvirt->domainLookupByName(conn, name);
-    if (domainPtr == nullptr)
-    {
-        throw VirtualMachineManagerException("Error while obtaining pointer to virtual machine");
-    }
+    const auto domainPtr = getVirtualMachineByName(name);
 
     if (libvirt->domainGetInfo(domainPtr, domainInfo) != 0)
     {
@@ -64,10 +49,7 @@ std::vector<VirtualMachineInfo> VirtualMachineManager::getListOfVirtualMachinesW
     virDomainPtr* domains = nullptr;
     int numDomains = 0;
 
-    if (conn == nullptr)
-    {
-        throw VirtualMachineManagerException("No active connection to the VM backend.");
-    }
+    checkIfConnectionIsSet();
 
     numDomains = libvirt->getListOfAllDomains(conn, &domains);
     if (numDomains == -1)
@@ -85,4 +67,27 @@ std::vector<VirtualMachineInfo> VirtualMachineManager::getListOfVirtualMachinesW
 
     free(domains);
     return virtualMachines;
+}
+
+void VirtualMachineManager::attachDeviceToVirtualMachine(const std::string& name,
+                                                         const std::string& deviceDefinition) const
+{
+    checkIfConnectionIsSet();
+
+    const auto domainPtr = getVirtualMachineByName(name);
+
+    if (libvirt->attachDeviceToVm(domainPtr, deviceDefinition) == -1)
+    {
+        throw VirtualMachineManagerException("Can't attach device");
+    }
+}
+
+virDomainPtr VirtualMachineManager::getVirtualMachineByName(const std::string& name) const
+{
+    const auto domainPtr = libvirt->domainLookupByName(conn, name);
+    if (domainPtr == nullptr)
+    {
+        throw VirtualMachineManagerException("Error while obtaining pointer to virtual machine");
+    }
+    return domainPtr;
 }

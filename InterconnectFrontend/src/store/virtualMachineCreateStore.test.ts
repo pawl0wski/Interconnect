@@ -3,10 +3,17 @@ import { act, renderHook } from "@testing-library/react";
 import { useVirtualMachineCreateStore } from "./virtualMachineCreateStore.ts";
 
 const mockCreateVirtualMachine = vi.hoisted(() => vi.fn());
+const mockUpdateEntityPosition = vi.hoisted(() => vi.fn());
 
 vi.mock("../api/resourceClient/VirtualMachineResourceClient.ts", () => ({
     virtualMachineResourceClient: {
         createVirtualMachine: mockCreateVirtualMachine
+    }
+}));
+
+vi.mock("../api/resourceClient/VirtualMachineEntityResourceClient.ts", () => ({
+    virtualMachineEntityResourceClient: {
+        updateEntityPosition: mockUpdateEntityPosition
     }
 }));
 
@@ -41,7 +48,7 @@ describe("virtualMachineCreateStore", () => {
         const { result } = renderHook(() => useVirtualMachineCreateStore());
 
         await act(async () => {
-            result.current.update({ name: "Test", virtualCPUs: 4, memory: 1024, bootableDiskId: 1 });
+            result.current.update({ name: "Test", virtualCPUs: 4, memory: 1024, bootableDiskId: 1, x: 43, y: 25 });
             await result.current.createVirtualMachine();
         });
 
@@ -51,5 +58,6 @@ describe("virtualMachineCreateStore", () => {
             virtualCpus: 4,
             bootableDiskId: 1
         });
+        expect(mockUpdateEntityPosition).toHaveBeenCalledWith(1, 43, 25);
     });
 });

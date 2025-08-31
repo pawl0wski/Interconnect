@@ -8,7 +8,7 @@
  *
  * This class provides actual implementations for connecting to the libvirt C API.
  */
-class LibvirtWrapper : public ILibvirtWrapper
+class LibvirtWrapper final : public ILibvirtWrapper
 {
 public:
     /**
@@ -73,6 +73,10 @@ public:
     void sendDataToStream(virStreamPtr stream, const char* buffer, int bufferSize) override;
 
     void finishAndFreeStream(virStreamPtr stream) override;
+
+    virNetworkPtr createNetworkFromXml(virConnectPtr conn, const std::string& networkDefinition) override;
+
+    int attachDeviceToVm(virDomainPtr domain, const std::string& deviceDefinition) override;
 };
 
 

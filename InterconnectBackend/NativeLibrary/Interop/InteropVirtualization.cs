@@ -31,5 +31,9 @@ namespace NativeLibrary.Interop
         public static extern void SendDataToConsole(out NativeExecutionInfo executionInfo, IntPtr facade, IntPtr stream, string buffer);
         [DllImport(Constants.LIBRARY_NAME)]
         public static extern void CloseStream(out NativeExecutionInfo executionInfo, IntPtr facade, IntPtr stream);
+        [DllImport(Constants.LIBRARY_NAME)]
+        public static extern void CreateVirtualNetwork(out NativeExecutionInfo executionInfo, IntPtr facade, out IntPtr network, string networkDefinition);
+        [DllImport(Constants.LIBRARY_NAME)]
+        public static extern void AttachDeviceToVirtualMachine(out NativeExecutionInfo executionInfo, IntPtr facade, string uuid, string deviceDefinition);
     }
 }

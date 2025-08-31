@@ -6,5 +6,6 @@ namespace Services
     {
         public VirtualMachineInfo CreateVirtualMachine(VirtualMachineCreateDefinition definition);
         public List<VirtualMachineInfo> GetListOfVirtualMachines();
+        public void AttachVirtualNetworkInterfaceToVirtualMachine(string name, string networkName, string macAddress);
     }
 }

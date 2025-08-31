@@ -4,8 +4,7 @@
 #include <vector>
 #include <libvirt/libvirt.h>
 
-#include "../../LibvirtWrapper.h"
-#include "../../interfaces/ILibvirtWrapper.h"
+#include "BaseManagerWithConnection.h"
 #include "../../models/VirtualMachineInfo.h"
 
 /**
@@ -15,28 +14,10 @@
  * and operations related to virtual machines such as creation
  * and retrieving information.
  */
-class VirtualMachineManager
+class VirtualMachineManager : public BaseManagerWithConnection
 {
-    virConnectPtr conn = nullptr; ///< Pointer to the active libvirt connection
-    ILibvirtWrapper* libvirt; ///< Reference to the libvirt wrapper interface
-
 public:
-    virtual ~VirtualMachineManager() = default;
-
-    /**
-     * @param libvirt Reference to an ILibvirtWrapper implementation.
-     */
-    explicit VirtualMachineManager(ILibvirtWrapper* libvirt)
-        : libvirt(libvirt)
-    {
-    }
-
-    explicit VirtualMachineManager()
-    {
-        libvirt = new LibvirtWrapper();
-    }
-
-    void updateConnection(virConnectPtr conn);
+    using BaseManagerWithConnection::BaseManagerWithConnection;
 
     /**
      * @brief Creates a virtual machine based on an XML configuration.
@@ -54,6 +35,11 @@ public:
     virtual VirtualMachineInfo getInfoAboutVirtualMachine(const std::string& name);
 
     std::vector<VirtualMachineInfo> getListOfVirtualMachinesWithInfo();
+
+    void attachDeviceToVirtualMachine(const std::string& name, const std::string& deviceDefinition) const;
+
+private:
+    [[nodiscard]] virDomainPtr getVirtualMachineByName(const std::string& name) const;
 };
 
 #endif //VIRTUALMACHINEMANAGER_H

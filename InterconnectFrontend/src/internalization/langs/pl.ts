@@ -1,6 +1,9 @@
 const pl = {
     "errorOccurred": "Wystąpił błąd",
     "connectingToServer": "Łączenie z serwerem...",
+    "terminal": "Terminal",
+    "network": "Sieć",
+    "slot": "Slot {{number}}",
     "virtualMachine": {
         "virtualMachine": "Maszyna wirtualna",
         "configuration": "Konfiguracja maszyny wirtualnej",

@@ -128,3 +128,13 @@ void LibvirtWrapper::finishAndFreeStream(const virStreamPtr stream)
     virStreamFinish(stream);
     virStreamFree(stream);
 }
+
+virNetworkPtr LibvirtWrapper::createNetworkFromXml(virConnectPtr conn, const std::string& networkDefinition)
+{
+    return virNetworkCreateXML(conn, networkDefinition.c_str());
+}
+
+int LibvirtWrapper::attachDeviceToVm(virDomainPtr domain, const std::string& deviceDefinition)
+{
+    return virDomainAttachDevice(domain, deviceDefinition.c_str());
+}

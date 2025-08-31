@@ -3,45 +3,51 @@ using System.Xml;
 
 namespace Services.Utils
 {
-
-    public class VirtualMachineCreateDefinitionBuilder
+    public class VirtualMachineDefinitionBuilder : BaseDefinitionBuilder<VirtualMachineCreateDefinition>
     {
-        public delegate void BuildingBlock(XmlWriter writer);
-        private string? Name;
-        private uint? Memory;
-        private uint? VirtualCpus;
-        private string? BootableDiskPath;
+        private string? _prefix;
+        private string? _name;
+        private uint? _memory;
+        private uint? _virtualCpus;
+        private string? _bootableDiskPath;
 
-        public void SetFromCreateDefinition(VirtualMachineCreateDefinition definition, string prefix)
+        public VirtualMachineDefinitionBuilder SetPrefix(string prefix)
         {
-            Name = definition.GetVirtualMachineNameWithPrefix(prefix);
-            Memory = definition.Memory;
-            VirtualCpus = definition.VirtualCpus;
-            BootableDiskPath = definition.BootableDiskPath;
+            _prefix = prefix;
+
+            return this;
         }
 
-        public string Build()
+        public override VirtualMachineDefinitionBuilder SetFromCreateDefinition(VirtualMachineCreateDefinition definition)
         {
-            if (Name is null || Memory is null || VirtualCpus is null || BootableDiskPath is null)
+            if (_prefix is null)
             {
-                throw new Exception("There are not all the things needed to build the XML definition for the virtual machine");
+                throw new NullReferenceException("You need to provide Prefix first");
             }
 
-            using var stringWriter = new StringWriter();
-            using (var writer = XmlWriter.Create(stringWriter, new XmlWriterSettings
-            {
-                OmitXmlDeclaration = true,
-                Indent = true
-            }))
-            {
+            _name = definition.GetVirtualMachineNameWithPrefix(_prefix);
+            _memory = definition.Memory;
+            _virtualCpus = definition.VirtualCpus;
+            _bootableDiskPath = definition.BootableDiskPath;
 
+            return this;
+        }
+
+        public override string Build()
+        {
+            CheckIsEverythingIsProvided(_name, _memory, _virtualCpus, _bootableDiskPath);
+
+            var (writer, stringWriter) = CreateXmlWriter();
+
+            using (writer)
+            {
                 writer.WriteStartDocument();
 
                 CreateDomainBlock(writer, w =>
                 {
-                    CreateNameBlock(w, Name);
-                    CreateMemoryBlock(w, (uint)Memory);
-                    CreateVCPUBlock(w, (uint)VirtualCpus);
+                    CreateNameBlock(w, _name);
+                    CreateMemoryBlock(w, (uint)_memory);
+                    CreateVCPUBlock(w, (uint)_virtualCpus);
                     CreateOsBlock(w, w =>
                     {
                         CreateTypeBlock(w);
@@ -51,7 +57,7 @@ namespace Services.Utils
                     CreateFeaturesBlock(w);
                     CreateDevicesBlock(w, w =>
                     {
-                        CreateIsoDiskBlock(w, BootableDiskPath);
+                        CreateIsoDiskBlock(w, _bootableDiskPath);
                         //CreateInterfaceBlock(w);
                         CreateConsoleBlock(w);
                         CreateSerialBlock(w);

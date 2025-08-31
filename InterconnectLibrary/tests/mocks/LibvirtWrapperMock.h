@@ -3,7 +3,7 @@
 #include <gmock/gmock.h>
 #include "interfaces/ILibvirtWrapper.h"
 
-class LibvirtWrapperMock : public ILibvirtWrapper
+class LibvirtWrapperMock final : public ILibvirtWrapper
 {
 public:
     MOCK_METHOD(virConnectPtr, connectOpen, (const char *name), (override));
@@ -28,6 +28,9 @@ public:
     MOCK_METHOD(int, receiveDataFromStream, (virStreamPtr stream, char* buffer, int bufferSize), (override));
     MOCK_METHOD(void, sendDataToStream, (virStreamPtr stream, const char* buffer, int bufferSize), (override));
     MOCK_METHOD(void, finishAndFreeStream, (virStreamPtr stream), (override));
+    MOCK_METHOD(virNetworkPtr, createNetworkFromXml, (virConnectPtr conn, const std::string& networkDefinition),
+                (override));
+    MOCK_METHOD(int, attachDeviceToVm, (virDomainPtr domain, const std::string& deviceDefinition), (override));
 };
 
 

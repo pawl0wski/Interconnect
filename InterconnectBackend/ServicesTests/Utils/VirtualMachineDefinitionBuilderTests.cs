@@ -4,29 +4,43 @@ using System.Xml.Linq;
 
 namespace ServicesTests.Utils
 {
-    public class VirtualMachineCreateDefinitionBuilderTests
+    public class VirtualMachineDefinitionBuilderTests
     {
-        private VirtualMachineCreateDefinitionBuilder _definitionBuilder;
+        private VirtualMachineDefinitionBuilder _definitionBuilder;
 
         [SetUp]
         public void OnSetup()
         {
-            _definitionBuilder = new VirtualMachineCreateDefinitionBuilder();
-            _definitionBuilder.SetFromCreateDefinition(new VirtualMachineCreateDefinition
+            _definitionBuilder = new VirtualMachineDefinitionBuilder();
+            _definitionBuilder.SetPrefix("test").SetFromCreateDefinition(new VirtualMachineCreateDefinition
             {
                 BootableDiskPath = "//MockBootableDiskPath",
                 Memory = 1000,
                 Name = "MockName",
                 VirtualCpus = 5,
-            }, "test");
+            });
         }
 
         [Test]
         public void Build_WhenNothingIsProvided_ShouldThrowException()
         {
-            _definitionBuilder = new VirtualMachineCreateDefinitionBuilder();
+            _definitionBuilder = new VirtualMachineDefinitionBuilder();
 
             Assert.That(() => _definitionBuilder.Build(), Throws.TypeOf<Exception>());
+        }
+
+        [Test]
+        public void SetFromCreateDefinition_WhenPrefixIsNotProvided_ShouldThrowException()
+        {
+            _definitionBuilder = new VirtualMachineDefinitionBuilder();
+
+            Assert.That(() => _definitionBuilder.SetFromCreateDefinition(new VirtualMachineCreateDefinition
+            {
+                BootableDiskPath = "//MockBootableDiskPath",
+                Memory = 1000,
+                Name = "MockName",
+                VirtualCpus = 5,
+            }), Throws.TypeOf<NullReferenceException>());
         }
 
         [Test]

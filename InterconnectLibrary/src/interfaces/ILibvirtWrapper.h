@@ -59,6 +59,10 @@ public:
     virtual void sendDataToStream(virStreamPtr stream, const char* buffer, int bufferSize) = 0;
 
     virtual void finishAndFreeStream(virStreamPtr stream) = 0;
+
+    virtual virNetworkPtr createNetworkFromXml(virConnectPtr conn, const std::string& networkDefinition) = 0;
+
+    virtual int attachDeviceToVm(virDomainPtr domain, const std::string& deviceDefinition) = 0;
 };
 
 

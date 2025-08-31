@@ -1,6 +1,8 @@
-﻿using Models.Database;
+﻿using Models;
+using Models.Database;
 using Moq;
 using Repositories;
+using Services;
 using Services.Impl;
 
 namespace ServicesTests
@@ -8,13 +10,16 @@ namespace ServicesTests
     public class VirtualMachineEntityServiceTests
     {
         private Mock<IVirtualMachineEntityRepository> _repository;
+        private Mock<IVirtualMachineManagerService> _managerService;
         private VirtualMachineEntityService _service;
+
 
         [SetUp]
         public void SetUp()
         {
             _repository = new Mock<IVirtualMachineEntityRepository>();
-            _service = new VirtualMachineEntityService(_repository.Object);
+            _managerService = new Mock<IVirtualMachineManagerService>();
+            _service = new VirtualMachineEntityService(_repository.Object, _managerService.Object);
         }
 
         [Test]
@@ -65,6 +70,13 @@ namespace ServicesTests
                         VmUuid = Guid.Parse("68013152-09EE-4837-998D-E7C3FEE3BB41"),
                     }
             ]);
+            _managerService.Setup(s => s.GetListOfVirtualMachines()).Returns([
+                new VirtualMachineInfo {
+                    Name = "Test",
+                    Uuid = "68013152-09EE-4837-998D-E7C3FEE3BB41",
+                    State = 1,
+                    UsedMemory = 1024,
+                }]);
 
             var entities = await _service.GetEntities();
 
