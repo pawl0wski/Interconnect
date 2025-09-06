@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useConnectionStore } from "../store/connectionStore.ts";
 
 interface ConnectionStatusProviderProps {
@@ -7,18 +7,32 @@ interface ConnectionStatusProviderProps {
 
 const ConnectionStatusProvider = ({ children }: ConnectionStatusProviderProps) => {
     const updateConnectionStatus = useConnectionStore((state) => state.updateConnectionStatus);
+    const [intervalId, setIntervalId] = useState<number | null>(null);
 
     useEffect(() => {
+        if (intervalId) {
+            return;
+        }
+
         updateConnectionStatus();
 
-        const id = setInterval(() => {
-            updateConnectionStatus();
-        }, 5000);
+        setIntervalId(setInterval(() => {
+            try {
+                updateConnectionStatus();
+            } catch (e) {
+                setIntervalId(null);
+                throw e;
+            }
+        }, 5000));
 
         return () => {
-            clearInterval(id);
+            if (!intervalId) {
+                return;
+            }
+
+            clearInterval(intervalId);
         };
-    }, [updateConnectionStatus]);
+    }, [updateConnectionStatus, intervalId]);
 
     return <>{children}</>;
 };

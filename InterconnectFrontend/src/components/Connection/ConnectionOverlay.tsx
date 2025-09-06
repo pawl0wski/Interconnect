@@ -8,7 +8,7 @@ const ConnectionOverlay = () => {
     const { t } = useTranslation();
 
     return <LoadingOverlay
-        visible={connectionStatus == ConnectionStatus.Unknown}
+        visible={connectionStatus == ConnectionStatus.Unknown || connectionStatus == ConnectionStatus.Dead}
         loaderProps={{
             children:
                 <Flex direction="column" align="center" justify="space-between" gap="md">

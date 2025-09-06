@@ -21,7 +21,7 @@ describe("ConnectionOverlay", () => {
     });
 
     test.each(
-        [ConnectionStatus.Alive, ConnectionStatus.Dead]
+        [ConnectionStatus.Alive]
     )("should not show overlay if connection is not unknown",
         (status: ConnectionStatus) => {
             mockUseConnectionStore.mockReturnValue(status);

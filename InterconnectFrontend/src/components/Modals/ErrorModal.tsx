@@ -20,6 +20,7 @@ const ErrorModalTitle = () => {
 
 const ErrorModal = ({ error, stackTrace, opened, onModalClose }: ErrorModalProps) => {
     return <Modal
+        zIndex={400}
         title={<ErrorModalTitle />}
         opened={opened}
         onClose={onModalClose}
