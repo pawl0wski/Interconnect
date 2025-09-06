@@ -122,6 +122,18 @@ namespace ServicesTests
         }
 
         [Test]
+        public void SendBytesToVirtualMachineConsoleByUuid_WhenInvokedWithNotOpenedConsole_ShouldOpenConsole()
+        {
+            var testUuid = Guid.Parse("fe18228a-d7b0-4f1f-b17a-85d839e4d023");
+            _consoleStreamRespository.Setup(r => r.GetByUuid(It.IsAny<Guid>())).Returns((StreamInfo?)null);
+            _virtualizationWrapper.Setup(w => w.SendDataToStream(It.IsAny<IntPtr>(), It.IsAny<string>()));
+
+            _vmConsoleService.SendBytesToVirtualMachineConsoleByUuid(testUuid, "123");
+
+            _virtualizationWrapper.Verify(vw => vw.OpenVirtualMachineConsole(It.Is<Guid>(uuid => uuid == testUuid)), Times.Once());
+        }
+
+        [Test]
         public void GetStreams_WhenInvoked_ShouldReturnStreams()
         {
             _consoleStreamRespository.Setup(r => r.GetAllStreams()).Returns(new List<StreamInfo>

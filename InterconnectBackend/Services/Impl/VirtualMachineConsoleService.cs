@@ -51,6 +51,12 @@ namespace Services.Impl
         public void SendBytesToVirtualMachineConsoleByUuid(Guid uuid, string data)
         {
             var stream = _consoleStreamRespository.GetByUuid(uuid);
+
+            if (stream is null)
+            {
+                stream = OpenVirtualMachineConsole(uuid);
+            }
+
             _virtualizationWrapper.SendDataToStream(stream.Stream, data);
         }
 

@@ -9,6 +9,7 @@ namespace Mappers
         {
             return new VirtualNetworkEntityConnectionDTO
             {
+                Id = model.Id,
                 FirstEntityUuid = model.FirstEntityUuid,
                 SecondEntityUuid = model.SecondEntityUuid,
             };

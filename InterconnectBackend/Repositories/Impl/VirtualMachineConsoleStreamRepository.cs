@@ -16,9 +16,9 @@ namespace Repositories.Impl
             return streams;
         }
 
-        public StreamInfo GetByUuid(Guid uuid)
+        public StreamInfo? GetByUuid(Guid uuid)
         {
-            return streams.Where(s => s.Uuid == uuid).First();
+            return streams.Where(s => s.Uuid == uuid).FirstOrDefault();
         }
 
         public void Remove(StreamInfo stream)

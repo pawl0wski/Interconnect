@@ -75,8 +75,7 @@ namespace RepositoriesTests
             Assert.That(data.Stream, Is.EqualTo((IntPtr)123));
 
             _repository.Remove(testStreamInfo);
-            Assert.Throws<InvalidOperationException>(() => _repository.GetByUuid(testUuid));
-
+            Assert.That(_repository.GetByUuid(testUuid), Is.EqualTo(null));
         }
     }
 }

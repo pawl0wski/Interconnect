@@ -6,7 +6,7 @@ namespace Repositories
     {
         void Add(StreamInfo stream);
         void Remove(StreamInfo stream);
-        StreamInfo GetByUuid(Guid uuid);
+        StreamInfo? GetByUuid(Guid uuid);
         List<StreamInfo> GetAllStreams();
     }
 }

@@ -53,6 +53,7 @@ namespace Services.Impl
 
             return new VirtualNetworkEntityConnectionDTO
             {
+                Id = 1,
                 FirstEntityUuid = sourceEntity.VmUuid.Value,
                 SecondEntityUuid = destinationEntity.VmUuid.Value,
             };
