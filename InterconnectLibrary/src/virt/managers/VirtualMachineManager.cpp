@@ -69,12 +69,12 @@ std::vector<VirtualMachineInfo> VirtualMachineManager::getListOfVirtualMachinesW
     return virtualMachines;
 }
 
-void VirtualMachineManager::attachDeviceToVirtualMachine(const std::string& name,
+void VirtualMachineManager::attachDeviceToVirtualMachine(const std::string& uuid,
                                                          const std::string& deviceDefinition) const
 {
     checkIfConnectionIsSet();
 
-    const auto domainPtr = getVirtualMachineByName(name);
+    const auto domainPtr = getVirtualMachineByUuid(uuid);
 
     if (libvirt->attachDeviceToVm(domainPtr, deviceDefinition) == -1)
     {
@@ -85,6 +85,16 @@ void VirtualMachineManager::attachDeviceToVirtualMachine(const std::string& name
 virDomainPtr VirtualMachineManager::getVirtualMachineByName(const std::string& name) const
 {
     const auto domainPtr = libvirt->domainLookupByName(conn, name);
+    if (domainPtr == nullptr)
+    {
+        throw VirtualMachineManagerException("Error while obtaining pointer to virtual machine");
+    }
+    return domainPtr;
+}
+
+virDomainPtr VirtualMachineManager::getVirtualMachineByUuid(const std::string& uuid) const
+{
+    const auto domainPtr = libvirt->domainLookupByUuid(conn, uuid);
     if (domainPtr == nullptr)
     {
         throw VirtualMachineManagerException("Error while obtaining pointer to virtual machine");

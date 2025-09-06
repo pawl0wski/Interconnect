@@ -1,12 +1,10 @@
 import { VirtualMachineState } from "./enums/VirtualMachineState.ts";
+import BaseEntity from "./interfaces/BaseEntity.ts";
 
-interface VirtualMachineEntityModel {
-    id: number;
+interface VirtualMachineEntityModel extends BaseEntity {
     vmUuid: string | null;
     name: string;
     state: VirtualMachineState;
-    x: number;
-    y: number;
 }
 
 export type { VirtualMachineEntityModel };

@@ -15,10 +15,10 @@ namespace ServicesTests.Utils
             _definitionBuilder.SetFromCreateDefinition(new VirtualNetworkCreateDefinition
             {
                 NetworkName = "Test",
+                BridgeName = "virbr1",
                 MacAddress = "D0-8C-DC-3F-5D-DE",
                 IpAddress = "192.153.231.123",
                 NetMask = "255.255.255.0",
-                DhcpEnabled = true,
                 DhcpStartRange = "192.0.0.1",
                 DhcpEndRange = "192.0.0.2",
             });
@@ -86,18 +86,28 @@ namespace ServicesTests.Utils
         }
 
         [Test]
+        public void Build_WhenInvoked_ShouldIncludeBridgeName()
+        {
+            var definition = _definitionBuilder.Build();
+            var doc = XDocument.Parse(definition);
+
+            var bridgeName = doc.Element("network")?.Element("bridge")?.Attribute("name")?.Value;
+            Assert.That(bridgeName, Is.EqualTo("virbr1"));
+        }
+
+        [Test]
         public void Build_WhenInvokedWithDhcpDisabled_ShouldNotIncludeDhcpRange()
         {
             _definitionBuilder = new VirtualNetworkCreateDefinitionBuilder();
             _definitionBuilder.SetFromCreateDefinition(new VirtualNetworkCreateDefinition
             {
                 NetworkName = "Test",
+                BridgeName = "virbr1",
                 MacAddress = "D0-8C-DC-3F-5D-DE",
                 IpAddress = "192.153.231.123",
                 NetMask = "255.255.255.0",
-                DhcpEnabled = false,
-                DhcpStartRange = "192.0.0.1",
-                DhcpEndRange = "192.0.0.2",
+                DhcpStartRange = null,
+                DhcpEndRange = null,
             });
 
             var definition = _definitionBuilder.Build();

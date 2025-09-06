@@ -7,12 +7,16 @@ import { useVirtualMachineEntitiesStore } from "../../../store/virtualMachineEnt
 import { useSimulationStageContextMenusStore } from "../../../store/simulationStageContextMenus.ts";
 import { useCurrentVirtualMachineStore } from "../../../store/currentVirtualMachineStore.ts";
 import useSimulationStageContextMenuClose from "../../../hooks/useSimulationStageContextMenuClose.ts";
+import { useEntityPlacementStore } from "../../../store/entityPlacementStore.ts";
+import useNetworkPlacementStore from "../../../store/networkPlacementStore.ts";
 
 const VirtualMachineContextMenuContainer = () => {
     const simulationStageContextMenusStore = useSimulationStageContextMenusStore();
     const virtualMachineEntitiesStore = useVirtualMachineEntitiesStore();
     const currentVirtualMachineModalStore = useCurrentVirtualMachineModalStore();
     const currentVirtualMachineEntityStore = useCurrentVirtualMachineStore();
+    const entityPlacementStore = useEntityPlacementStore();
+    const networkPlacementStore = useNetworkPlacementStore();
     const { closeContextMenu } = useSimulationStageContextMenuClose();
 
     const currentEntity = useMemo(() => {
@@ -36,8 +40,16 @@ const VirtualMachineContextMenuContainer = () => {
         closeContextMenu();
     }, [closeContextMenu, currentEntity, currentVirtualMachineEntityStore, currentVirtualMachineModalStore]);
 
+    const handleStartPlacingVirtualNetwork = useCallback((socketId: number) => {
+        entityPlacementStore.setCurrentEntityType(EntityType.Network);
+        networkPlacementStore.setSourceEntity(currentEntity!, EntityType.VirtualMachine, socketId);
+
+        closeContextMenu();
+    }, [closeContextMenu, currentEntity, entityPlacementStore, networkPlacementStore]);
+
     return <VirtualMachineContextMenu title={currentEntity?.name ?? ""} position={position} isVisible={visible}
-                                      openVirtualMachineConsole={handleOpenVirtualMachineConsole} />;
+                                      onOpenVirtualMachineConsole={handleOpenVirtualMachineConsole}
+                                      onStartPlacingVirtualNetwork={handleStartPlacingVirtualNetwork} />;
 };
 
 export default VirtualMachineContextMenuContainer;

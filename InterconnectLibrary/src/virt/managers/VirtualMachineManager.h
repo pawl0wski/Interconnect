@@ -36,10 +36,12 @@ public:
 
     std::vector<VirtualMachineInfo> getListOfVirtualMachinesWithInfo();
 
-    void attachDeviceToVirtualMachine(const std::string& name, const std::string& deviceDefinition) const;
+    void attachDeviceToVirtualMachine(const std::string& uuid, const std::string& deviceDefinition) const;
 
 private:
     [[nodiscard]] virDomainPtr getVirtualMachineByName(const std::string& name) const;
+
+    [[nodiscard]] virDomainPtr getVirtualMachineByUuid(const std::string& uuid) const;
 };
 
 #endif //VIRTUALMACHINEMANAGER_H

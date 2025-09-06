@@ -1,13 +1,15 @@
-import { useVirtualMachineEntitiesStore } from "../../../store/virtualMachineEntitiesStore.ts";
-import VirtualMachineEntity from "./VirtualMachineEntity.tsx";
-import { VirtualMachineEntityModel } from "../../../models/VirtualMachineEntityModel.ts";
+import { useMemo } from "react";
 import { KonvaEventObject } from "konva/lib/Node";
+import VirtualMachineEntity from "./VirtualMachineEntity.tsx";
+import simulationStageEntitiesUtils from "../../../utils/simulationStageEntitiesUtils.ts";
+import useIsEntityDraggable from "../../../hooks/useIsEntityDraggable.ts";
+import { EntityType } from "../../../models/enums/EntityType.ts";
+import { VirtualMachineEntityModel } from "../../../models/VirtualMachineEntityModel.ts";
 import { useCurrentVirtualMachineModalStore } from "../../../store/modals/currentVirtualMachineModalStore.ts";
 import { useCurrentVirtualMachineStore } from "../../../store/currentVirtualMachineStore.ts";
 import { useEntityPlacementStore } from "../../../store/entityPlacementStore.ts";
-import { useMemo } from "react";
-import simulationStageEntitiesUtils from "../../../utils/simulationStageEntitiesUtils.ts";
-import { EntityType } from "../../../models/enums/EntityType.ts";
+import { useVirtualMachineEntitiesStore } from "../../../store/virtualMachineEntitiesStore.ts";
+import useNetworkPlacementStore from "../../../store/networkPlacementStore.ts";
 
 interface VirtualMachineEntityContainerProps {
     entity: VirtualMachineEntityModel;
@@ -18,6 +20,9 @@ const VirtualMachineEntityContainer = ({ entity }: VirtualMachineEntityContainer
         const currentVirtualMachineStore = useCurrentVirtualMachineStore();
         const currentVirtualMachineModalStore = useCurrentVirtualMachineModalStore();
         const entityPlacementStore = useEntityPlacementStore();
+        const networkPlacementStore = useNetworkPlacementStore();
+
+        const draggable = useIsEntityDraggable();
 
         const shapeName = useMemo(() => {
             return simulationStageEntitiesUtils.createShapeName({ id: entity.id! }, EntityType.VirtualMachine);
@@ -44,26 +49,44 @@ const VirtualMachineEntityContainer = ({ entity }: VirtualMachineEntityContainer
         };
 
         const handleDragEnd = (e: KonvaEventObject<DragEvent>) => {
-            virtualMachineEntityStore.updateEntityPosition(entity.id, e.target.x(), e.target.y());
+            virtualMachineEntityStore.updateEntityPosition(entity.id, e.target.x(), e.target.y(), true);
             changeCursor(e, "pointer");
         };
 
         const handleDragMove = (e: KonvaEventObject<DragEvent>) => {
+            virtualMachineEntityStore.updateEntityPosition(entity.id, e.target.x(), e.target.y());
             changeCursor(e, "move");
         };
 
-        const handleOnClick = (e: KonvaEventObject<MouseEvent>) => {
+        const openVirtualMachineModal = () => {
+            currentVirtualMachineStore.setCurrentEntity(entity);
+            currentVirtualMachineModalStore.open();
+        };
+
+        const attachVirtualNetwork = async (): Promise<boolean> => {
+            if (entityPlacementStore.currentEntityType !== EntityType.Network) {
+                return false;
+            }
+
+            networkPlacementStore.setDestinationEntity(entity, EntityType.VirtualMachine, 1);
+            await entityPlacementStore.placeCurrentEntity(0, 0);
+            return true;
+        };
+
+        const handleOnClick = async (e: KonvaEventObject<MouseEvent>) => {
             if (e.evt.button !== 0) {
                 return;
             }
-
-            currentVirtualMachineStore.setCurrentEntity(entity);
-            currentVirtualMachineModalStore.open();
+            if (await attachVirtualNetwork()) {
+                return;
+            }
+            openVirtualMachineModal();
         };
 
         return <VirtualMachineEntity
             entity={entity}
             shapeName={shapeName ?? ""}
+            draggable={draggable}
             onMouseOver={handleOnMouseOver}
             onMouseOut={handleOnMouseOut}
             onDragEnd={handleDragEnd}

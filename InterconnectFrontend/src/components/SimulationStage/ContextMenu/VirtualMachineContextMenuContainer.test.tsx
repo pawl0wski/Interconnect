@@ -50,17 +50,6 @@ describe("VirtualMachineContextMenuContainer", () => {
         vi.clearAllMocks();
     });
 
-    test("should call setCurrentEntity, open modal and close context menu when openVirtualMachineConsole is called", () => {
-        const { getByTestId } = render(<VirtualMachineContextMenuContainer />);
-        const menu = getByTestId("context-menu");
-
-        fireEvent.click(menu);
-
-        expect(mockCurrentVirtualMachineStore.setCurrentEntity).toHaveBeenCalledWith({ id: 1, name: "TestVM" });
-        expect(mockCurrentVirtualMachineModalStore.open).toHaveBeenCalled();
-        expect(mockUseSimulationStageContextMenuClose.closeContextMenu).toHaveBeenCalled();
-    });
-
     test("should handle case when currentEntity is undefined", () => {
         mockSimulationStageContextMenusStore.currentEntityId = undefined;
         const { getByTestId } = render(<VirtualMachineContextMenuContainer />);

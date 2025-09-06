@@ -8,14 +8,16 @@ interface VirtualMachineContextMenuProps {
     position: PositionModel;
     isVisible: boolean;
 
-    openVirtualMachineConsole: () => void;
+    onOpenVirtualMachineConsole: () => void;
+    onStartPlacingVirtualNetwork: (slotId: number) => void;
 }
 
 const VirtualMachineContextMenu = ({
                                        title,
                                        position,
                                        isVisible,
-                                       openVirtualMachineConsole
+                                       onOpenVirtualMachineConsole,
+                                       onStartPlacingVirtualNetwork
                                    }: VirtualMachineContextMenuProps) => {
     const { t } = useTranslation();
 
@@ -28,25 +30,21 @@ const VirtualMachineContextMenu = ({
             <Menu.Label>
                 {title}
             </Menu.Label>
-            <Menu.Item leftSection={<MdTerminal size={14} />} onClick={openVirtualMachineConsole}>
+            <Menu.Item leftSection={<MdTerminal size={14} />} onClick={onOpenVirtualMachineConsole}>
                 {t("terminal")}
             </Menu.Item>
             <Menu.Divider />
             <Menu.Label>
                 {t("network")}
             </Menu.Label>
-            <Menu.Item leftSection={<MdOutlineCable size={14} />}>
-                {t("slot", { number: 1 })}
-            </Menu.Item>
-            <Menu.Item leftSection={<MdOutlineCable size={14} />}>
-                {t("slot", { number: 2 })}
-            </Menu.Item>
-            <Menu.Item leftSection={<MdOutlineCable size={14} />}>
-                {t("slot", { number: 3 })}
-            </Menu.Item>
-            <Menu.Item leftSection={<MdOutlineCable size={14} />}>
-                {t("slot", { number: 4 })}
-            </Menu.Item>
+            {
+                [...Array(4)].map((_, i) => (
+                    <Menu.Item key={i} onClick={() => onStartPlacingVirtualNetwork(i + 1)}
+                               leftSection={<MdOutlineCable size={14} />}>
+                        {t("slot", { number: i + 1 })}
+                    </Menu.Item>
+                ))
+            }
         </Menu.Dropdown>
     </Menu>;
 };

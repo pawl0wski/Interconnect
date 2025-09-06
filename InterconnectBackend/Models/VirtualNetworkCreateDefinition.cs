@@ -3,10 +3,10 @@
     public class VirtualNetworkCreateDefinition
     {
         public required string NetworkName { get; set; }
-        public required string MacAddress { get; set; }
-        public required string IpAddress { get; set; }
-        public required string NetMask { get; set; }
-        public required bool DhcpEnabled { get; set; }
+        public required string BridgeName { get; set; }
+        public string? MacAddress { get; set; }
+        public string? IpAddress { get; set; }
+        public string? NetMask { get; set; }
         public string? DhcpStartRange { get; set; }
         public string? DhcpEndRange { get; set; }
     }

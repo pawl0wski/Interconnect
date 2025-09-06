@@ -206,7 +206,7 @@ TEST_F(VirtualMachineManagerTests, attachDeviceToVirtualMachine_WhenConnectionIs
 TEST_F(VirtualMachineManagerTests, attachDeviceToVirtualMachine_WhenCannotFindDevice_ShouldThrowException)
 {
     const auto mockConn = reinterpret_cast<virConnectPtr>(0x123);
-    EXPECT_CALL(mockLibvirt, domainLookupByName(mockConn, "test")).WillOnce(testing::ReturnNull());
+    EXPECT_CALL(mockLibvirt, domainLookupByUuid(mockConn, "test")).WillOnce(testing::ReturnNull());
 
     manager.updateConnection(mockConn);
     TestingUtils::expectThrowWithMessage([this]
@@ -219,7 +219,7 @@ TEST_F(VirtualMachineManagerTests, attachDeviceToVirtualMachine_WhenCannotAttach
 {
     const auto mockConn = reinterpret_cast<virConnectPtr>(0x123);
     const auto mockDomain = reinterpret_cast<virDomainPtr>(0x456);
-    EXPECT_CALL(mockLibvirt, domainLookupByName(mockConn, "test")).WillOnce(testing::Return(mockDomain));
+    EXPECT_CALL(mockLibvirt, domainLookupByUuid(mockConn, "test")).WillOnce(testing::Return(mockDomain));
     EXPECT_CALL(mockLibvirt, attachDeviceToVm(mockDomain, "test")).WillOnce(testing::Return(-1));
 
     manager.updateConnection(mockConn);
@@ -233,7 +233,7 @@ TEST_F(VirtualMachineManagerTests, attachDeviceToVirtualMachine_WhenInvoked_Shou
 {
     const auto mockConn = reinterpret_cast<virConnectPtr>(0x123);
     const auto mockDomain = reinterpret_cast<virDomainPtr>(0x456);
-    EXPECT_CALL(mockLibvirt, domainLookupByName(mockConn, "test")).WillOnce(testing::Return(mockDomain));
+    EXPECT_CALL(mockLibvirt, domainLookupByUuid(mockConn, "test")).WillOnce(testing::Return(mockDomain));
     EXPECT_CALL(mockLibvirt, attachDeviceToVm(mockDomain, "test")).WillOnce(testing::Return(0));
 
     manager.updateConnection(mockConn);

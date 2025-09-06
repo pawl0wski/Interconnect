@@ -5,6 +5,7 @@ import classNames from "classnames";
 import { KonvaEventObject } from "konva/lib/Node";
 import { useMemo } from "react";
 import SimulationContextMenuProvider from "./ContextMenu/SimulationContextMenuProvider.tsx";
+import VirtualNetworkRenderer from "./Renderers/VirtualNetworkRenderer.tsx";
 
 interface SimulationStageProps {
     showPlacementCursor: boolean;
@@ -22,6 +23,7 @@ const SimulationStage = ({ showPlacementCursor, onClick, onContextMenu }: Simula
         <SimulationContextMenuProvider />
         <Stage width={stageWidth} height={stageHeight} onClick={onClick} onContextMenu={onContextMenu}>
             <Layer>
+                <VirtualNetworkRenderer />
                 <VirtualMachineEntryRenderer />
             </Layer>
         </Stage>

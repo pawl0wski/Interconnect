@@ -57,7 +57,7 @@ describe("virtualMachineEntitiesStore", () => {
         expect(result.current.entities[1].name).toBe("Test2");
     });
 
-    test("should update entity position when updateEntityPosition is invoked", async () => {
+    test("should update entity position when updateEntityPosition is invoked with final update", async () => {
         mockGetListOfEntities.mockReturnValueOnce(
             {
                 data: [
@@ -84,7 +84,7 @@ describe("virtualMachineEntitiesStore", () => {
 
         await act(async () => {
             await result.current.fetchEntities();
-            await result.current.updateEntityPosition(1, 54, 33);
+            await result.current.updateEntityPosition(1, 54, 33, true);
         });
         const { name, id, x, y } = result.current.entities[0];
 
@@ -93,6 +93,39 @@ describe("virtualMachineEntitiesStore", () => {
         expect(id).toBe(1);
         expect(x).toBe(54);
         expect(y).toBe(33);
+    });
+
+    test("should not update entity position when updateEntityPosition is invoked without final update", async () => {
+        mockGetListOfEntities.mockReturnValueOnce(
+            {
+                data: [
+                    {
+                        id: 1,
+                        vmUuid: null,
+                        name: "Test1",
+                        x: 12,
+                        y: 54
+                    }
+                ] as VirtualMachineEntityModel[]
+            }
+        );
+        mockUpdateEntityPosition.mockReturnValueOnce({
+            data: {
+                id: 1,
+                vmUuid: null,
+                name: "Test1",
+                x: 54,
+                y: 33
+            }
+        });
+        const { result } = renderHook(() => useVirtualMachineEntitiesStore());
+
+        await act(async () => {
+            await result.current.fetchEntities();
+            await result.current.updateEntityPosition(1, 54, 33, false);
+        });
+
+        expect(mockUpdateEntityPosition).not.toHaveBeenCalledWith(1, 54, 33);
     });
 
     test("should not modify anything if the user changes the position of a non-existent entity", async () => {

@@ -5,9 +5,10 @@ import { virtualMachineEntityResourceClient } from "../api/resourceClient/Virtua
 interface VirtualMachineEntitiesStore {
     entities: VirtualMachineEntityModel[];
     fetchEntities: () => Promise<void>;
-    updateEntityPosition: (id: number, x: number, y: number) => Promise<void>;
+    updateEntityPosition: (id: number, x: number, y: number, finalUpdate?: boolean) => Promise<void>;
     clearEntities: () => void;
     getById: (id: number) => VirtualMachineEntityModel;
+    getByVmUuid: (uuid: string) => VirtualMachineEntityModel | undefined;
 }
 
 const useVirtualMachineEntitiesStore = create<VirtualMachineEntitiesStore>()((set, get) => ({
@@ -19,7 +20,7 @@ const useVirtualMachineEntitiesStore = create<VirtualMachineEntitiesStore>()((se
             entities: resp.data
         });
     },
-    updateEntityPosition: async (id: number, x: number, y: number) => {
+    updateEntityPosition: async (id: number, x: number, y: number, finalUpdate: boolean = false) => {
         const foundEntity = get().entities.find((e) => e.id === id);
 
         [x, y] = [Math.floor(x), Math.floor(y)];
@@ -38,16 +39,17 @@ const useVirtualMachineEntitiesStore = create<VirtualMachineEntitiesStore>()((se
             };
         });
 
-        await virtualMachineEntityResourceClient.updateEntityPosition(id, x, y);
+        if (finalUpdate) {
+            await virtualMachineEntityResourceClient.updateEntityPosition(id, x, y);
+        }
     },
     clearEntities: () => {
         set({
             entities: []
         });
     },
-    getById: (id: number) => {
-        return get().entities.find((e) => e.id === id)!;
-    }
+    getById: (id: number) => get().entities.find((e) => e.id === id)!,
+    getByVmUuid: (uuid: string) => get().entities.find((e) => e.vmUuid === uuid)
 }));
 
 export { useVirtualMachineEntitiesStore };

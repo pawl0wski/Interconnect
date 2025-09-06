@@ -1,9 +1,10 @@
-﻿using Models;
+﻿using Models.DTO;
 
 namespace Services
 {
     public interface IVirtualNetworkService
     {
-        void CreateVirtualNetwork(VirtualNetworkCreateDefinition definition);
+        Task<VirtualNetworkEntityConnectionDTO> ConnectTwoVirtualMachines(int sourceEntityId, int sourceSocketId, int destinationEntityId, int destinationSocketId);
+        Task<List<VirtualNetworkEntityConnectionDTO>> GetVirtualNetworkConnections();
     }
 }

@@ -9,9 +9,10 @@ namespace Repositories
         {
             serviceCollection.AddSingleton<IVirtualMachineConsoleDataRepository, VirtualMachineConsoleDataRepository>();
             serviceCollection.AddSingleton<IVirtualMachineConsoleStreamRepository, VirtualMachineConsoleStreamRepository>();
-            
+
             serviceCollection.AddScoped<IBootableDiskRepository, BootableDiskRepository>();
             serviceCollection.AddScoped<IVirtualMachineEntityRepository, VirtualMachineEntityRepository>();
+            serviceCollection.AddScoped<IVirtualNetworkEntityConnectionRepository, VirtualNetworkEntityConnectionRepository>();
         }
     }
 }
