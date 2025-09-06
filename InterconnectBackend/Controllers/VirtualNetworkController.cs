@@ -18,6 +18,14 @@ namespace Controllers
             _virtualNetworkService = virtualNetworkService;
         }
 
+        [HttpGet]
+        public async Task<VirtualNetworkEntityConnectionsResponse> GetAllConnections()
+        {
+            var connections = await _virtualNetworkService.GetVirtualNetworkConnections();
+
+            return VirtualNetworkEntityConnectionsResponse.WithSuccess(connections);
+        }
+
         [HttpPost]
         public async Task<VirtualNetworkEntityConnectionsResponse> ConnectEntities(ConnectEntitiesRequest req)
         {
@@ -37,12 +45,12 @@ namespace Controllers
             return VirtualNetworkEntityConnectionsResponse.WithSuccess([virtualNetworkConnection]);
         }
 
-        [HttpGet]
-        public async Task<VirtualNetworkEntityConnectionsResponse> GetAllConnections()
+        [HttpPost]
+        public async Task<VirtualSwitchResponse> CreateVirtualSwitch(CreateVirtualSwitchRequest req)
         {
-            var connections = await _virtualNetworkService.GetVirtualNetworkConnections();
-
-            return VirtualNetworkEntityConnectionsResponse.WithSuccess(connections);
+            var virtualSwitch = await _virtualNetworkService.CreateVirtualSwitch(req.Name);
+        
+            return VirtualSwitchResponse.WithSuccess(virtualSwitch);
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Database.Migrations
 {
     [DbContext(typeof(InterconnectDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250906192140_VirtualSwitch")]
+    partial class VirtualSwitch
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,6 +85,10 @@ namespace Database.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("BridgeName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<Guid>("FirstEntityUuid")
                         .HasColumnType("uuid");
 
@@ -110,9 +117,6 @@ namespace Database.Migrations
 
                     b.Property<Guid>("Uuid")
                         .HasColumnType("uuid");
-
-                    b.Property<bool>("Visible")
-                        .HasColumnType("boolean");
 
                     b.Property<int>("X")
                         .HasColumnType("integer");

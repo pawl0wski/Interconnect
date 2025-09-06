@@ -13,11 +13,10 @@ namespace Repositories.Impl
             _context = context;
         }
 
-        public async Task CreateNew(string bridgeName, Guid firstEntityUuid, Guid secondEntityUuid)
+        public async Task Create(Guid firstEntityUuid, Guid secondEntityUuid)
         {
             var newModel = new VirtualNetworkEntityConnectionModel
             {
-                BridgeName = bridgeName,
                 FirstEntityUuid = firstEntityUuid,
                 SecondEntityUuid = secondEntityUuid
             };

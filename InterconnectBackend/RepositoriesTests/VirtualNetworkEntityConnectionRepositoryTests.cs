@@ -25,16 +25,15 @@ namespace RepositoriesTests
         }
 
         [Test]
-        public async Task CreateNew_WhenInvoked_ShouldCreateVirtualNetworkConnectionEntity()
+        public async Task Create_WhenInvoked_ShouldCreateVirtualNetworkConnectionEntity()
         {
             var sourceEntityUuid = Guid.Parse("b8ea0706-679c-405f-83c7-3e2da0cfe283");
             var destinationEntityUuid = Guid.Parse("cb066f62-2094-46cf-87da-530fb1ad304b");
-            await _repository.CreateNew("virbr0", sourceEntityUuid, destinationEntityUuid);
+            await _repository.Create( sourceEntityUuid, destinationEntityUuid);
 
             var savedModel = await _context.VirtualNetworkEntityConnectionModels.FirstAsync();
 
             Assert.That(savedModel.Id, Is.EqualTo(1));
-            Assert.That(savedModel.BridgeName, Is.EqualTo("virbr0"));
             Assert.That(savedModel.FirstEntityUuid, Is.EqualTo(sourceEntityUuid));
             Assert.That(savedModel.SecondEntityUuid, Is.EqualTo(destinationEntityUuid));
         }
@@ -46,7 +45,6 @@ namespace RepositoriesTests
             var destinationEntityUuid = Guid.Parse("cb066f62-2094-46cf-87da-530fb1ad304b");
             await _context.VirtualNetworkEntityConnectionModels.AddAsync(new VirtualNetworkEntityConnectionModel
             {
-                BridgeName = "virbr1",
                 FirstEntityUuid = sourceEntityUuid,
                 SecondEntityUuid = destinationEntityUuid
             });
@@ -66,7 +64,6 @@ namespace RepositoriesTests
             var destinationEntityUuid = Guid.Parse("cb066f62-2094-46cf-87da-530fb1ad304b");
             await _context.VirtualNetworkEntityConnectionModels.AddAsync(new VirtualNetworkEntityConnectionModel
             {
-                BridgeName = "virbr1",
                 FirstEntityUuid = sourceEntityUuid,
                 SecondEntityUuid = destinationEntityUuid
             });
@@ -85,7 +82,6 @@ namespace RepositoriesTests
             var destinationEntityUuid = Guid.Parse("cb066f62-2094-46cf-87da-530fb1ad304b");
             await _context.VirtualNetworkEntityConnectionModels.AddAsync(new VirtualNetworkEntityConnectionModel
             {
-                BridgeName = "virbr1",
                 FirstEntityUuid = sourceEntityUuid,
                 SecondEntityUuid = destinationEntityUuid
             });

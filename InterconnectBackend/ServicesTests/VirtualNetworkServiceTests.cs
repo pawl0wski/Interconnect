@@ -13,6 +13,7 @@ namespace ServicesTests
         private Mock<IVirtualizationWrapper> _virtualizationWrapper;
         private Mock<IVirtualMachineEntityService> _vmEntityService;
         private Mock<IVirtualNetworkEntityConnectionRepository> _connectionRepository;
+        private Mock<IVirtualSwitchEntityRepository> _switchRepository;
         private VirtualNetworkService _vnService;
 
         [SetUp]
@@ -21,7 +22,8 @@ namespace ServicesTests
             _virtualizationWrapper = new Mock<IVirtualizationWrapper>();
             _vmEntityService = new Mock<IVirtualMachineEntityService>();
             _connectionRepository = new Mock<IVirtualNetworkEntityConnectionRepository>();
-            _vnService = new VirtualNetworkService(_virtualizationWrapper.Object, _vmEntityService.Object, _connectionRepository.Object);
+            _switchRepository = new Mock<IVirtualSwitchEntityRepository>();
+            _vnService = new VirtualNetworkService(_virtualizationWrapper.Object, _vmEntityService.Object, _connectionRepository.Object, _switchRepository.Object);
         }
 
         [Test]
@@ -31,7 +33,6 @@ namespace ServicesTests
             var destinationEntityUuid = Guid.Parse("cb066f62-2094-46cf-87da-530fb1ad304b");
             _connectionRepository.Setup(r => r.GetAll()).ReturnsAsync([new VirtualNetworkEntityConnectionModel{
                 Id = 1,
-                BridgeName = "virbr1",
                 FirstEntityUuid = sourceEntityUuid,
                 SecondEntityUuid = destinationEntityUuid
             }]);
@@ -114,11 +115,35 @@ namespace ServicesTests
 
             await _vnService.ConnectTwoVirtualMachines(1, 1, 2, 1);
 
-            _connectionRepository.Verify(r => r.CreateNew(
-                It.IsAny<string>(),
+            _connectionRepository.Verify(r => r.Create(
                 It.Is<Guid>(uuid => uuid == sourceVmUuid),
                 It.Is<Guid>(uuid => uuid == destinationVmUuid)
                 ), Times.Once());
+        }
+
+        [TestCase(null)]
+        [TestCase("test")]
+        public async Task CreateVirtualSwitch_WhenInvoked_ShouldCreateVirtualNetwork(string? name)
+        {
+            await _vnService.CreateVirtualSwitch(name);
+
+            _virtualizationWrapper.Verify(vw => vw.CreateVirtualNetwork(It.IsAny<string>()), Times.Once());
+        }
+
+        [Test]
+        public async Task CreateVirtualSwitch_WhenInvokedWithoutName_ShouldCreateInvisibleVirtualSwitch()
+        {
+            await _vnService.CreateVirtualSwitch(null);
+
+            _switchRepository.Verify(r => r.CreateInvisible(It.IsAny<string>(), It.IsAny<Guid>()), Times.Once);
+        }
+
+        [Test]
+        public async Task CreateVirtualSwitch_WhenInvokedWithName_ShouldCreateVisibleVirtualSwitch()
+        {
+            await _vnService.CreateVirtualSwitch("testName");
+
+            _switchRepository.Verify(r => r.Create(It.Is<string>(s => s == "testName"), It.IsAny<string>(), It.IsAny<Guid>()), Times.Once);
         }
     }
 }
