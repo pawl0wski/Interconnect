@@ -14,7 +14,8 @@ vi.mock("./virtualMachineCreateStore.ts", () => ({
     }
 }));
 
-vi.mock("./modals/virtualMachineCreateModalStore.ts", () => ({
+vi.mock("./modals/modalStores.ts", async () => ({
+    ...(await vi.importActual("./modals/modalStores.ts")),
     useVirtualMachineCreateModalStore: {
         getState: vi.fn(() => ({ open: mockOpen }))
     }

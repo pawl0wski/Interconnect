@@ -5,7 +5,7 @@ import { PositionModel } from "../../../models/PositionModel.ts";
 import { useEntityPlacementStore } from "../../../store/entityPlacementStore.ts";
 import { EntityType } from "../../../models/enums/EntityType.ts";
 
-const VirtualNetworkPlacingEntityContainer = () => {
+const VirtualNetworkPlacingConnectionContainer = () => {
     const networkPlacementStore = useNetworkPlacementStore();
     const entityPlacementStore = useEntityPlacementStore();
     const [destinationPosition, setDestinationPosition] = useState<PositionModel>({ x: 0, y: 0 });
@@ -44,4 +44,4 @@ const VirtualNetworkPlacingEntityContainer = () => {
     }</>;
 };
 
-export default VirtualNetworkPlacingEntityContainer;
+export default VirtualNetworkPlacingConnectionContainer;

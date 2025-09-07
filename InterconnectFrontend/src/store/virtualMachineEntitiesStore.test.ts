@@ -88,7 +88,7 @@ describe("virtualMachineEntitiesStore", () => {
         });
         const { name, id, x, y } = result.current.entities[0];
 
-        expect(mockUpdateEntityPosition).toHaveBeenCalledWith(1, 54, 33);
+        expect(mockUpdateEntityPosition).toHaveBeenCalledWith({id: 1, x: 54, y: 33});
         expect(name).toBe("Test1");
         expect(id).toBe(1);
         expect(x).toBe(54);

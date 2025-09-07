@@ -1,6 +1,6 @@
 import { useConnectionStore } from "../../store/connectionStore.ts";
 import ConnectionStatusIndicator from "./ConnectionStatusIndicator.tsx";
-import { useConnectionInfoModalStore } from "../../store/modals/connectionInfoModalStore.ts";
+import { useConnectionInfoModalStore } from "../../store/modals/modalStores.ts";
 import { useCallback } from "react";
 import { ConnectionStatus } from "../../models/enums/ConnectionStatus.ts";
 

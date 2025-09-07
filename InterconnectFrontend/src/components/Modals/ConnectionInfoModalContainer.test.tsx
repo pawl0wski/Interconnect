@@ -9,7 +9,7 @@ const mockUseConnectionInfoStore = vi.hoisted(() => vi.fn());
 vi.mock("../../store/connectionInfoStore.ts", () => ({
     useConnectionInfoStore: mockUseConnectionInfoStore
 }));
-vi.mock("../../store/modals/connectionInfoModalStore.ts", () => ({
+vi.mock("../../store/modals/modalStores.ts", () => ({
     useConnectionInfoModalStore: mockUseConnectionInfoModalStore
 }));
 

@@ -8,6 +8,7 @@ import { AppShell } from "@mantine/core";
 import Header from "../components/Header/Header.tsx";
 import ConnectionOverlay from "../components/Connection/ConnectionOverlay.tsx";
 import SimulationStageContainer from "../components/SimulationStage/SimulationStageContainer.tsx";
+import VirtualSwitchCreateModalContainer from "../components/Modals/VirtualSwitchCreateModalContainer.tsx";
 
 const HomePage = () => {
     const headerHeight = 60;
@@ -33,6 +34,7 @@ const HomePage = () => {
         <Tray />
         <Footer />
         <VirtualMachineCreateModalContainer />
+        <VirtualSwitchCreateModalContainer />
         <ConnectionInfoModalContainer />
         <TerminalModalContainer />
         <ErrorModalContainer />

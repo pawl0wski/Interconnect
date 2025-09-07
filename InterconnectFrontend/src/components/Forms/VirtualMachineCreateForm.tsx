@@ -10,7 +10,7 @@ import VirtualMachineNameInput from "./FormControls/VirtualMachineNameInput.tsx"
 
 interface VirtualMachineCreateFormProps {
     form: UseFormReturnType<VirtualMachineCreateFormValues>;
-    onFormSubmit: () => void;
+    onFormSubmit: (values: VirtualMachineCreateFormValues) => void;
 }
 
 const VirtualMachineCreateForm = ({ form, onFormSubmit }: VirtualMachineCreateFormProps) => {

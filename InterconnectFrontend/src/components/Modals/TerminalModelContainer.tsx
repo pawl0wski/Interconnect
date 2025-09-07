@@ -1,6 +1,6 @@
 import TerminalModel from "./TerminalModal.tsx";
 import { useCurrentVirtualMachineStore } from "../../store/currentVirtualMachineStore.ts";
-import { useCurrentVirtualMachineModalStore } from "../../store/modals/currentVirtualMachineModalStore.ts";
+import { useCurrentVirtualMachineModalStore } from "../../store/modals/modalStores.ts";
 
 const TerminalModelContainer = () => {
     const currentVirtualMachineStore = useCurrentVirtualMachineStore();

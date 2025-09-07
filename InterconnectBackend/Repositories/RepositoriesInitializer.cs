@@ -12,7 +12,8 @@ namespace Repositories
 
             serviceCollection.AddScoped<IBootableDiskRepository, BootableDiskRepository>();
             serviceCollection.AddScoped<IVirtualMachineEntityRepository, VirtualMachineEntityRepository>();
-            serviceCollection.AddScoped<IVirtualNetworkEntityConnectionRepository, VirtualNetworkEntityConnectionRepository>();
+            serviceCollection.AddScoped<IVirtualNetworkConnectionRepository, VirtualNetworkConnectionRepository>();
+            serviceCollection.AddScoped<IVirtualSwitchEntityRepository, VirtualSwitchEntityRepository>();
         }
     }
 }

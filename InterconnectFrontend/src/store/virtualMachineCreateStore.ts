@@ -31,7 +31,7 @@ const useVirtualMachineCreateStore = create<VirtualMachineCreateStore>()((set, g
             virtualCpus: virtualCPUs,
             bootableDiskId: bootableDiskId
         });
-        await virtualMachineEntityResourceClient.updateEntityPosition(response.data.id, x, y);
+        await virtualMachineEntityResourceClient.updateEntityPosition({ id: response.data.id, x, y });
         return response.data;
     }
 }));

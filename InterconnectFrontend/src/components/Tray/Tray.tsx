@@ -1,12 +1,13 @@
-import { Box } from "@mantine/core";
+import { Flex } from "@mantine/core";
 import classes from "./Tray.module.scss";
-import VirtualMachineCreateEntityTrayButtonContainer
-    from "./Buttons/VirtualMachineCreateEntityTrayButtonContainer.tsx";
+import VirtualMachineCreateEntityTrayButtonContainer from "./Buttons/VirtualMachineCreateEntityTrayButtonContainer.tsx";
+import VirtualSwitchCreateEntityTrayButtonContainer from "./Buttons/VirtualSwitchCreateEntityTrayButtonContainer.tsx";
 
 const Tray = () => {
-    return <Box className={classes["tray"]} mx="lg">
+    return <Flex className={classes["tray"]} mx="lg" justify="start" gap="lg">
         <VirtualMachineCreateEntityTrayButtonContainer />
-    </Box>;
+        <VirtualSwitchCreateEntityTrayButtonContainer />
+    </Flex>;
 };
 
 export default Tray;

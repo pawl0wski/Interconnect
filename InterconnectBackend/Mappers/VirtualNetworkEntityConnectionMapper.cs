@@ -5,13 +5,15 @@ namespace Mappers
 {
     public static class VirtualNetworkEntityConnectionMapper
     {
-        public static VirtualNetworkEntityConnectionDTO MapToDTO(VirtualNetworkEntityConnectionModel model)
+        public static VirtualNetworkConnectionDTO MapToDTO(VirtualNetworkEntityConnectionModel model)
         {
-            return new VirtualNetworkEntityConnectionDTO
+            return new VirtualNetworkConnectionDTO
             {
                 Id = model.Id,
-                FirstEntityUuid = model.FirstEntityUuid,
-                SecondEntityUuid = model.SecondEntityUuid,
+                SourceEntityId = model.SourceEntityId,
+                SourceEntityType = model.SourceEntityType,
+                DestinationEntityId = model.DestinationEntityId,
+                DestinationEntityType = model.DestinationEntityType,
             };
         }
     }

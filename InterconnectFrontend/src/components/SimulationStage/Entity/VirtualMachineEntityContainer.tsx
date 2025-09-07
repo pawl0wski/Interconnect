@@ -5,11 +5,12 @@ import simulationStageEntitiesUtils from "../../../utils/simulationStageEntities
 import useIsEntityDraggable from "../../../hooks/useIsEntityDraggable.ts";
 import { EntityType } from "../../../models/enums/EntityType.ts";
 import { VirtualMachineEntityModel } from "../../../models/VirtualMachineEntityModel.ts";
-import { useCurrentVirtualMachineModalStore } from "../../../store/modals/currentVirtualMachineModalStore.ts";
+import { useCurrentVirtualMachineModalStore } from "../../../store/modals/modalStores.ts";
 import { useCurrentVirtualMachineStore } from "../../../store/currentVirtualMachineStore.ts";
 import { useEntityPlacementStore } from "../../../store/entityPlacementStore.ts";
 import { useVirtualMachineEntitiesStore } from "../../../store/virtualMachineEntitiesStore.ts";
 import useNetworkPlacementStore from "../../../store/networkPlacementStore.ts";
+import useChangeCursor from "../../../hooks/useChangeCursor.ts";
 
 interface VirtualMachineEntityContainerProps {
     entity: VirtualMachineEntityModel;
@@ -28,20 +29,10 @@ const VirtualMachineEntityContainer = ({ entity }: VirtualMachineEntityContainer
             return simulationStageEntitiesUtils.createShapeName({ id: entity.id! }, EntityType.VirtualMachine);
         }, [entity.id]);
 
-        const changeCursor = (e: KonvaEventObject<any>, cursor: string) => {
-            if (entityPlacementStore.currentEntityType) {
-                return;
-            }
-
-            const stage = e.target.getStage();
-            if (!stage) {
-                return;
-            }
-            stage.container().style.cursor = cursor;
-        };
+        const changeCursor = useChangeCursor();
 
         const handleOnMouseOver = (e: KonvaEventObject<MouseEvent>) => {
-            changeCursor(e, "pointer");
+            changeCursor(e, "grab");
         };
 
         const handleOnMouseOut = (e: KonvaEventObject<MouseEvent>) => {
@@ -50,12 +41,12 @@ const VirtualMachineEntityContainer = ({ entity }: VirtualMachineEntityContainer
 
         const handleDragEnd = (e: KonvaEventObject<DragEvent>) => {
             virtualMachineEntityStore.updateEntityPosition(entity.id, e.target.x(), e.target.y(), true);
-            changeCursor(e, "pointer");
+            changeCursor(e, "grab");
         };
 
         const handleDragMove = (e: KonvaEventObject<DragEvent>) => {
             virtualMachineEntityStore.updateEntityPosition(entity.id, e.target.x(), e.target.y());
-            changeCursor(e, "move");
+            changeCursor(e, "grabbing");
         };
 
         const openVirtualMachineModal = () => {
@@ -68,7 +59,7 @@ const VirtualMachineEntityContainer = ({ entity }: VirtualMachineEntityContainer
                 return false;
             }
 
-            networkPlacementStore.setDestinationEntity(entity, EntityType.VirtualMachine, 1);
+            networkPlacementStore.setDestinationEntity(entity, EntityType.VirtualMachine);
             await entityPlacementStore.placeCurrentEntity(0, 0);
             return true;
         };

@@ -6,12 +6,10 @@ import ConnectEntitiesRequest from "../api/requests/ConnectEntitiesRequest.ts";
 interface NetworkPlacementStore {
     sourceEntity: BaseEntity | null;
     sourceEntityType: EntityType | null;
-    sourceSocketId: number | null;
     destinationEntity: BaseEntity | null;
     destinationEntityType: EntityType | null;
-    destinationSocketId: number | null;
-    setSourceEntity: (sourceEntity: BaseEntity, sourceEntityType: EntityType, sourceSocketId: number) => void;
-    setDestinationEntity: (destinationEntity: BaseEntity, destinationEntityType: EntityType, destinationSocketId: number) => void;
+    setSourceEntity: (sourceEntity: BaseEntity, sourceEntityType: EntityType) => void;
+    setDestinationEntity: (destinationEntity: BaseEntity, destinationEntityType: EntityType) => void;
     combineAsRequest: () => ConnectEntitiesRequest;
     clear: () => void;
 }
@@ -19,37 +17,29 @@ interface NetworkPlacementStore {
 const useNetworkPlacementStore = create<NetworkPlacementStore>()((set, get) => ({
     sourceEntity: null,
     sourceEntityType: null,
-    sourceSocketId: null,
     destinationEntity: null,
     destinationEntityType: null,
-    destinationSocketId: null,
-    setSourceEntity: (sourceEntity: BaseEntity, sourceEntityType: EntityType, sourceSocketId: number) => set({
+    setSourceEntity: (sourceEntity: BaseEntity, sourceEntityType: EntityType) => set({
         sourceEntity,
         sourceEntityType,
-        sourceSocketId
     }),
-    setDestinationEntity: (destinationEntity: BaseEntity, destinationEntityType: EntityType, destinationSocketId: number) => set({
+    setDestinationEntity: (destinationEntity: BaseEntity, destinationEntityType: EntityType) => set({
         destinationEntity,
         destinationEntityType,
-        destinationSocketId
     }),
     combineAsRequest: (): ConnectEntitiesRequest => {
         const {
             sourceEntity,
             sourceEntityType,
-            sourceSocketId,
             destinationEntity,
             destinationEntityType,
-            destinationSocketId
         } = get();
 
         return {
-            sourceEntity: sourceEntity!,
+            sourceEntityId: sourceEntity!.id!,
             sourceEntityType: sourceEntityType!,
-            sourceSocketId: sourceSocketId!,
-            destinationEntity: destinationEntity!,
+            destinationEntityId: destinationEntity!.id!,
             destinationEntityType: destinationEntityType!,
-            destinationSocketId: destinationSocketId!
         };
     },
     clear: () => set({ sourceEntity: null })

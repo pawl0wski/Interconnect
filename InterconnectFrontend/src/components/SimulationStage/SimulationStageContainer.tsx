@@ -20,19 +20,17 @@ const SimulationStageContainer = () => {
             }
 
             simulationStageContextMenuStore.clearCurrentContextMenu();
-            if (
-                entityPlacementStore.currentEntityType ==
-                EntityType.VirtualMachine
-            ) {
+
+            if (entityPlacementStore.currentEntityType !== EntityType.Network) {
                 entityPlacementStore.placeCurrentEntity(e.evt.x, e.evt.y);
             }
         },
-        [entityPlacementStore, simulationStageContextMenuStore],
+        [entityPlacementStore, simulationStageContextMenuStore]
     );
 
     const handleOnContextMenu = (e: KonvaEventObject<PointerEvent>) => {
         const name = SimulationStageEntitiesUtils.getTargetOrParentEntityInfo(
-            e.target as ObjectWithName,
+            e.target as ObjectWithName
         );
 
         if (!name) {
@@ -49,7 +47,7 @@ const SimulationStageContainer = () => {
         simulationStageContextMenuStore.setCurrentContextMenu(
             entity.type,
             entity.id,
-            { x, y },
+            { x, y }
         );
     };
 
@@ -57,7 +55,7 @@ const SimulationStageContainer = () => {
         <SimulationStage
             onClick={handleOnClick}
             showPlacementCursor={Boolean(
-                entityPlacementStore.currentEntityType,
+                entityPlacementStore.currentEntityType
             )}
             onContextMenu={handleOnContextMenu}
         />

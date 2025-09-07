@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useVirtualMachineCreateModalStore } from "../../store/modals/virtualMachineCreateModalStore.ts";
+import { useVirtualMachineCreateModalStore } from "../../store/modals/modalStores.ts";
 import VirtualMachineCreateModal from "./VirtualMachineCreateModal.tsx";
 
 const VirtualMachineCreateModalContainer = () => {

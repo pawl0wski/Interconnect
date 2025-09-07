@@ -17,7 +17,7 @@ namespace Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<VirtualMachineEntityResponse>> UpdateVirtualMachineEntityPosition(UpdateVirtualMachineEntityPositionRequest req)
+        public async Task<ActionResult<VirtualMachineEntityResponse>> UpdateVirtualMachineEntityPosition(UpdateEntityPositionRequest req)
         {
             var entity = await _entityService.UpdateEntityPosition(req.Id, req.X, req.Y);
 

@@ -24,7 +24,7 @@ namespace ControllersTests
             _mockService.Setup(s => s.UpdateEntityPosition(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()));
             var controller = new VirtualMachineEntityController(_mockService.Object);
 
-            await controller.UpdateVirtualMachineEntityPosition(new UpdateVirtualMachineEntityPositionRequest
+            await controller.UpdateVirtualMachineEntityPosition(new UpdateEntityPositionRequest
             {
                 Id = 1,
                 X = 43,
@@ -46,7 +46,7 @@ namespace ControllersTests
             });
             var controller = new VirtualMachineEntityController(_mockService.Object);
 
-            var response = await controller.UpdateVirtualMachineEntityPosition(new UpdateVirtualMachineEntityPositionRequest
+            var response = await controller.UpdateVirtualMachineEntityPosition(new UpdateEntityPositionRequest
             {
                 Id = 1,
                 X = 10,

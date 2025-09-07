@@ -12,7 +12,7 @@ vi.mock("../../store/connectionStore.ts", () => ({
     useConnectionStore: mockUseConnectionStore
 }));
 
-vi.mock("../../store/modals/connectionInfoModalStore.ts", () => ({
+vi.mock("../../store/modals/modalStores.ts", () => ({
     useConnectionInfoModalStore: mockUseConnectionInfoModalStore
 }));
 

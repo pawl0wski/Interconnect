@@ -58,6 +58,6 @@ describe("virtualMachineCreateStore", () => {
             virtualCpus: 4,
             bootableDiskId: 1
         });
-        expect(mockUpdateEntityPosition).toHaveBeenCalledWith(1, 43, 25);
+        expect(mockUpdateEntityPosition).toHaveBeenCalledWith({ id: 1, x: 43, y: 25 });
     });
 });

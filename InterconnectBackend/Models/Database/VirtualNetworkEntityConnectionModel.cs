@@ -1,10 +1,13 @@
-﻿namespace Models.Database
+﻿using Models.Enums;
+
+namespace Models.Database
 {
     public class VirtualNetworkEntityConnectionModel
     {
         public int Id { get; set; }
-        public required string BridgeName { get; set; }
-        public required Guid FirstEntityUuid { get; set; }
-        public required Guid SecondEntityUuid { get; set; }
+        public required int SourceEntityId { get; set; }
+        public required EntityType SourceEntityType { get; set; }
+        public required int DestinationEntityId { get; set; }
+        public required EntityType DestinationEntityType { get; set; }
     }
 }

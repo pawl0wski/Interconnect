@@ -1,14 +1,29 @@
 import BaseBackendResourceClient from "./BaseBackendResourceClient.ts";
 import ConnectEntitiesRequest from "../requests/ConnectEntitiesRequest.ts";
-import VirtualNetworkEntityConnectionsResponse from "../responses/VirtualNetworkEntityConnectionsResponse.ts";
+import VirtualNetworkConnectionsResponse from "../responses/VirtualNetworkConnectionsResponse.ts";
+import VirtualSwitchesResponse from "../responses/VirtualSwitchesResponse.ts";
+import CreateVirtualSwitchRequest from "../requests/CreateVirtualSwitchRequest.ts";
+import UpdateEntityPositionRequest from "../requests/UpdateEntityPositionRequest.ts";
 
 class VirtualNetworkResourceClient extends BaseBackendResourceClient {
-    public async connectEntities(request: ConnectEntitiesRequest) {
+    public connectEntities(request: ConnectEntitiesRequest) {
         return this.sendBackendRequest("ConnectEntities", "POST", request);
     }
 
-    public async getAllConnections(): Promise<VirtualNetworkEntityConnectionsResponse> {
+    public getAllConnections(): Promise<VirtualNetworkConnectionsResponse> {
         return this.sendBackendRequest("GetAllConnections", "GET", {});
+    }
+
+    public createVirtualSwitch(req: CreateVirtualSwitchRequest): Promise<VirtualSwitchesResponse> {
+        return this.sendBackendRequest("CreateVirtualSwitch", "POST", req);
+    }
+
+    public updateVirtualSwitchEntityPosition(req: UpdateEntityPositionRequest): Promise<VirtualSwitchesResponse> {
+        return this.sendBackendRequest("UpdateVirtualSwitchEntityPosition", "POST", req);
+    }
+
+    public getVirtualSwitchEntities(): Promise<VirtualSwitchesResponse> {
+        return this.sendBackendRequest("GetVirtualSwitchEntities", "GET", {});
     }
 
     protected getResourceName(): string {

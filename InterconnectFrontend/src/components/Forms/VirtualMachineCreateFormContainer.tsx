@@ -57,10 +57,10 @@ const VirtualMachineCreateFormContainer = ({ onFormSubmitted }: VirtualMachineCr
         }
     });
 
-    const handleCreateVirtualMachine = async () => {
+    const handleCreateVirtualMachine = async (values: VirtualMachineCreateFormValues) => {
         setIsCreating(true);
         try {
-            virtualMachineCreateStore.update({ ...form.values, bootableDiskId: parseInt(form.values.bootableDiskId!) });
+            virtualMachineCreateStore.update({ ...values, bootableDiskId: parseInt(form.values.bootableDiskId!) });
             await virtualMachineCreateStore.createVirtualMachine();
             await virtualMachineEntityStore.fetchEntities();
             onFormSubmitted();

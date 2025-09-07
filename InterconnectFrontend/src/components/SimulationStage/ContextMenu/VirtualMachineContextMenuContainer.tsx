@@ -2,7 +2,7 @@ import { useCallback, useMemo } from "react";
 import VirtualMachineContextMenu from "./VirtualMachineContextMenu.tsx";
 import { useSimulationStageContextMenuInfo } from "../../../hooks/useSimulationStageContextMenuInfo.ts";
 import { EntityType } from "../../../models/enums/EntityType.ts";
-import { useCurrentVirtualMachineModalStore } from "../../../store/modals/currentVirtualMachineModalStore.ts";
+import { useCurrentVirtualMachineModalStore } from "../../../store/modals/modalStores.ts";
 import { useVirtualMachineEntitiesStore } from "../../../store/virtualMachineEntitiesStore.ts";
 import { useSimulationStageContextMenusStore } from "../../../store/simulationStageContextMenus.ts";
 import { useCurrentVirtualMachineStore } from "../../../store/currentVirtualMachineStore.ts";
@@ -40,9 +40,9 @@ const VirtualMachineContextMenuContainer = () => {
         closeContextMenu();
     }, [closeContextMenu, currentEntity, currentVirtualMachineEntityStore, currentVirtualMachineModalStore]);
 
-    const handleStartPlacingVirtualNetwork = useCallback((socketId: number) => {
+    const handleStartPlacingVirtualNetwork = useCallback(() => {
         entityPlacementStore.setCurrentEntityType(EntityType.Network);
-        networkPlacementStore.setSourceEntity(currentEntity!, EntityType.VirtualMachine, socketId);
+        networkPlacementStore.setSourceEntity(currentEntity!, EntityType.VirtualMachine);
 
         closeContextMenu();
     }, [closeContextMenu, currentEntity, entityPlacementStore, networkPlacementStore]);

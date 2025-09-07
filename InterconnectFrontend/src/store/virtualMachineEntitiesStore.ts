@@ -8,7 +8,6 @@ interface VirtualMachineEntitiesStore {
     updateEntityPosition: (id: number, x: number, y: number, finalUpdate?: boolean) => Promise<void>;
     clearEntities: () => void;
     getById: (id: number) => VirtualMachineEntityModel;
-    getByVmUuid: (uuid: string) => VirtualMachineEntityModel | undefined;
 }
 
 const useVirtualMachineEntitiesStore = create<VirtualMachineEntitiesStore>()((set, get) => ({
@@ -40,7 +39,7 @@ const useVirtualMachineEntitiesStore = create<VirtualMachineEntitiesStore>()((se
         });
 
         if (finalUpdate) {
-            await virtualMachineEntityResourceClient.updateEntityPosition(id, x, y);
+            await virtualMachineEntityResourceClient.updateEntityPosition({ id, x, y });
         }
     },
     clearEntities: () => {
@@ -48,8 +47,7 @@ const useVirtualMachineEntitiesStore = create<VirtualMachineEntitiesStore>()((se
             entities: []
         });
     },
-    getById: (id: number) => get().entities.find((e) => e.id === id)!,
-    getByVmUuid: (uuid: string) => get().entities.find((e) => e.vmUuid === uuid)
+    getById: (id: number) => get().entities.find((e) => e.id === id)!
 }));
 
 export { useVirtualMachineEntitiesStore };

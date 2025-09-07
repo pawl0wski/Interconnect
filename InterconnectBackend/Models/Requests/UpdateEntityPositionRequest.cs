@@ -1,6 +1,6 @@
 ﻿namespace Models.Requests
 {
-    public class UpdateVirtualMachineEntityPositionRequest
+    public class UpdateEntityPositionRequest
     {
         public required int Id { get; set; }
         public required int X { get; set; }

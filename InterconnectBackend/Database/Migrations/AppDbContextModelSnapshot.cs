@@ -82,19 +82,53 @@ namespace Database.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BridgeName")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("DestinationEntityId")
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("FirstEntityUuid")
-                        .HasColumnType("uuid");
+                    b.Property<int>("DestinationEntityType")
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("SecondEntityUuid")
-                        .HasColumnType("uuid");
+                    b.Property<int>("SourceEntityId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SourceEntityType")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.ToTable("VirtualNetworkEntityConnectionModels");
+                });
+
+            modelBuilder.Entity("Models.Database.VirtualSwitchEntityModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BridgeName")
+                        .IsRequired()
+                        .HasColumnType("varchar(128)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<Guid>("Uuid")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Visible")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("X")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Y")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("VirtualSwitchEntityModels");
                 });
 #pragma warning restore 612, 618
         }

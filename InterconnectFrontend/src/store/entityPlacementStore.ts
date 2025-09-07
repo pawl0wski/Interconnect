@@ -1,9 +1,11 @@
 import { create } from "zustand/react";
 import { EntityType } from "../models/enums/EntityType.ts";
-import { useVirtualMachineCreateModalStore } from "./modals/virtualMachineCreateModalStore.ts";
+import { useVirtualMachineCreateModalStore, useVirtualSwitchCreateModalStore } from "./modals/modalStores.ts";
 import { useVirtualMachineCreateStore } from "./virtualMachineCreateStore.ts";
 import useNetworkPlacementStore from "./networkPlacementStore.ts";
 import virtualNetworkResourceClient from "../api/resourceClient/VirtualNetworkResourceClient.ts";
+import useVirtualSwitchCreateStore from "./virtualSwitchCreateStore.ts";
+import useNetworkConnectionsStore from "./networkConnectionsStore.ts";
 
 interface EntityPlacementStore {
     currentEntityType: EntityType | null;
@@ -22,6 +24,10 @@ const useEntityPlacementStore = create<EntityPlacementStore>()((set, get) => ({
             useVirtualMachineCreateStore.getState();
         const virtualMachineCreateModalStore =
             useVirtualMachineCreateModalStore.getState();
+        const virtualSwitchCreateModalStore = useVirtualSwitchCreateModalStore.getState();
+        const virtualSwitchCreateStore = useVirtualSwitchCreateStore.getState();
+        const networkPlacementStore = useNetworkPlacementStore.getState();
+        const networkConnectionsStore = useNetworkConnectionsStore.getState();
 
         switch (currentEntityType) {
             case EntityType.VirtualMachine:
@@ -29,16 +35,20 @@ const useEntityPlacementStore = create<EntityPlacementStore>()((set, get) => ({
                 virtualMachineCreateModalStore.open();
                 break;
             case EntityType.Network:
-                const req = useNetworkPlacementStore
-                    .getState()
+                const req = networkPlacementStore
                     .combineAsRequest();
                 await virtualNetworkResourceClient.connectEntities(req);
-                useNetworkPlacementStore.getState().clear();
+                networkPlacementStore.clear();
+                await networkConnectionsStore.fetch();
+                break;
+            case EntityType.VirtualSwitch:
+                virtualSwitchCreateStore.updatePosition({ x, y });
+                virtualSwitchCreateModalStore.open();
                 break;
         }
         set({ currentEntityType: null });
     },
-    discardPlacingEntity: () => set({ currentEntityType: null }),
+    discardPlacingEntity: () => set({ currentEntityType: null })
 }));
 
 export { useEntityPlacementStore };

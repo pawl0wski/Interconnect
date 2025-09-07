@@ -4,5 +4,6 @@
     {
         VirtualMachine = 1,
         Network = 2,
+        VirtualSwitch = 3,
     }
 }

@@ -1,19 +1,19 @@
-import useVirtualNetworkEntitiesStore from "../../../store/virtualNetworkEntitiesStore.ts";
+import useNetworkConnectionsStore from "../../../store/networkConnectionsStore.ts";
 import { useEffect } from "react";
-import VirtualNetworkEntityContainer from "../Entity/VirtualNetworkEntityContainer.tsx";
+import VirtualNetworkConnectionContainer from "../Entity/VirtualNetworkConnectionContainer.tsx";
 
 const VirtualNetworkEntityRenderer = () => {
-    const virtualNetworkEntitiesStore = useVirtualNetworkEntitiesStore();
+    const virtualNetworkEntitiesStore = useNetworkConnectionsStore();
 
     useEffect(() => {
         (async () => {
-            await virtualNetworkEntitiesStore.fetchVirtualNetworkEntities();
+            await virtualNetworkEntitiesStore.fetch();
         })();
     }, []);
 
-    return virtualNetworkEntitiesStore.virtualNetworkEntities.map(e => (
-        <VirtualNetworkEntityContainer key={e.firstEntityUuid}
-                                       virtualNetworkEntity={e} />
+    return virtualNetworkEntitiesStore.networkConnections.map(e => (
+        <VirtualNetworkConnectionContainer key={e.id}
+                                           virtualNetworkEntity={e} />
     ));
 };
 

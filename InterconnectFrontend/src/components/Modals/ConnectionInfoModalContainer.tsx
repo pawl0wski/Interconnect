@@ -1,7 +1,7 @@
 import { useConnectionInfoStore } from "../../store/connectionInfoStore.ts";
 import ConnectionInfoModal from "./ConnectionInfoModal.tsx";
 import { useCallback } from "react";
-import { useConnectionInfoModalStore } from "../../store/modals/connectionInfoModalStore.ts";
+import { useConnectionInfoModalStore } from "../../store/modals/modalStores.ts";
 
 const ConnectionInfoModalContainer = () => {
     const connectionInfoStore = useConnectionInfoStore();

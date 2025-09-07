@@ -9,7 +9,7 @@ interface VirtualMachineContextMenuProps {
     isVisible: boolean;
 
     onOpenVirtualMachineConsole: () => void;
-    onStartPlacingVirtualNetwork: (slotId: number) => void;
+    onStartPlacingVirtualNetwork: () => void;
 }
 
 const VirtualMachineContextMenu = ({
@@ -37,16 +37,12 @@ const VirtualMachineContextMenu = ({
             <Menu.Label>
                 {t("network")}
             </Menu.Label>
-            {
-                [...Array(4)].map((_, i) => (
-                    <Menu.Item key={i} onClick={() => onStartPlacingVirtualNetwork(i + 1)}
-                               leftSection={<MdOutlineCable size={14} />}>
-                        {t("slot", { number: i + 1 })}
-                    </Menu.Item>
-                ))
-            }
-        </Menu.Dropdown>
-    </Menu>;
+            <Menu.Item onClick={() => onStartPlacingVirtualNetwork()} leftSection={<MdOutlineCable size={14} />}>
+                {t("connectWithAnotherEntity")}
+            </Menu.Item>
+        </Menu.Dropdown>;
+    </Menu>
+        ;
 };
 
 export default VirtualMachineContextMenu;

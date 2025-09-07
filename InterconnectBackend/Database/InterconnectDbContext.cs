@@ -20,7 +20,7 @@ namespace Database
         public DbSet<VirtualMachineEntityModel> VirtualMachineEntityModels { get; set; }
         public DbSet<BootableDiskModel> BootableDiskModels { get; set; }
         public DbSet<VirtualNetworkEntityConnectionModel> VirtualNetworkEntityConnectionModels { get; set; }
-
+        public DbSet<VirtualSwitchEntityModel> VirtualSwitchEntityModels { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (optionsBuilder.IsConfigured)

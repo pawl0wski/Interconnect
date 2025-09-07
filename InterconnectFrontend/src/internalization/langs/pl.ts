@@ -4,6 +4,15 @@ const pl = {
     "terminal": "Terminal",
     "network": "Sieć",
     "slot": "Slot {{number}}",
+    "connectWithAnotherEntity": "Połącz z innym urządzeniem",
+    "virtualSwitch": {
+        "virtualSwitch": "Switch",
+        "form": {
+            "newVirtualSwitch": "Nowy switch wirtualny",
+            "name": "Nazwa",
+            "createVirtualSwitch": "Stwórz wirtualny switch",
+        }
+    },
     "virtualMachine": {
         "virtualMachine": "Maszyna wirtualna",
         "configuration": "Konfiguracja maszyny wirtualnej",

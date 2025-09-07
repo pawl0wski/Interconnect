@@ -18,14 +18,35 @@ namespace Controllers
             _virtualNetworkService = virtualNetworkService;
         }
 
-        [HttpPost]
-        public async Task<VirtualNetworkEntityConnectionsResponse> ConnectEntities(ConnectEntitiesRequest req)
+        [HttpGet]
+        public async Task<VirtualNetworkConnectionsResponse> GetAllConnections()
         {
-            VirtualNetworkEntityConnectionDTO? virtualNetworkConnection = null;
+            var connections = await _virtualNetworkService.GetVirtualNetworkConnections();
 
-            if (req.SourceEntityType == EntityType.VirtualMachine && req.DestinationEntityType == EntityType.VirtualMachine)
+            return VirtualNetworkConnectionsResponse.WithSuccess(connections);
+        }
+
+        [HttpPost]
+        public async Task<VirtualNetworkConnectionsResponse> ConnectEntities(ConnectEntitiesRequest req)
+        {
+            VirtualNetworkConnectionDTO? virtualNetworkConnection = null;
+
+            if (AreTypes(req.SourceEntityType, req.DestinationEntityType, EntityType.VirtualMachine, EntityType.VirtualMachine))
             {
-                virtualNetworkConnection = await _virtualNetworkService.ConnectTwoVirtualMachines(req.SourceEntity.Id, req.SourceSocketId, req.DestinationEntity.Id, req.DestinationSocketId);
+                virtualNetworkConnection = await _virtualNetworkService.ConnectTwoVirtualMachines(req.SourceEntityId, req.DestinationEntityId);
+            }
+
+            if (AreTypes(req.SourceEntityType, req.DestinationEntityType, EntityType.VirtualSwitch, EntityType.VirtualMachine))
+            {
+                var sourceEntityId = req.SourceEntityId;
+                var destinationEntityId = req.DestinationEntityId;
+
+                if (req.SourceEntityType != EntityType.VirtualMachine)
+                {
+                    (sourceEntityId, destinationEntityId) = (destinationEntityId, sourceEntityId);
+                }
+
+                virtualNetworkConnection = await _virtualNetworkService.ConnectVirtualMachineToVirtualSwitch(sourceEntityId, destinationEntityId);
             }
 
 
@@ -34,15 +55,36 @@ namespace Controllers
                 throw new NotImplementedException("Unsuported entity types");
             }
 
-            return VirtualNetworkEntityConnectionsResponse.WithSuccess([virtualNetworkConnection]);
+            return VirtualNetworkConnectionsResponse.WithSuccess([virtualNetworkConnection]);
+        }
+
+        [HttpPost]
+        public async Task<VirtualSwitchesEntitiesResponse> CreateVirtualSwitch(CreateVirtualSwitchRequest req)
+        {
+            var virtualSwitch = await _virtualNetworkService.CreateVirtualSwitch(req.Name);
+
+            return VirtualSwitchesEntitiesResponse.WithSuccess([virtualSwitch]);
+        }
+
+        [HttpPost]
+        public async Task<VirtualSwitchesEntitiesResponse> UpdateVirtualSwitchEntityPosition(UpdateEntityPositionRequest req)
+        {
+            var virtualSwitch = await _virtualNetworkService.UpdateVirtualSwitchEntityPosition(req.Id, req.X, req.Y);
+
+            return VirtualSwitchesEntitiesResponse.WithSuccess([virtualSwitch]);
         }
 
         [HttpGet]
-        public async Task<VirtualNetworkEntityConnectionsResponse> GetAllConnections()
+        public async Task<VirtualSwitchesEntitiesResponse> GetVirtualSwitchEntities()
         {
-            var connections = await _virtualNetworkService.GetVirtualNetworkConnections();
+            var virtualSwitches = await _virtualNetworkService.GetVisibleVirtualSwitchEntities();
 
-            return VirtualNetworkEntityConnectionsResponse.WithSuccess(connections);
+            return VirtualSwitchesEntitiesResponse.WithSuccess(virtualSwitches);
+        }
+
+        private bool AreTypes(EntityType sourceEntityType, EntityType destinationEntityType, EntityType firstEntityType, EntityType secondEntityType)
+        {
+            return (sourceEntityType == firstEntityType && destinationEntityType == secondEntityType) || (sourceEntityType == secondEntityType && destinationEntityType == firstEntityType);
         }
     }
 }

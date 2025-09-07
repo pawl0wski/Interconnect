@@ -2,8 +2,8 @@ import { useMemo } from "react";
 import useImage from "use-image";
 import { KonvaEventObject } from "konva/lib/Node";
 import { Circle, Group, Image, Text } from "react-konva";
-import virtualMachineImageDefault from "../../../static/virtual_machine.svg";
-import virtualMachineImageRunning from "../../../static/virtual_machine_running.svg";
+import virtualMachineImageDefault from "../../../static/virtualMachine.svg";
+import virtualMachineImageRunning from "../../../static/virtualMachineRunning.svg";
 import { VirtualMachineEntityModel } from "../../../models/VirtualMachineEntityModel.ts";
 import { VirtualMachineState } from "../../../models/enums/VirtualMachineState.ts";
 
