@@ -7,6 +7,7 @@ namespace Services.Utils
     {
         private string? _networkName;
         private string? _macAddress;
+        private bool? _forwardNat;
         private string? _ipAddress;
         private string? _netMask;
         private string? _dhcpStartRange;
@@ -17,6 +18,7 @@ namespace Services.Utils
         {
             _networkName = definition.NetworkName;
             _macAddress = definition.MacAddress;
+            _forwardNat = definition.ForwardNat;
             _ipAddress = definition.IpAddress;
             _netMask = definition.NetMask;
             _dhcpStartRange = definition.DhcpStartRange;
@@ -37,8 +39,12 @@ namespace Services.Utils
 
                 CreateNetworkBlock(writer, w =>
                 {
-                    CreateBridgeBlock(writer, _bridgeName);
-                    CreateNetworkNameBlock(w, _networkName);
+                    if (_forwardNat ?? false)
+                    {
+                        CreateForwardBlock(writer, _forwardNat ?? false);
+                    }
+                    CreateBridgeBlock(writer, _bridgeName!);
+                    CreateNetworkNameBlock(w, _networkName!);
                     if (_macAddress is not null)
                     {
                         CreateMacAddressBlock(w, _macAddress);
@@ -66,6 +72,18 @@ namespace Services.Utils
             writer.WriteStartElement("network");
 
             blockFunc(writer);
+
+            writer.WriteEndElement();
+        }
+
+        static private void CreateForwardBlock(XmlWriter writer, bool forwardNat)
+        {
+            writer.WriteStartElement("forward");
+
+            if (forwardNat)
+            {
+                writer.WriteStartAttribute("mode", "nat");
+            }
 
             writer.WriteEndElement();
         }

@@ -15,38 +15,40 @@ namespace Services.Impl
         private readonly IVirtualMachineEntityService _vmEntityService;
         private readonly IVirtualNetworkConnectionRepository _connectionRepository;
         private readonly IVirtualSwitchEntityRepository _switchRepository;
+        private readonly IInternetEntityRepository _internetRepository;
 
         public VirtualNetworkService(
             IVirtualizationWrapper wrapper,
             IVirtualMachineEntityService vmEntityService,
             IVirtualNetworkConnectionRepository connectionRepository,
-            IVirtualSwitchEntityRepository switchRepository)
+            IVirtualSwitchEntityRepository switchRepository,
+            IInternetEntityRepository internetRepository)
         {
             _wrapper = wrapper;
             _vmEntityService = vmEntityService;
             _connectionRepository = connectionRepository;
             _switchRepository = switchRepository;
+            _internetRepository = internetRepository;
         }
 
         public async Task<VirtualNetworkConnectionDTO> ConnectTwoVirtualMachines(int sourceEntityId, int destinationEntityId)
         {
-            var sourceEntity = await _vmEntityService.GetEntityById(sourceEntityId);
-            var destinationEntity = await _vmEntityService.GetEntityById(destinationEntityId);
+            var sourceEntity = await _vmEntityService.GetById(sourceEntityId);
+            var destinationEntity = await _vmEntityService.GetById(destinationEntityId);
 
             var virtualSwitch = await CreateVirtualSwitch(null);
             var networkName = GetNetworkNameFromUuid(virtualSwitch.Uuid);
 
-            if (sourceEntity.VmUuid is null || destinationEntity.VmUuid is null)
-            {
-                throw new NullReferenceException("Source or destination entity vmuuid is null");
-            }
+            EnsureVmUuidNotNull(sourceEntity);
+            EnsureVmUuidNotNull(destinationEntity);
 
-            AttachNetworkInterfaceToVirtualMachine(sourceEntity.VmUuid.Value, new VirtualNetworkInterfaceCreateDefinition
+
+            AttachNetworkInterfaceToVirtualMachine(sourceEntity.VmUuid!.Value, new VirtualNetworkInterfaceCreateDefinition
             {
                 NetworkName = networkName,
                 MacAddress = MacAddressGenerator.Generate()
             });
-            AttachNetworkInterfaceToVirtualMachine(destinationEntity.VmUuid.Value, new VirtualNetworkInterfaceCreateDefinition
+            AttachNetworkInterfaceToVirtualMachine(destinationEntity.VmUuid!.Value, new VirtualNetworkInterfaceCreateDefinition
             {
                 NetworkName = networkName,
                 MacAddress = MacAddressGenerator.Generate()
@@ -59,23 +61,40 @@ namespace Services.Impl
 
         public async Task<VirtualNetworkConnectionDTO> ConnectVirtualMachineToVirtualSwitch(int sourceEntityId, int destinationEntityId)
         {
-            var sourceVirtualMachine = await _vmEntityService.GetEntityById(sourceEntityId);
+            var sourceVirtualMachine = await _vmEntityService.GetById(sourceEntityId);
             var destinationVirtualSwitch = await _switchRepository.GetById(destinationEntityId);
 
             var networkName = GetNetworkNameFromUuid(destinationVirtualSwitch.Uuid);
 
-            if (sourceVirtualMachine.VmUuid is null)
-            {
-                throw new NullReferenceException("Source entity vmuuid is null");
-            }
+            EnsureVmUuidNotNull(sourceVirtualMachine);
 
-            AttachNetworkInterfaceToVirtualMachine(sourceVirtualMachine.VmUuid.Value, new VirtualNetworkInterfaceCreateDefinition
+            AttachNetworkInterfaceToVirtualMachine(sourceVirtualMachine.VmUuid!.Value, new VirtualNetworkInterfaceCreateDefinition
             {
                 NetworkName = networkName,
                 MacAddress = MacAddressGenerator.Generate()
             });
 
             var connection = await _connectionRepository.Create(sourceVirtualMachine.Id, EntityType.VirtualMachine, destinationVirtualSwitch.Id, EntityType.VirtualSwitch);
+
+            return VirtualNetworkEntityConnectionMapper.MapToDTO(connection);
+        }
+
+        public async Task<VirtualNetworkConnectionDTO> ConnectVirtualMachineToInternet(int sourceEntityId, int destinationEntityId)
+        {
+            var sourceVirtualMachine = await _vmEntityService.GetById(sourceEntityId);
+            var destinationInternet = await _internetRepository.GetById(destinationEntityId);
+
+            var networkName = GetNetworkNameFromUuid(destinationInternet.Uuid);
+
+            EnsureVmUuidNotNull(sourceVirtualMachine);
+
+            AttachNetworkInterfaceToVirtualMachine(sourceVirtualMachine.VmUuid!.Value, new VirtualNetworkInterfaceCreateDefinition
+            {
+                NetworkName = networkName,
+                MacAddress = MacAddressGenerator.Generate()
+            });
+
+            var connection = await _connectionRepository.Create(sourceVirtualMachine.Id, EntityType.VirtualMachine, destinationEntityId, EntityType.Internet);
 
             return VirtualNetworkEntityConnectionMapper.MapToDTO(connection);
         }
@@ -121,6 +140,40 @@ namespace Services.Impl
             return VirtualSwitchEntityMapper.MapToDTO(model);
         }
 
+        public async Task<InternetEntityModelDTO> CreateInternet()
+        {
+            var networkUuid = Guid.NewGuid();
+            var networkName = GetNetworkNameFromUuid(networkUuid);
+            var bridgeSuffixId = networkName.Split("-").Last();
+            var bridgeName = $"ic{bridgeSuffixId}";
+
+            CreateVirtualNetwork(new VirtualNetworkCreateDefinition
+            {
+                NetworkName = networkName,
+                BridgeName = bridgeName,
+                ForwardNat = true,
+                IpAddress = "192.168.0.1",
+                NetMask = "255.255.255.0"
+            });
+
+            var internetEntity = await _internetRepository.Create(bridgeName, networkUuid);
+            return InternetEntityMapper.MapToDTO(internetEntity);
+        }
+
+        public async Task<List<InternetEntityModelDTO>> GetInternetEntities()
+        {
+            var internetEntities = await _internetRepository.GetAll();
+
+            return [.. internetEntities.Select(InternetEntityMapper.MapToDTO)];
+        }
+
+        public async Task<InternetEntityModelDTO> UpdateInternetEntityPosition(int entityId, int x, int y)
+        {
+            var model = await _internetRepository.UpdatePosition(entityId, x, y);
+
+            return InternetEntityMapper.MapToDTO(model);
+        }
+
         private void CreateVirtualNetwork(VirtualNetworkCreateDefinition definition)
         {
             var builder = new VirtualNetworkCreateDefinitionBuilder().SetFromCreateDefinition(definition);
@@ -140,5 +193,13 @@ namespace Services.Impl
 
         private string GetNetworkNameFromUuid(Guid uuid) =>
             $"InterconnectSwitch-{uuid}";
+
+        private void EnsureVmUuidNotNull(VirtualMachineEntityDTO entity)
+        {
+            if (entity.VmUuid is null)
+            {
+                throw new NullReferenceException("Source entity vmuuid is null");
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ import useNetworkPlacementStore from "./networkPlacementStore.ts";
 import virtualNetworkResourceClient from "../api/resourceClient/VirtualNetworkResourceClient.ts";
 import useVirtualSwitchCreateStore from "./virtualSwitchCreateStore.ts";
 import useNetworkConnectionsStore from "./networkConnectionsStore.ts";
+import { useInternetEntitiesStore } from "./entitiesStore.ts";
 
 interface EntityPlacementStore {
     currentEntityType: EntityType | null;
@@ -19,6 +20,7 @@ const useEntityPlacementStore = create<EntityPlacementStore>()((set, get) => ({
     setCurrentEntityType: (type: EntityType) =>
         set({ currentEntityType: type }),
     placeCurrentEntity: async (x: number, y: number): Promise<void> => {
+        [x, y] = [x - 25, y - 100];
         const { currentEntityType } = get();
         const virtualMachineCreateStore =
             useVirtualMachineCreateStore.getState();
@@ -28,6 +30,7 @@ const useEntityPlacementStore = create<EntityPlacementStore>()((set, get) => ({
         const virtualSwitchCreateStore = useVirtualSwitchCreateStore.getState();
         const networkPlacementStore = useNetworkPlacementStore.getState();
         const networkConnectionsStore = useNetworkConnectionsStore.getState();
+        const internetEntitiesStore = useInternetEntitiesStore.getState();
 
         switch (currentEntityType) {
             case EntityType.VirtualMachine:
@@ -44,6 +47,11 @@ const useEntityPlacementStore = create<EntityPlacementStore>()((set, get) => ({
             case EntityType.VirtualSwitch:
                 virtualSwitchCreateStore.updatePosition({ x, y });
                 virtualSwitchCreateModalStore.open();
+                break;
+            case EntityType.Internet:
+                const resp = await virtualNetworkResourceClient.createInternet();
+                await internetEntitiesStore.fetchEntities();
+                await internetEntitiesStore.updateEntityPosition(resp.data[0].id, x, y);
                 break;
         }
         set({ currentEntityType: null });

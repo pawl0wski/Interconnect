@@ -1,12 +1,13 @@
 import { Layer, Stage } from "react-konva";
 import classes from "./SimulationStage.module.scss";
-import VirtualMachineEntryRenderer from "./Renderers/VirtualMachineEntryRenderer.tsx";
+import VirtualMachineEntityRenderer from "./Renderers/VirtualMachineEntityRenderer.tsx";
 import classNames from "classnames";
 import { KonvaEventObject } from "konva/lib/Node";
 import { useMemo } from "react";
 import SimulationContextMenuProvider from "./ContextMenu/SimulationContextMenuProvider.tsx";
 import VirtualNetworkRenderer from "./Renderers/VirtualNetworkRenderer.tsx";
 import VirtualSwitchRenderer from "./Renderers/VirtualSwitchRenderer.tsx";
+import InternetEntityRenderer from "./Renderers/InternetEntityRenderer.tsx";
 
 interface SimulationStageProps {
     showPlacementCursor: boolean;
@@ -25,8 +26,9 @@ const SimulationStage = ({ showPlacementCursor, onClick, onContextMenu }: Simula
         <Stage width={stageWidth} height={stageHeight} onClick={onClick} onContextMenu={onContextMenu}>
             <Layer>
                 <VirtualNetworkRenderer />
-                <VirtualMachineEntryRenderer />
+                <VirtualMachineEntityRenderer />
                 <VirtualSwitchRenderer />
+                <InternetEntityRenderer />
             </Layer>
         </Stage>
     </div>;

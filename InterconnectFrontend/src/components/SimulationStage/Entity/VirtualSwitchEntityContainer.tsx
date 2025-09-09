@@ -1,7 +1,7 @@
 import VirtualSwitchEntityModel from "../../../models/VirtualSwitchEntityModel.ts";
 import VirtualSwitchEntity from "./VirtualSwitchEntity.tsx";
 import { KonvaEventObject } from "konva/lib/Node";
-import useVirtualSwitchEntitiesStore from "../../../store/virtualSwitchEntitiesStore.ts";
+import { useVirtualSwitchEntitiesStore } from "../../../store/entitiesStore.ts";
 import useChangeCursor from "../../../hooks/useChangeCursor.ts";
 import { useEntityPlacementStore } from "../../../store/entityPlacementStore.ts";
 import useNetworkPlacementStore from "../../../store/networkPlacementStore.ts";
@@ -48,7 +48,6 @@ const VirtualSwitchEntityContainer = ({ entity }: VirtualSwitchEntityContainerPr
         }
 
         networkPlacementStore.setDestinationEntity(entity, EntityType.VirtualSwitch);
-        console.log("TEst");
         await entityPlacementStore.placeCurrentEntity(0, 0);
         return true;
     };

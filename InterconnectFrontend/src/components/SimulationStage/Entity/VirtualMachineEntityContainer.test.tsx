@@ -5,7 +5,7 @@ import VirtualMachineEntityContainer from "./VirtualMachineEntityContainer.tsx";
 
 const mockVirtualMachineEntitiesStore = vi.hoisted(() => vi.fn());
 const mockCurrentVirtualMachineStore = vi.hoisted(() => vi.fn());
-vi.mock("../../../store/virtualMachineEntitiesStore.ts", () => ({
+vi.mock("../../../store/entitiesStore.ts", () => ({
     useVirtualMachineEntitiesStore: mockVirtualMachineEntitiesStore
 }));
 vi.mock("../../../store/currentVirtualMachineStore.ts", () => ({

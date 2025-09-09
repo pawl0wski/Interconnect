@@ -14,6 +14,7 @@ namespace Repositories
             serviceCollection.AddScoped<IVirtualMachineEntityRepository, VirtualMachineEntityRepository>();
             serviceCollection.AddScoped<IVirtualNetworkConnectionRepository, VirtualNetworkConnectionRepository>();
             serviceCollection.AddScoped<IVirtualSwitchEntityRepository, VirtualSwitchEntityRepository>();
+            serviceCollection.AddScoped<IInternetEntityRepository, InternetEntityRepository>();
         }
     }
 }

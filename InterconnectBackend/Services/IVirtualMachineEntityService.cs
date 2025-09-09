@@ -7,7 +7,7 @@ namespace Services
         public Task<List<VirtualMachineEntityDTO>> GetEntities();
         public Task<VirtualMachineEntityDTO> CreateEntity(string name, int x, int y);
         public Task<VirtualMachineEntityDTO> UpdateEntityPosition(int id, int x, int y);
-        public Task<VirtualMachineEntityDTO> GetEntityById(int id);
+        public Task<VirtualMachineEntityDTO> GetById(int id);
         public Task<VirtualMachineEntityDTO> UpdateEntityVmUUID(int id, string uuid);
     }
 }

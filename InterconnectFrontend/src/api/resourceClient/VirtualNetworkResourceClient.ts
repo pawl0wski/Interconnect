@@ -4,6 +4,7 @@ import VirtualNetworkConnectionsResponse from "../responses/VirtualNetworkConnec
 import VirtualSwitchesResponse from "../responses/VirtualSwitchesResponse.ts";
 import CreateVirtualSwitchRequest from "../requests/CreateVirtualSwitchRequest.ts";
 import UpdateEntityPositionRequest from "../requests/UpdateEntityPositionRequest.ts";
+import InternetEntitiesResponse from "../responses/InternetEntitiesResponse.ts";
 
 class VirtualNetworkResourceClient extends BaseBackendResourceClient {
     public connectEntities(request: ConnectEntitiesRequest) {
@@ -24,6 +25,18 @@ class VirtualNetworkResourceClient extends BaseBackendResourceClient {
 
     public getVirtualSwitchEntities(): Promise<VirtualSwitchesResponse> {
         return this.sendBackendRequest("GetVirtualSwitchEntities", "GET", {});
+    }
+
+    public createInternet(): Promise<InternetEntitiesResponse> {
+        return this.sendBackendRequest("CreateInternet", "POST", {});
+    }
+
+    public getInternetEntities(): Promise<InternetEntitiesResponse> {
+        return this.sendBackendRequest("GetInternetEntities", "GET", {});
+    }
+
+    public updateInternetEntityPosition(req: UpdateEntityPositionRequest): Promise<InternetEntitiesResponse> {
+        return this.sendBackendRequest("UpdateInternetEntityPosition", "POST", req);
     }
 
     protected getResourceName(): string {

@@ -40,9 +40,8 @@ const VirtualMachineContextMenu = ({
             <Menu.Item onClick={() => onStartPlacingVirtualNetwork()} leftSection={<MdOutlineCable size={14} />}>
                 {t("connectWithAnotherEntity")}
             </Menu.Item>
-        </Menu.Dropdown>;
-    </Menu>
-        ;
+        </Menu.Dropdown>
+    </Menu>;
 };
 
 export default VirtualMachineContextMenu;

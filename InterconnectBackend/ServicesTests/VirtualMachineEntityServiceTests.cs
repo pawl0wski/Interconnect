@@ -106,7 +106,7 @@ namespace ServicesTests
                     VmUuid = Guid.Parse("68013153-09EE-4837-998D-E7C3FEE3BB41"),
                 });
 
-            var entity = await _service.GetEntityById(1);
+            var entity = await _service.GetById(1);
 
             Assert.That(entity.Id, Is.EqualTo(0));
             Assert.That(entity.Name, Is.EqualTo("TestEntity1"));

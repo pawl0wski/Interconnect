@@ -51,7 +51,7 @@ namespace Services.Impl
             return entitiesDto;
         }
 
-        public async Task<VirtualMachineEntityDTO> GetEntityById(int id)
+        public async Task<VirtualMachineEntityDTO> GetById(int id)
         {
             var entity = await _repository.GetById(id);
 

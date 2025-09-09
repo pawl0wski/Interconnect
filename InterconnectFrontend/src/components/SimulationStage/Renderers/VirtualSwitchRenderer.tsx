@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import useVirtualSwitchEntitiesStore from "../../../store/virtualSwitchEntitiesStore.ts";
+import { useVirtualSwitchEntitiesStore } from "../../../store/entitiesStore.ts";
 import VirtualSwitchEntityContainer from "../Entity/VirtualSwitchEntityContainer.tsx";
 
 const VirtualSwitchRenderer = () => {
@@ -11,7 +11,7 @@ const VirtualSwitchRenderer = () => {
         })();
     }, []);
 
-    return virtualSwitchEntitiesStore.virtualSwitchEntities.map((e) => (
+    return virtualSwitchEntitiesStore.entities.map((e) => (
         <VirtualSwitchEntityContainer key={e.id} entity={e} />
     ));
 };

@@ -8,7 +8,7 @@ import { VirtualMachineEntityModel } from "../../../models/VirtualMachineEntityM
 import { useCurrentVirtualMachineModalStore } from "../../../store/modals/modalStores.ts";
 import { useCurrentVirtualMachineStore } from "../../../store/currentVirtualMachineStore.ts";
 import { useEntityPlacementStore } from "../../../store/entityPlacementStore.ts";
-import { useVirtualMachineEntitiesStore } from "../../../store/virtualMachineEntitiesStore.ts";
+import { useVirtualMachineEntitiesStore } from "../../../store/entitiesStore.ts";
 import useNetworkPlacementStore from "../../../store/networkPlacementStore.ts";
 import useChangeCursor from "../../../hooks/useChangeCursor.ts";
 

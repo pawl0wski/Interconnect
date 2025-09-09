@@ -1,8 +1,8 @@
-import { useVirtualMachineEntitiesStore } from "../../../store/virtualMachineEntitiesStore.ts";
+import { useVirtualMachineEntitiesStore } from "../../../store/entitiesStore.ts";
 import VirtualMachineEntityContainer from "../Entity/VirtualMachineEntityContainer.tsx";
 import { useEffect } from "react";
 
-const VirtualMachineEntryRenderer = () => {
+const VirtualMachineEntityRenderer = () => {
     const virtualMachineEntitiesStore = useVirtualMachineEntitiesStore();
 
     useEffect(() => {
@@ -16,4 +16,4 @@ const VirtualMachineEntryRenderer = () => {
     });
 };
 
-export default VirtualMachineEntryRenderer;
+export default VirtualMachineEntityRenderer;

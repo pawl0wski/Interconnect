@@ -21,6 +21,8 @@ namespace Database
         public DbSet<BootableDiskModel> BootableDiskModels { get; set; }
         public DbSet<VirtualNetworkEntityConnectionModel> VirtualNetworkEntityConnectionModels { get; set; }
         public DbSet<VirtualSwitchEntityModel> VirtualSwitchEntityModels { get; set; }
+        public DbSet<InternetEntityModel> InternetEntityModels { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (optionsBuilder.IsConfigured)

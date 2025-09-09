@@ -48,7 +48,7 @@ describe("entityPlacementStore", () => {
             result.current.placeCurrentEntity(50, 75);
         });
 
-        expect(mockUpdate).toHaveBeenCalledWith({ x: 50, y: 75 });
+        expect(mockUpdate).toHaveBeenCalledWith({ x: 25, y: -25 });
         expect(mockOpen).toHaveBeenCalled();
         expect(result.current.currentEntityType).toBeNull();
     });

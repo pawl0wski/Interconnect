@@ -1,10 +1,10 @@
 import { beforeEach } from "vitest";
 import { render } from "@testing-library/react";
-import VirtualMachineEntryRenderer from "./VirtualMachineEntryRenderer.tsx";
+import VirtualMachineEntityRenderer from "./VirtualMachineEntityRenderer.tsx";
 import { VirtualMachineEntityModel } from "../../../models/VirtualMachineEntityModel.ts";
 
 const mockVirtualMachineEntitiesStore = vi.hoisted(() => vi.fn());
-vi.mock("../../../store/virtualMachineEntitiesStore.ts", () => ({
+vi.mock("../../../store/entitiesStore.ts", () => ({
     useVirtualMachineEntitiesStore: mockVirtualMachineEntitiesStore
 }));
 vi.mock("../Entity/VirtualMachineEntityContainer.tsx", () => ({
@@ -12,7 +12,7 @@ vi.mock("../Entity/VirtualMachineEntityContainer.tsx", () => ({
 }));
 
 
-describe("VirtualMachineEntryRenderer", async () => {
+describe("VirtualMachineEntityRenderer", async () => {
     beforeEach(() => {
         mockVirtualMachineEntitiesStore.mockReset();
     });
@@ -25,7 +25,7 @@ describe("VirtualMachineEntryRenderer", async () => {
         });
 
         render(
-            <VirtualMachineEntryRenderer />
+            <VirtualMachineEntityRenderer />
         );
 
         expect(mockFetchEntities).toHaveBeenCalled();
@@ -50,7 +50,7 @@ describe("VirtualMachineEntryRenderer", async () => {
             fetchEntities: vi.fn()
         });
 
-        const screen = render(<VirtualMachineEntryRenderer />);
+        const screen = render(<VirtualMachineEntityRenderer />);
 
         expect(screen.getByText(("VM1"))).toBeInTheDocument();
         expect(screen.getByText(("VM2"))).toBeInTheDocument();

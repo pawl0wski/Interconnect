@@ -15,6 +15,7 @@ namespace ServicesTests
         private Mock<IVirtualMachineEntityService> _vmEntityService;
         private Mock<IVirtualNetworkConnectionRepository> _connectionRepository;
         private Mock<IVirtualSwitchEntityRepository> _switchRepository;
+        private Mock<IInternetEntityRepository> _internetRepository;
         private VirtualNetworkService _vnService;
 
         [SetUp]
@@ -24,7 +25,14 @@ namespace ServicesTests
             _vmEntityService = new Mock<IVirtualMachineEntityService>();
             _connectionRepository = new Mock<IVirtualNetworkConnectionRepository>();
             _switchRepository = new Mock<IVirtualSwitchEntityRepository>();
-            _vnService = new VirtualNetworkService(_virtualizationWrapper.Object, _vmEntityService.Object, _connectionRepository.Object, _switchRepository.Object);
+            _internetRepository = new Mock<IInternetEntityRepository>();
+            _vnService = new VirtualNetworkService(
+                _virtualizationWrapper.Object,
+                _vmEntityService.Object,
+                _connectionRepository.Object,
+                _switchRepository.Object,
+                _internetRepository.Object
+                );
         }
 
         [Test]
@@ -48,7 +56,7 @@ namespace ServicesTests
         [Test]
         public void ConnectTwoVirtualMachines_WhenInvokedWithEntitiesWithoutVm_ShouldThrowException()
         {
-            _vmEntityService.Setup(s => s.GetEntityById(It.IsAny<int>())).ReturnsAsync((int entityId) => new VirtualMachineEntityDTO
+            _vmEntityService.Setup(s => s.GetById(It.IsAny<int>())).ReturnsAsync((int entityId) => new VirtualMachineEntityDTO
             {
                 Id = entityId,
                 Name = $"Entity{entityId}",
@@ -66,7 +74,7 @@ namespace ServicesTests
         public async Task ConnectTwoVirtualMachines_WhenInvoked_ShouldCreateVirtualNetwork()
         {
             var vmUuid = Guid.Parse("cb066f62-2094-46cf-87da-530fb1ad304b");
-            _vmEntityService.Setup(s => s.GetEntityById(It.IsAny<int>())).ReturnsAsync((int entityId) => new VirtualMachineEntityDTO
+            _vmEntityService.Setup(s => s.GetById(It.IsAny<int>())).ReturnsAsync((int entityId) => new VirtualMachineEntityDTO
             {
                 Id = entityId,
                 Name = $"Entity{entityId}",
@@ -87,7 +95,7 @@ namespace ServicesTests
         {
             var sourceVmUuid = Guid.Parse("cb066f62-2094-46cf-87da-530fb1ad304b");
             var destinationVmUuid = Guid.Parse("8343aeaa-6da4-46da-8118-d4edb5b39c49");
-            _vmEntityService.Setup(s => s.GetEntityById(It.IsAny<int>())).ReturnsAsync((int entityId) => new VirtualMachineEntityDTO
+            _vmEntityService.Setup(s => s.GetById(It.IsAny<int>())).ReturnsAsync((int entityId) => new VirtualMachineEntityDTO
             {
                 Id = entityId,
                 Name = $"Entity{entityId}",
@@ -109,7 +117,7 @@ namespace ServicesTests
         {
             var sourceVmUuid = Guid.Parse("cb066f62-2094-46cf-87da-530fb1ad304b");
             var destinationVmUuid = Guid.Parse("8343aeaa-6da4-46da-8118-d4edb5b39c49");
-            _vmEntityService.Setup(s => s.GetEntityById(It.IsAny<int>())).ReturnsAsync((int entityId) => new VirtualMachineEntityDTO
+            _vmEntityService.Setup(s => s.GetById(It.IsAny<int>())).ReturnsAsync((int entityId) => new VirtualMachineEntityDTO
             {
                 Id = entityId,
                 Name = $"Entity{entityId}",
@@ -167,7 +175,7 @@ namespace ServicesTests
         {
             var vmUuid = Guid.Parse("2FB1BEC3-7E13-4510-A4E4-A1869A52E02F");
             var networkUuid = Guid.Parse("9482e9c9-2a4c-4e79-922d-b6ec273e26a5");
-            _vmEntityService.Setup(s => s.GetEntityById(It.Is<int>(id => id == 1))).ReturnsAsync((int id) =>
+            _vmEntityService.Setup(s => s.GetById(It.Is<int>(id => id == 1))).ReturnsAsync((int id) =>
             {
                 return new VirtualMachineEntityDTO
                 {

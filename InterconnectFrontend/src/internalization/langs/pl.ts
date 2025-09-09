@@ -10,7 +10,7 @@ const pl = {
         "form": {
             "newVirtualSwitch": "Nowy switch wirtualny",
             "name": "Nazwa",
-            "createVirtualSwitch": "Stwórz wirtualny switch",
+            "createVirtualSwitch": "Stwórz wirtualny switch"
         }
     },
     "virtualMachine": {
@@ -30,6 +30,9 @@ const pl = {
             "memoryNotSetValidationError": "Musisz zadeklarować pamięć operacyjną dla maszyny wirtualnej",
             "bootableDiskNotSelectedValidationError": "Musisz wybrać obraz dla maszyny wirtualnej"
         }
+    },
+    "internet": {
+        "internet": "Internet"
     }
 };
 

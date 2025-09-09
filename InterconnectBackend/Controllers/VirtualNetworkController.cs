@@ -38,15 +38,16 @@ namespace Controllers
 
             if (AreTypes(req.SourceEntityType, req.DestinationEntityType, EntityType.VirtualSwitch, EntityType.VirtualMachine))
             {
-                var sourceEntityId = req.SourceEntityId;
-                var destinationEntityId = req.DestinationEntityId;
-
-                if (req.SourceEntityType != EntityType.VirtualMachine)
-                {
-                    (sourceEntityId, destinationEntityId) = (destinationEntityId, sourceEntityId);
-                }
+                var (sourceEntityId, destinationEntityId) = ResolveEntityIdsOrder(req);
 
                 virtualNetworkConnection = await _virtualNetworkService.ConnectVirtualMachineToVirtualSwitch(sourceEntityId, destinationEntityId);
+            }
+
+            if (AreTypes(req.SourceEntityType, req.DestinationEntityType, EntityType.Internet, EntityType.VirtualMachine))
+            {
+                var (sourceEntityId, destinationEntityId) = ResolveEntityIdsOrder(req);
+
+                virtualNetworkConnection = await _virtualNetworkService.ConnectVirtualMachineToInternet(sourceEntityId, destinationEntityId);
             }
 
 
@@ -80,6 +81,43 @@ namespace Controllers
             var virtualSwitches = await _virtualNetworkService.GetVisibleVirtualSwitchEntities();
 
             return VirtualSwitchesEntitiesResponse.WithSuccess(virtualSwitches);
+        }
+
+        [HttpPost]
+        public async Task<InternetEntitiesResponse> CreateInternet()
+        {
+            var internetEntity = await _virtualNetworkService.CreateInternet();
+
+            return InternetEntitiesResponse.WithSuccess([internetEntity]);
+        }
+
+        [HttpGet]
+        public async Task<InternetEntitiesResponse> GetInternetEntities()
+        {
+            var internetEntities = await _virtualNetworkService.GetInternetEntities();
+
+            return InternetEntitiesResponse.WithSuccess(internetEntities);
+        }
+
+        [HttpPost]
+        public async Task<InternetEntitiesResponse> UpdateInternetEntityPosition(UpdateEntityPositionRequest req)
+        {
+            var internetEntity = await _virtualNetworkService.UpdateInternetEntityPosition(req.Id, req.X, req.Y);
+
+            return InternetEntitiesResponse.WithSuccess([internetEntity]);
+        }
+
+        private (int sourceEntityId, int destinationEntityId) ResolveEntityIdsOrder(ConnectEntitiesRequest req)
+        {
+            var sourceEntityId = req.SourceEntityId;
+            var destinationEntityId = req.DestinationEntityId;
+
+            if (req.SourceEntityType != EntityType.VirtualMachine)
+            {
+                (sourceEntityId, destinationEntityId) = (destinationEntityId, sourceEntityId);
+            }
+
+            return (sourceEntityId, destinationEntityId);
         }
 
         private bool AreTypes(EntityType sourceEntityType, EntityType destinationEntityType, EntityType firstEntityType, EntityType secondEntityType)

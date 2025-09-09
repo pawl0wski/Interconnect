@@ -3,7 +3,7 @@ import VirtualSwitchCreateForm from "./VirtualSwitchCreateForm.tsx";
 import { useCallback, useState } from "react";
 import { LoadingOverlay } from "@mantine/core";
 import useVirtualSwitchCreateStore from "../../store/virtualSwitchCreateStore.ts";
-import useVirtualSwitchEntitiesStore from "../../store/virtualSwitchEntitiesStore.ts";
+import { useVirtualSwitchEntitiesStore } from "../../store/entitiesStore.ts";
 
 interface VirtualSwitchCreateFormContainerProps {
     onFormSubmitted: () => void;

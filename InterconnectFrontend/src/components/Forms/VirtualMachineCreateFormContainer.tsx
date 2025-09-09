@@ -4,7 +4,7 @@ import { useForm } from "@mantine/form";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useVirtualMachineCreateStore } from "../../store/virtualMachineCreateStore.ts";
-import { useVirtualMachineEntitiesStore } from "../../store/virtualMachineEntitiesStore.ts";
+import { useVirtualMachineEntitiesStore } from "../../store/entitiesStore.ts";
 import { useErrorStore } from "../../store/errorStore.ts";
 
 interface VirtualMachineCreateFormContainerProps {

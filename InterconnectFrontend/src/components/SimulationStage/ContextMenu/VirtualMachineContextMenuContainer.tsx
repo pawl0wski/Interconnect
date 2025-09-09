@@ -3,7 +3,7 @@ import VirtualMachineContextMenu from "./VirtualMachineContextMenu.tsx";
 import { useSimulationStageContextMenuInfo } from "../../../hooks/useSimulationStageContextMenuInfo.ts";
 import { EntityType } from "../../../models/enums/EntityType.ts";
 import { useCurrentVirtualMachineModalStore } from "../../../store/modals/modalStores.ts";
-import { useVirtualMachineEntitiesStore } from "../../../store/virtualMachineEntitiesStore.ts";
+import { useVirtualMachineEntitiesStore } from "../../../store/entitiesStore.ts";
 import { useSimulationStageContextMenusStore } from "../../../store/simulationStageContextMenus.ts";
 import { useCurrentVirtualMachineStore } from "../../../store/currentVirtualMachineStore.ts";
 import useSimulationStageContextMenuClose from "../../../hooks/useSimulationStageContextMenuClose.ts";
