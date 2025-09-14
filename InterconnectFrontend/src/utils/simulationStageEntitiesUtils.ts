@@ -25,6 +25,8 @@ const SimulationStageEntitiesUtils = {
         switch (entityType) {
             case EntityType.VirtualMachine:
                 return `vm-${entity.id}`;
+            case EntityType.VirtualSwitch:
+                return `sw-${entity.id}`;
         }
     },
     parseShapeName(name: string): EntityTypeWithId | null {
@@ -33,6 +35,9 @@ const SimulationStageEntitiesUtils = {
         switch (typeName) {
             case "vm":
                 entityType = EntityType.VirtualMachine;
+                break;
+            case "sw":
+                entityType = EntityType.VirtualSwitch;
                 break;
         }
 

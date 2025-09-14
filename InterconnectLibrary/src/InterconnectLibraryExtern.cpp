@@ -121,11 +121,37 @@ void CreateVirtualNetwork(ExecutionInfo* executionInfo, VirtualizationFacade* vi
 }
 
 void AttachDeviceToVirtualMachine(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization, const char* uuid,
-                      const char* deviceDefinition)
+                                  const char* deviceDefinition)
 {
     ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, uuid, deviceDefinition]
     {
         virtualization->attachDeviceToVm(uuid, deviceDefinition);
+    });
+}
+
+void DetachDeviceFromVirtualMachine(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization,
+                                    const char* uuid, const char* deviceDefinition)
+{
+    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, uuid, deviceDefinition]
+    {
+        virtualization->detachDeviceFromVm(uuid, deviceDefinition);
+    });
+}
+
+void UpdateVmDevice(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization, const char* uuid,
+                    const char* deviceDefinition)
+{
+    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, uuid, deviceDefinition]
+    {
+        virtualization->updateVmDevice(uuid, deviceDefinition);
+    });
+}
+
+void DestroyNetwork(ExecutionInfo* executionInfo, VirtualizationFacade* virtualization, const char* uuid)
+{
+    ExecutionInfoObtainer::runAndObtainExecutionInfo(executionInfo, [virtualization, uuid]
+    {
+        virtualization->destroyNetwork(uuid);
     });
 }
 }

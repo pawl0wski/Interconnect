@@ -140,5 +140,32 @@ namespace NativeLibrary.Wrappers.Impl
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
         }
+
+        public void DetachDeviceFromVirtualMachine(Guid uuid, string deviceDefinition)
+        {
+            NativeExecutionInfo executionInfo = new();
+
+            InteropVirtualization.DetachDeviceFromVirtualMachine(out executionInfo, _virtualizationFacade, uuid.ToString(), deviceDefinition);
+
+            ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
+        }
+
+        public void UpdateVmDevice(Guid uuid, string deviceDefinition)
+        {
+            NativeExecutionInfo executionInfo = new();
+
+            InteropVirtualization.UpdateVmDevice(out executionInfo, _virtualizationFacade, uuid.ToString(), deviceDefinition);
+
+            ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
+        }
+
+        public void DestroyNetwork(string name)
+        {
+            NativeExecutionInfo executionInfo = new();
+
+            InteropVirtualization.DestroyNetwork(out executionInfo, _virtualizationFacade, name);
+
+            ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
+        }
     }
 }

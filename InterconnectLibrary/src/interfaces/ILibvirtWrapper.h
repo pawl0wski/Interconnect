@@ -63,6 +63,14 @@ public:
     virtual virNetworkPtr createNetworkFromXml(virConnectPtr conn, const std::string& networkDefinition) = 0;
 
     virtual int attachDeviceToVm(virDomainPtr domain, const std::string& deviceDefinition) = 0;
+
+    virtual int detachDeviceFromVm(virDomainPtr domain, const std::string& deviceDefinition) = 0;
+
+    virtual int updateVmDevice(virDomainPtr domain, const std::string& deviceDefinition) = 0;
+
+    virtual virNetworkPtr getNetworkByName(virConnectPtr conn, const std::string& name) = 0;
+
+    virtual int destroyNetwork(virNetworkPtr network) = 0;
 };
 
 

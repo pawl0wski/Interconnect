@@ -77,6 +77,14 @@ public:
     virNetworkPtr createNetworkFromXml(virConnectPtr conn, const std::string& networkDefinition) override;
 
     int attachDeviceToVm(virDomainPtr domain, const std::string& deviceDefinition) override;
+
+    int detachDeviceFromVm(virDomainPtr domain, const std::string& deviceDefinition) override;
+
+    int updateVmDevice(virDomainPtr domain, const std::string& deviceDefinition) override;
+
+    virNetworkPtr getNetworkByName(virConnectPtr conn, const std::string& name) override;
+
+    int destroyNetwork(virNetworkPtr network) override;
 };
 
 

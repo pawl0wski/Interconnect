@@ -138,3 +138,23 @@ int LibvirtWrapper::attachDeviceToVm(virDomainPtr domain, const std::string& dev
 {
     return virDomainAttachDevice(domain, deviceDefinition.c_str());
 }
+
+int LibvirtWrapper::detachDeviceFromVm(virDomainPtr domain, const std::string& deviceDefinition)
+{
+    return virDomainDetachDevice(domain, deviceDefinition.c_str());
+}
+
+int LibvirtWrapper::updateVmDevice(virDomainPtr domain, const std::string& deviceDefinition)
+{
+    return virDomainUpdateDeviceFlags(domain, deviceDefinition.c_str(), VIR_DOMAIN_AFFECT_LIVE);
+}
+
+virNetworkPtr LibvirtWrapper::getNetworkByName(virConnectPtr conn, const std::string& name)
+{
+    return virNetworkLookupByName(conn, name.c_str());
+}
+
+int LibvirtWrapper::destroyNetwork(virNetworkPtr network)
+{
+    return virNetworkDestroy(network);
+}

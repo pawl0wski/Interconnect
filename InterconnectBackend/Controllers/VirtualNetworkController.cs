@@ -50,6 +50,10 @@ namespace Controllers
                 virtualNetworkConnection = await _virtualNetworkService.ConnectVirtualMachineToInternet(sourceEntityId, destinationEntityId);
             }
 
+            if (AreTypes(req.SourceEntityType, req.DestinationEntityType, EntityType.VirtualSwitch, EntityType.VirtualSwitch))
+            {
+                virtualNetworkConnection = await _virtualNetworkService.ConnectTwoVirtualSwitches(req.SourceEntityId, req.DestinationEntityId);
+            }
 
             if (virtualNetworkConnection is null)
             {

@@ -38,6 +38,10 @@ public:
 
     void attachDeviceToVirtualMachine(const std::string& uuid, const std::string& deviceDefinition) const;
 
+    void detachDeviceFromVirtualMachine(const std::string& uuid, const std::string& deviceDefinition) const;
+
+    void updateVmDevice(const std::string& uuid, const std::string& deviceDefinition) const;
+
 private:
     [[nodiscard]] virDomainPtr getVirtualMachineByName(const std::string& name) const;
 

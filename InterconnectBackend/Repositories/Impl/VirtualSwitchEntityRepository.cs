@@ -13,14 +13,13 @@ namespace Repositories.Impl
             _context = context;
         }
 
-        public async Task<VirtualSwitchEntityModel> Create(string name, string bridge, Guid uuid)
+        public async Task<VirtualSwitchEntityModel> Create(string name, VirtualNetworkModel virtualNetwork)
         {
             var virtualSwitch = new VirtualSwitchEntityModel
             {
                 Name = name,
-                BridgeName = bridge,
-                Uuid = uuid,
                 Visible = true,
+                VirtualNetwork = virtualNetwork
             };
             await _context.VirtualSwitchEntityModels.AddAsync(virtualSwitch);
             await _context.SaveChangesAsync();
@@ -28,12 +27,11 @@ namespace Repositories.Impl
             return virtualSwitch;
         }
 
-        public async Task<VirtualSwitchEntityModel> CreateInvisible(string bridge, Guid uuid)
+        public async Task<VirtualSwitchEntityModel> CreateInvisible(VirtualNetworkModel virtualNetwork)
         {
             var virtualSwitch = new VirtualSwitchEntityModel
             {
-                BridgeName = bridge,
-                Uuid = uuid,
+                VirtualNetwork = virtualNetwork,
                 Visible = false
             };
             await _context.VirtualSwitchEntityModels.AddAsync(virtualSwitch);
@@ -44,17 +42,17 @@ namespace Repositories.Impl
 
         public Task<List<VirtualSwitchEntityModel>> GetAll()
         {
-            return _context.VirtualSwitchEntityModels.ToListAsync();
+            return _context.VirtualSwitchEntityModels.Include(x => x.VirtualNetwork).ToListAsync();
         }
 
         public Task<VirtualSwitchEntityModel> GetById(int id)
         {
-            return _context.VirtualSwitchEntityModels.FirstAsync(m => m.Id == id);
+            return _context.VirtualSwitchEntityModels.Include(x => x.VirtualNetwork).FirstAsync(m => m.Id == id);
         }
 
         public Task<List<VirtualSwitchEntityModel>> GetVisible()
         {
-            return _context.VirtualSwitchEntityModels.Where(m => m.Visible).ToListAsync();
+            return _context.VirtualSwitchEntityModels.Include(x => x.VirtualNetwork).Where(m => m.Visible).ToListAsync();
         }
 
         public async Task<VirtualSwitchEntityModel> UpdateEntityPosition(int id, int x, int y)
@@ -62,6 +60,17 @@ namespace Repositories.Impl
             var model = await GetById(id);
             model.X = x;
             model.Y = y;
+
+            _context.VirtualSwitchEntityModels.Update(model);
+            await _context.SaveChangesAsync();
+
+            return model;
+        }
+
+        public async Task<VirtualSwitchEntityModel> UpdateNetwork(int id, VirtualNetworkModel virtualNetwork)
+        {
+            var model = await GetById(id);
+            model.VirtualNetwork = virtualNetwork;
 
             _context.VirtualSwitchEntityModels.Update(model);
             await _context.SaveChangesAsync();

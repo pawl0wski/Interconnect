@@ -16,6 +16,29 @@ namespace Services.Utils
             return this;
         }
 
+        public VirtualNetworkInterfaceCreateDefinitionBuilder SetFromXml(string xml)
+        {
+            var doc = new XmlDocument();
+            doc.LoadXml(xml);
+
+            var macNode = doc.SelectSingleNode("//interface/mac[@address]");
+            if (macNode?.Attributes?["address"] != null)
+                _macAddress = macNode.Attributes["address"]?.Value;
+
+            var sourceNode = doc.SelectSingleNode("//interface/source[@network]");
+            if (sourceNode?.Attributes?["network"] != null)
+                _networkName = sourceNode.Attributes["network"]?.Value;
+
+            return this;
+        }
+
+        public VirtualNetworkInterfaceCreateDefinitionBuilder SetNetworkName(string networkName)
+        {
+            _networkName = networkName;
+
+            return this;
+        }
+
         public override string Build()
         {
             CheckIsEverythingIsProvided(_macAddress, _networkName);

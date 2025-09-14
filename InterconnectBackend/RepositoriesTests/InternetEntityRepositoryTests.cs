@@ -28,15 +28,17 @@ namespace RepositoriesTests
         public async Task Create_WhenInvoked_ShouldCreateNewInternetEntity()
         {
             var uuid = Guid.Parse("989D81A2-FD93-476D-942D-61987F399890");
-            await _internetRepository.Create("TestBridge", uuid);
+            await _internetRepository.Create(new VirtualNetworkModel
+            {
+                BridgeName = "TestBridge",
+                Uuid = uuid
+            });
 
             var model = await _context.InternetEntityModels.FirstAsync();
 
             Assert.Multiple(() =>
             {
                 Assert.That(model.Id, Is.EqualTo(1));
-                Assert.That(model.BridgeName, Is.EqualTo("TestBridge"));
-                Assert.That(model.Uuid, Is.EqualTo(uuid));
                 Assert.That(model.X, Is.EqualTo(0));
                 Assert.That(model.Y, Is.EqualTo(0));
             });
@@ -48,8 +50,7 @@ namespace RepositoriesTests
             var uuid = Guid.Parse("989D81A2-FD93-476D-942D-61987F399890");
             await _context.InternetEntityModels.AddAsync(new InternetEntityModel
             {
-                BridgeName = "TestBridge",
-                Uuid = uuid,
+                VirtualNetwork = new VirtualNetworkModel { BridgeName = "abc", Uuid = uuid },
                 X = 1,
                 Y = 15
             });
@@ -60,8 +61,6 @@ namespace RepositoriesTests
             Assert.Multiple(() =>
             {
                 Assert.That(models.Count(), Is.EqualTo(1));
-                Assert.That(models[0].BridgeName, Is.EqualTo("TestBridge"));
-                Assert.That(models[0].Uuid, Is.EqualTo(uuid));
                 Assert.That(models[0].X, Is.EqualTo(1));
                 Assert.That(models[0].Y, Is.EqualTo(15));
             });

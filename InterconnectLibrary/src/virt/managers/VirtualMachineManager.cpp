@@ -82,6 +82,31 @@ void VirtualMachineManager::attachDeviceToVirtualMachine(const std::string& uuid
     }
 }
 
+void VirtualMachineManager::detachDeviceFromVirtualMachine(const std::string& uuid,
+                                                           const std::string& deviceDefinition) const
+{
+    checkIfConnectionIsSet();
+
+    const auto domainPtr = getVirtualMachineByUuid(uuid);
+
+    if (libvirt->detachDeviceFromVm(domainPtr, deviceDefinition) == -1)
+    {
+        throw VirtualMachineManagerException("Can't detach device");
+    }
+}
+
+void VirtualMachineManager::updateVmDevice(const std::string& uuid, const std::string& deviceDefinition) const
+{
+    checkIfConnectionIsSet();
+
+    const auto domainPtr = getVirtualMachineByUuid(uuid);
+
+    if (libvirt->updateVmDevice(domainPtr, deviceDefinition) == -1)
+    {
+        throw VirtualMachineManagerException("Can't modify device");
+    }
+}
+
 virDomainPtr VirtualMachineManager::getVirtualMachineByName(const std::string& name) const
 {
     const auto domainPtr = libvirt->domainLookupByName(conn, name);

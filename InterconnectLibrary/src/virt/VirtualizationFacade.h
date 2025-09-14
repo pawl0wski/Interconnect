@@ -47,6 +47,12 @@ public:
     [[nodiscard]] virNetworkPtr createVirtualNetworkFromXml(const std::string& networkDefinition) const;
 
     void attachDeviceToVm(const std::string& uuid, const std::string& deviceDefinition) const;
+
+    void detachDeviceFromVm(const std::string& uuid, const std::string& deviceDefinition) const;
+
+    void updateVmDevice(const std::string& uuid, const std::string& deviceDefinition) const;
+
+    void destroyNetwork(const std::string& name) const;
 };
 
 #endif //VIRTUALIZATIONFACADE_H

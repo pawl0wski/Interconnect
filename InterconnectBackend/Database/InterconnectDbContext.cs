@@ -22,6 +22,7 @@ namespace Database
         public DbSet<VirtualNetworkEntityConnectionModel> VirtualNetworkEntityConnectionModels { get; set; }
         public DbSet<VirtualSwitchEntityModel> VirtualSwitchEntityModels { get; set; }
         public DbSet<InternetEntityModel> InternetEntityModels { get; set; }
+        public DbSet<VirtualNetworkModel> VirtualNetworkModels { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

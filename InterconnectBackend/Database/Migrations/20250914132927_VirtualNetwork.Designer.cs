@@ -3,6 +3,7 @@ using System;
 using Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Database.Migrations
 {
     [DbContext(typeof(InterconnectDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250914132927_VirtualNetwork")]
+    partial class VirtualNetwork
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,9 +83,6 @@ namespace Database.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("DeviceDefinition")
-                        .HasColumnType("text");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
@@ -143,7 +143,7 @@ namespace Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("VirtualNetworkModels");
+                    b.ToTable("VirtualNetworkModel");
                 });
 
             modelBuilder.Entity("Models.Database.VirtualSwitchEntityModel", b =>
@@ -157,7 +157,7 @@ namespace Database.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<int>("VirtualNetworkId")
+                    b.Property<int>("NetworkId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Visible")
@@ -172,7 +172,7 @@ namespace Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("VirtualNetworkId");
+                    b.HasIndex("NetworkId");
 
                     b.ToTable("VirtualSwitchEntityModels");
                 });
@@ -190,13 +190,13 @@ namespace Database.Migrations
 
             modelBuilder.Entity("Models.Database.VirtualSwitchEntityModel", b =>
                 {
-                    b.HasOne("Models.Database.VirtualNetworkModel", "VirtualNetwork")
+                    b.HasOne("Models.Database.VirtualNetworkModel", "Network")
                         .WithMany("VirtualSwitches")
-                        .HasForeignKey("VirtualNetworkId")
+                        .HasForeignKey("NetworkId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("VirtualNetwork");
+                    b.Navigation("Network");
                 });
 
             modelBuilder.Entity("Models.Database.VirtualNetworkModel", b =>

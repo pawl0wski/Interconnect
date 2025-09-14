@@ -17,5 +17,8 @@ namespace NativeLibrary.Wrappers
         public void CloseStream(IntPtr stream);
         public IntPtr CreateVirtualNetwork(string networkDefinition);
         public void AttachDeviceToVirtualMachine(Guid uuid, string deviceDefinition);
+        public void DetachDeviceFromVirtualMachine(Guid uuid, string deviceDefinition);
+        public void UpdateVmDevice(Guid uuid, string deviceDefinition);
+        public void DestroyNetwork(string name);
     }
 }

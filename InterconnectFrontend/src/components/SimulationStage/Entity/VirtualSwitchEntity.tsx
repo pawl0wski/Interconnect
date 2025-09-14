@@ -6,6 +6,7 @@ import VirtualSwitchEntityModel from "../../../models/VirtualSwitchEntityModel.t
 
 interface VirtualSwitchEntityProps {
     entity: VirtualSwitchEntityModel;
+    shapeName: string;
     onDragMove: (e: KonvaEventObject<DragEvent>) => void;
     onDragEnd: (e: KonvaEventObject<DragEvent>) => void;
     onMouseOver: (e: KonvaEventObject<MouseEvent>) => void;
@@ -15,6 +16,7 @@ interface VirtualSwitchEntityProps {
 
 const VirtualSwitchEntity = ({
                                  entity,
+                                 shapeName,
                                  onDragMove,
                                  onDragEnd,
                                  onMouseOut,
@@ -25,6 +27,7 @@ const VirtualSwitchEntity = ({
 
     return <Group
         draggable
+        name={shapeName}
         x={entity.x}
         y={entity.y}
         onDragMove={onDragMove}

@@ -36,10 +36,10 @@ namespace Repositories.Impl
             return _context.VirtualNetworkEntityConnectionModels.ToListAsync();
         }
 
-        public async Task<VirtualNetworkEntityConnectionModel> GetUsingEntityId(int id)
+        public async Task<List<VirtualNetworkEntityConnectionModel>> GetUsingEntityId(int id, EntityType type)
         {
             var model = await _context.VirtualNetworkEntityConnectionModels
-                .FirstAsync(m => m.SourceEntityId == id || m.DestinationEntityId == id);
+                .Where(m => (m.SourceEntityId == id && m.SourceEntityType == type) || (m.DestinationEntityId == id && m.DestinationEntityType == type)).ToListAsync();
 
             return model;
         }

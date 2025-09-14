@@ -15,3 +15,15 @@ virNetworkPtr VirtualNetworkManager::createNetworkFromXml(const std::string& net
 
     return network;
 }
+
+void VirtualNetworkManager::destroyNetwork(const std::string& name) const
+{
+    checkIfConnectionIsSet();
+
+    const auto network = libvirt->getNetworkByName(conn, name);
+
+    if (libvirt->destroyNetwork(network) == -1)
+    {
+        throw VirtualMachineManagerException("Failed to destroy network");
+    }
+}

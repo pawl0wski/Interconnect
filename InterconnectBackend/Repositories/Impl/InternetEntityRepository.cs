@@ -13,12 +13,11 @@ namespace Repositories.Impl
             _context = context;
         }
 
-        public async Task<InternetEntityModel> Create(string bridgeName, Guid uuid)
+        public async Task<InternetEntityModel> Create(VirtualNetworkModel virtualNetwork)
         {
             var model = new InternetEntityModel
             {
-                BridgeName = bridgeName,
-                Uuid = uuid,
+                VirtualNetwork = virtualNetwork,
                 X = 0,
                 Y = 0,
             };
@@ -30,12 +29,12 @@ namespace Repositories.Impl
 
         public async Task<List<InternetEntityModel>> GetAll()
         {
-            return await _context.InternetEntityModels.ToListAsync();
+            return await _context.InternetEntityModels.Include(x => x.VirtualNetwork).ToListAsync();
         }
 
         public async Task<InternetEntityModel> GetById(int id)
         {
-            return await _context.InternetEntityModels.FirstAsync(m => m.Id == id);
+            return await _context.InternetEntityModels.Include(x => x.VirtualNetwork).FirstAsync(m => m.Id == id);
         }
 
         public async Task<InternetEntityModel> UpdatePosition(int id, int x, int y)

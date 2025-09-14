@@ -6,6 +6,8 @@ import useChangeCursor from "../../../hooks/useChangeCursor.ts";
 import { useEntityPlacementStore } from "../../../store/entityPlacementStore.ts";
 import useNetworkPlacementStore from "../../../store/networkPlacementStore.ts";
 import { EntityType } from "../../../models/enums/EntityType.ts";
+import { useMemo } from "react";
+import simulationStageEntitiesUtils from "../../../utils/simulationStageEntitiesUtils.ts";
 
 interface VirtualSwitchEntityContainerProps {
     entity: VirtualSwitchEntityModel;
@@ -15,6 +17,10 @@ const VirtualSwitchEntityContainer = ({ entity }: VirtualSwitchEntityContainerPr
     const virtualSwitchEntitiesStore = useVirtualSwitchEntitiesStore();
     const entityPlacementStore = useEntityPlacementStore();
     const networkPlacementStore = useNetworkPlacementStore();
+
+    const shapeName = useMemo(() => {
+        return simulationStageEntitiesUtils.createShapeName({ id: entity.id! }, EntityType.VirtualSwitch);
+    }, [entity.id]);
 
     const changeCursor = useChangeCursor();
 
@@ -52,7 +58,8 @@ const VirtualSwitchEntityContainer = ({ entity }: VirtualSwitchEntityContainerPr
         return true;
     };
 
-    return <VirtualSwitchEntity entity={entity} onDragEnd={handleDragEnd} onDragMove={handleDragMove}
+    return <VirtualSwitchEntity entity={entity} shapeName={shapeName ?? ""} onDragEnd={handleDragEnd}
+                                onDragMove={handleDragMove}
                                 onMouseOut={handleOnMouseOut} onMouseOver={handleOnMouseOver}
                                 onClick={handleOnClick} />;
 };

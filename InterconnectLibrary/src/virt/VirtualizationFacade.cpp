@@ -103,3 +103,18 @@ void VirtualizationFacade::attachDeviceToVm(const std::string& uuid, const std::
 {
     vmManager->attachDeviceToVirtualMachine(uuid, deviceDefinition);
 }
+
+void VirtualizationFacade::detachDeviceFromVm(const std::string& uuid, const std::string& deviceDefinition) const
+{
+    vmManager->detachDeviceFromVirtualMachine(uuid, deviceDefinition);
+}
+
+void VirtualizationFacade::updateVmDevice(const std::string& uuid, const std::string& deviceDefinition) const
+{
+    vmManager->updateVmDevice(uuid, deviceDefinition);
+}
+
+void VirtualizationFacade::destroyNetwork(const std::string& name) const
+{
+    networkManager->destroyNetwork(name);
+}

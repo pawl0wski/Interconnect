@@ -12,26 +12,29 @@ namespace ServicesTests
     public class VirtualNetworkServiceTests
     {
         private Mock<IVirtualizationWrapper> _virtualizationWrapper;
-        private Mock<IVirtualMachineEntityService> _vmEntityService;
+        private Mock<IVirtualMachineEntityRepository> _vmEntityRepository;
         private Mock<IVirtualNetworkConnectionRepository> _connectionRepository;
         private Mock<IVirtualSwitchEntityRepository> _switchRepository;
         private Mock<IInternetEntityRepository> _internetRepository;
+        private Mock<IVirtualNetworkRepository> _networkRepository;
         private VirtualNetworkService _vnService;
 
         [SetUp]
         public void SetUp()
         {
             _virtualizationWrapper = new Mock<IVirtualizationWrapper>();
-            _vmEntityService = new Mock<IVirtualMachineEntityService>();
+            _vmEntityRepository = new Mock<IVirtualMachineEntityRepository>();
             _connectionRepository = new Mock<IVirtualNetworkConnectionRepository>();
             _switchRepository = new Mock<IVirtualSwitchEntityRepository>();
             _internetRepository = new Mock<IInternetEntityRepository>();
+            _networkRepository = new Mock<IVirtualNetworkRepository>();
             _vnService = new VirtualNetworkService(
                 _virtualizationWrapper.Object,
-                _vmEntityService.Object,
+                _vmEntityRepository.Object,
                 _connectionRepository.Object,
                 _switchRepository.Object,
-                _internetRepository.Object
+                _internetRepository.Object,
+                _networkRepository.Object
                 );
         }
 
@@ -56,7 +59,7 @@ namespace ServicesTests
         [Test]
         public void ConnectTwoVirtualMachines_WhenInvokedWithEntitiesWithoutVm_ShouldThrowException()
         {
-            _vmEntityService.Setup(s => s.GetById(It.IsAny<int>())).ReturnsAsync((int entityId) => new VirtualMachineEntityDTO
+            _vmEntityRepository.Setup(s => s.GetById(It.IsAny<int>())).ReturnsAsync((int entityId) => new VirtualMachineEntityModel
             {
                 Id = entityId,
                 Name = $"Entity{entityId}",
@@ -74,7 +77,7 @@ namespace ServicesTests
         public async Task ConnectTwoVirtualMachines_WhenInvoked_ShouldCreateVirtualNetwork()
         {
             var vmUuid = Guid.Parse("cb066f62-2094-46cf-87da-530fb1ad304b");
-            _vmEntityService.Setup(s => s.GetById(It.IsAny<int>())).ReturnsAsync((int entityId) => new VirtualMachineEntityDTO
+            _vmEntityRepository.Setup(s => s.GetById(It.IsAny<int>())).ReturnsAsync((int entityId) => new VirtualMachineEntityModel
             {
                 Id = entityId,
                 Name = $"Entity{entityId}",
@@ -95,7 +98,7 @@ namespace ServicesTests
         {
             var sourceVmUuid = Guid.Parse("cb066f62-2094-46cf-87da-530fb1ad304b");
             var destinationVmUuid = Guid.Parse("8343aeaa-6da4-46da-8118-d4edb5b39c49");
-            _vmEntityService.Setup(s => s.GetById(It.IsAny<int>())).ReturnsAsync((int entityId) => new VirtualMachineEntityDTO
+            _vmEntityRepository.Setup(s => s.GetById(It.IsAny<int>())).ReturnsAsync((int entityId) => new VirtualMachineEntityModel
             {
                 Id = entityId,
                 Name = $"Entity{entityId}",
@@ -117,7 +120,7 @@ namespace ServicesTests
         {
             var sourceVmUuid = Guid.Parse("cb066f62-2094-46cf-87da-530fb1ad304b");
             var destinationVmUuid = Guid.Parse("8343aeaa-6da4-46da-8118-d4edb5b39c49");
-            _vmEntityService.Setup(s => s.GetById(It.IsAny<int>())).ReturnsAsync((int entityId) => new VirtualMachineEntityDTO
+            _vmEntityRepository.Setup(s => s.GetById(It.IsAny<int>())).ReturnsAsync((int entityId) => new VirtualMachineEntityModel
             {
                 Id = entityId,
                 Name = $"Entity{entityId}",
@@ -157,7 +160,7 @@ namespace ServicesTests
 
             await _vnService.CreateVirtualSwitch(null);
 
-            _switchRepository.Verify(r => r.CreateInvisible(It.IsAny<string>(), It.IsAny<Guid>()), Times.Once);
+            _switchRepository.Verify(r => r.CreateInvisible(It.IsAny<VirtualNetworkModel>()), Times.Once);
         }
 
         [Test]
@@ -167,7 +170,7 @@ namespace ServicesTests
 
             await _vnService.CreateVirtualSwitch("testName");
 
-            _switchRepository.Verify(r => r.Create(It.Is<string>(s => s == "testName"), It.IsAny<string>(), It.IsAny<Guid>()), Times.Once);
+            _switchRepository.Verify(r => r.Create(It.Is<string>(s => s == "testName"), It.IsAny<VirtualNetworkModel>()), Times.Once);
         }
 
         [Test]
@@ -175,9 +178,9 @@ namespace ServicesTests
         {
             var vmUuid = Guid.Parse("2FB1BEC3-7E13-4510-A4E4-A1869A52E02F");
             var networkUuid = Guid.Parse("9482e9c9-2a4c-4e79-922d-b6ec273e26a5");
-            _vmEntityService.Setup(s => s.GetById(It.Is<int>(id => id == 1))).ReturnsAsync((int id) =>
+            _vmEntityRepository.Setup(s => s.GetById(It.Is<int>(id => id == 1))).ReturnsAsync((int id) =>
             {
-                return new VirtualMachineEntityDTO
+                return new VirtualMachineEntityModel
                 {
                     Id = id,
                     VmUuid = vmUuid,
@@ -191,9 +194,12 @@ namespace ServicesTests
                 return new VirtualSwitchEntityModel
                 {
                     Id = id,
-                    BridgeName = "Bridge",
                     Name = "Test",
-                    Uuid = networkUuid,
+                    VirtualNetwork = new VirtualNetworkModel
+                    {
+                        BridgeName = "Bridge",
+                        Uuid = networkUuid,
+                    },
                     Visible = true,
                 };
             });
@@ -207,13 +213,12 @@ namespace ServicesTests
 
         private void MockSwitchRepositoryCreateInvisibleMethod()
         {
-            _switchRepository.Setup(r => r.CreateInvisible(It.IsAny<string>(), It.IsAny<Guid>())).ReturnsAsync((string bridge, Guid uuid) =>
+            _switchRepository.Setup(r => r.CreateInvisible(It.IsAny<VirtualNetworkModel>())).ReturnsAsync((VirtualNetworkModel networkModel) =>
             {
                 return new VirtualSwitchEntityModel
                 {
                     Id = 1,
-                    BridgeName = bridge,
-                    Uuid = uuid,
+                    VirtualNetwork = networkModel,
                     Visible = false,
                     X = 0,
                     Y = 0,
@@ -223,14 +228,13 @@ namespace ServicesTests
 
         private void MockSwitchRepositoryCreateMethod()
         {
-            _switchRepository.Setup(r => r.Create(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Guid>())).ReturnsAsync((string name, string bridge, Guid uuid) =>
+            _switchRepository.Setup(r => r.Create(It.IsAny<string>(), It.IsAny<VirtualNetworkModel>())).ReturnsAsync((string name, VirtualNetworkModel networkModel) =>
             {
                 return new VirtualSwitchEntityModel
                 {
                     Id = 1,
-                    BridgeName = bridge,
                     Name = name,
-                    Uuid = uuid,
+                    VirtualNetwork = networkModel,
                     Visible = true,
                     X = 0,
                     Y = 0,

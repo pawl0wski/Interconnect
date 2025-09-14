@@ -10,6 +10,8 @@ public:
     using BaseManagerWithConnection::BaseManagerWithConnection;
 
     virNetworkPtr createNetworkFromXml(const std::string& networkDefinition) const;
+
+    void destroyNetwork(const std::string& name) const;
 };
 
 #endif //VIRTUALNETWORKMANAGER_H

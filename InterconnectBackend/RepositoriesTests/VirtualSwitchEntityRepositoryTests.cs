@@ -28,15 +28,19 @@ namespace RepositoriesTests
         public async Task Create_WhenInvoked_ShouldCreateVisibleVirtualSwitch()
         {
             var virtualSwitchUuid = Guid.Parse("f056d767-e170-498f-a8eb-b333782f8ea3");
-            await _repository.Create("test", "testBridge", virtualSwitchUuid);
+            await _repository.Create("test", new VirtualNetworkModel
+            {
+                BridgeName = "test",
+                Uuid = virtualSwitchUuid
+            });
 
             var model = await _context.VirtualSwitchEntityModels.FirstAsync();
 
             Assert.Multiple(() =>
             {
-                Assert.That(model.Uuid, Is.EqualTo(virtualSwitchUuid));
+                Assert.That(model.VirtualNetwork.Uuid, Is.EqualTo(virtualSwitchUuid));
                 Assert.That(model.Name, Is.EqualTo("test"));
-                Assert.That(model.BridgeName, Is.EqualTo("testBridge"));
+                Assert.That(model.VirtualNetwork.BridgeName, Is.EqualTo("test"));
                 Assert.That(model.Visible, Is.True);
             });
         }
@@ -45,15 +49,19 @@ namespace RepositoriesTests
         public async Task Create_WhenInvoked_ShouldCreateInvisibleVirtualSwitch()
         {
             var virtualSwitchUuid = Guid.Parse("f056d767-e170-498f-a8eb-b333782f8ea3");
-            await _repository.CreateInvisible("testBridge", virtualSwitchUuid);
+            await _repository.CreateInvisible(new VirtualNetworkModel
+            {
+                BridgeName = "test",
+                Uuid = virtualSwitchUuid
+            });
 
             var model = await _context.VirtualSwitchEntityModels.FirstAsync();
 
             Assert.Multiple(() =>
             {
-                Assert.That(model.Uuid, Is.EqualTo(virtualSwitchUuid));
+                Assert.That(model.VirtualNetwork.Uuid, Is.EqualTo(virtualSwitchUuid));
                 Assert.That(model.Name, Is.Null);
-                Assert.That(model.BridgeName, Is.EqualTo("testBridge"));
+                Assert.That(model.VirtualNetwork.BridgeName, Is.EqualTo("test"));
                 Assert.That(model.Visible, Is.False);
             });
         }
@@ -65,8 +73,12 @@ namespace RepositoriesTests
             var virtualSwitch = new VirtualSwitchEntityModel
             {
                 Name = "test",
-                BridgeName = "testBridge",
-                Uuid = virtualSwitchUuid,
+                VirtualNetwork = new VirtualNetworkModel
+                {
+                    BridgeName = "testBridge",
+                    Uuid = virtualSwitchUuid,
+
+                },
                 Visible = true,
             };
 
@@ -76,8 +88,8 @@ namespace RepositoriesTests
             var model = await _repository.GetAll();
             Assert.That(model.Count(), Is.EqualTo(1));
             Assert.That(model[0].Name, Is.EqualTo("test"));
-            Assert.That(model[0].BridgeName, Is.EqualTo("testBridge"));
-            Assert.That(model[0].Uuid, Is.EqualTo(virtualSwitchUuid));
+            Assert.That(model[0].VirtualNetwork.BridgeName, Is.EqualTo("testBridge"));
+            Assert.That(model[0].VirtualNetwork.Uuid, Is.EqualTo(virtualSwitchUuid));
             Assert.That(model[0].Visible, Is.EqualTo(true));
         }
 
@@ -89,8 +101,11 @@ namespace RepositoriesTests
             {
                 Id = 1,
                 Name = "test",
-                BridgeName = "testBridge",
-                Uuid = virtualSwitchUuid,
+                VirtualNetwork = new VirtualNetworkModel
+                {
+                    BridgeName = "testBridge",
+                    Uuid = virtualSwitchUuid,
+                },
                 Visible = true,
             };
 
@@ -100,8 +115,8 @@ namespace RepositoriesTests
             var model = await _repository.GetById(1);
             Assert.That(model.Id, Is.EqualTo(1));
             Assert.That(model.Name, Is.EqualTo("test"));
-            Assert.That(model.BridgeName, Is.EqualTo("testBridge"));
-            Assert.That(model.Uuid, Is.EqualTo(virtualSwitchUuid));
+            Assert.That(model.VirtualNetwork.BridgeName, Is.EqualTo("testBridge"));
+            Assert.That(model.VirtualNetwork.Uuid, Is.EqualTo(virtualSwitchUuid));
             Assert.That(model.Visible, Is.EqualTo(true));
         }
 
@@ -113,8 +128,11 @@ namespace RepositoriesTests
             {
                 Id = 1,
                 Name = "test",
-                BridgeName = "testBridge",
-                Uuid = virtualSwitchUuid,
+                VirtualNetwork = new VirtualNetworkModel
+                {
+                    BridgeName = "testBridge",
+                    Uuid = virtualSwitchUuid,
+                },
                 Visible = true,
             };
             await _context.AddAsync(virtualSwitch);

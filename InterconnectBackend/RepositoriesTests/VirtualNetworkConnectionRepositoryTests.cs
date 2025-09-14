@@ -68,10 +68,10 @@ namespace RepositoriesTests
             });
             await _context.SaveChangesAsync();
 
-            var savedModel = await _repository.GetUsingEntityId(1);
+            var savedModel = await _repository.GetUsingEntityId(1, EntityType.VirtualMachine);
 
-            Assert.That(savedModel.SourceEntityId, Is.EqualTo(1));
-            Assert.That(savedModel.DestinationEntityId, Is.EqualTo(2));
+            Assert.That(savedModel[0].SourceEntityId, Is.EqualTo(1));
+            Assert.That(savedModel[0].DestinationEntityId, Is.EqualTo(2));
         }
 
         [Test]
@@ -86,10 +86,10 @@ namespace RepositoriesTests
             });
             await _context.SaveChangesAsync();
 
-            var savedModel = await _repository.GetUsingEntityId(2);
+            var savedModel = await _repository.GetUsingEntityId(2, EntityType.VirtualMachine);
 
-            Assert.That(savedModel.SourceEntityId, Is.EqualTo(1));
-            Assert.That(savedModel.DestinationEntityId, Is.EqualTo(2));
+            Assert.That(savedModel[0].SourceEntityId, Is.EqualTo(1));
+            Assert.That(savedModel[0].DestinationEntityId, Is.EqualTo(2));
         }
     }
 }

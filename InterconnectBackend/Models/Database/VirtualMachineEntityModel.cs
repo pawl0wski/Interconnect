@@ -9,6 +9,7 @@ namespace Models.Database
         public Guid? VmUuid { get; set; }
         [Column(TypeName = "varchar(255)")]
         public required string Name { get; set; }
+        public string? DeviceDefinition { get; set; }
         public required int X { get; set; }
         public required int Y { get; set; }
     }
