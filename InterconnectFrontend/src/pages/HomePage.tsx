@@ -1,5 +1,5 @@
 import ConnectionInfoModalContainer from "../components/Modals/ConnectionInfoModalContainer.tsx";
-import TerminalModalContainer from "../components/Modals/TerminalModelContainer.tsx";
+import TerminalModalContainer from "../components/Modals/TerminalModalContainer.tsx";
 import ErrorModalContainer from "../components/Modals/ErrorModalContainer.tsx";
 import Footer from "../components/Footer/Footer.tsx";
 import Tray from "../components/Tray/Tray.tsx";

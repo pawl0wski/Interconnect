@@ -1,8 +1,8 @@
 import BaseBackendHubClient from "./BaseBackendHubClient.ts";
-import PingResponse from "../responses/PingResponse.ts";
+import StringResponse from "../responses/StringResponse.ts";
 
 class ConnectionStatusHubClient extends BaseBackendHubClient {
-    public async ping(): Promise<PingResponse> {
+    public async ping(): Promise<StringResponse> {
         return await this.sendHubRequest("Ping");
     }
 

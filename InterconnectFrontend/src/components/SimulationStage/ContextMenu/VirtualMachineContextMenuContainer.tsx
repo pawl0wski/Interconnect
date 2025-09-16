@@ -9,26 +9,35 @@ import { useCurrentVirtualMachineStore } from "../../../store/currentVirtualMach
 import useSimulationStageContextMenuClose from "../../../hooks/useSimulationStageContextMenuClose.ts";
 import { useEntityPlacementStore } from "../../../store/entityPlacementStore.ts";
 import useNetworkPlacementStore from "../../../store/networkPlacementStore.ts";
+import useNetworkConnectionsStore from "../../../store/networkConnectionsStore.ts";
 
 const VirtualMachineContextMenuContainer = () => {
-    const simulationStageContextMenusStore = useSimulationStageContextMenusStore();
+    const simulationStageContextMenusStore =
+        useSimulationStageContextMenusStore();
     const virtualMachineEntitiesStore = useVirtualMachineEntitiesStore();
-    const currentVirtualMachineModalStore = useCurrentVirtualMachineModalStore();
+    const currentVirtualMachineModalStore =
+        useCurrentVirtualMachineModalStore();
     const currentVirtualMachineEntityStore = useCurrentVirtualMachineStore();
     const entityPlacementStore = useEntityPlacementStore();
     const networkPlacementStore = useNetworkPlacementStore();
+    const networkConnectionsStore = useNetworkConnectionsStore();
     const { closeContextMenu } = useSimulationStageContextMenuClose();
 
     const currentEntity = useMemo(() => {
-        const currentEntityId = simulationStageContextMenusStore.currentEntityId;
+        const currentEntityId =
+            simulationStageContextMenusStore.currentEntityId;
         if (!currentEntityId) {
             return;
         }
 
         return virtualMachineEntitiesStore.getById(currentEntityId);
-    }, [simulationStageContextMenusStore.currentEntityId, virtualMachineEntitiesStore]);
-    const { position, visible } = useSimulationStageContextMenuInfo(EntityType.VirtualMachine);
-
+    }, [
+        simulationStageContextMenusStore.currentEntityId,
+        virtualMachineEntitiesStore,
+    ]);
+    const { position, visible } = useSimulationStageContextMenuInfo(
+        EntityType.VirtualMachine,
+    );
 
     const handleOpenVirtualMachineConsole = useCallback(() => {
         if (!currentEntity) {
@@ -38,18 +47,44 @@ const VirtualMachineContextMenuContainer = () => {
         currentVirtualMachineEntityStore.setCurrentEntity(currentEntity);
         currentVirtualMachineModalStore.open();
         closeContextMenu();
-    }, [closeContextMenu, currentEntity, currentVirtualMachineEntityStore, currentVirtualMachineModalStore]);
+    }, [
+        closeContextMenu,
+        currentEntity,
+        currentVirtualMachineEntityStore,
+        currentVirtualMachineModalStore,
+    ]);
 
     const handleStartPlacingVirtualNetwork = useCallback(() => {
         entityPlacementStore.setCurrentEntityType(EntityType.Network);
-        networkPlacementStore.setSourceEntity(currentEntity!, EntityType.VirtualMachine);
+        networkPlacementStore.setSourceEntity(
+            currentEntity!,
+            EntityType.VirtualMachine,
+        );
 
         closeContextMenu();
-    }, [closeContextMenu, currentEntity, entityPlacementStore, networkPlacementStore]);
+    }, [
+        closeContextMenu,
+        currentEntity,
+        entityPlacementStore,
+        networkPlacementStore,
+    ]);
 
-    return <VirtualMachineContextMenu title={currentEntity?.name ?? ""} position={position} isVisible={visible}
-                                      onOpenVirtualMachineConsole={handleOpenVirtualMachineConsole}
-                                      onStartPlacingVirtualNetwork={handleStartPlacingVirtualNetwork} />;
+    const entityConnections = networkConnectionsStore.getConnectionsForEntity(
+        currentEntity?.id ?? 0,
+        EntityType.VirtualMachine,
+    );
+
+    return (
+        <VirtualMachineContextMenu
+            entityId={currentEntity?.id ?? 0}
+            title={currentEntity?.name ?? ""}
+            position={position}
+            isVisible={visible}
+            connections={entityConnections}
+            onOpenVirtualMachineConsole={handleOpenVirtualMachineConsole}
+            onStartPlacingVirtualNetwork={handleStartPlacingVirtualNetwork}
+        />
+    );
 };
 
 export default VirtualMachineContextMenuContainer;

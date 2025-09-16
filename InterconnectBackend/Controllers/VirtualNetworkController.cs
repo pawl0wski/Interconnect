@@ -29,36 +29,7 @@ namespace Controllers
         [HttpPost]
         public async Task<VirtualNetworkConnectionsResponse> ConnectEntities(ConnectEntitiesRequest req)
         {
-            VirtualNetworkConnectionDTO? virtualNetworkConnection = null;
-
-            if (AreTypes(req.SourceEntityType, req.DestinationEntityType, EntityType.VirtualMachine, EntityType.VirtualMachine))
-            {
-                virtualNetworkConnection = await _virtualNetworkService.ConnectTwoVirtualMachines(req.SourceEntityId, req.DestinationEntityId);
-            }
-
-            if (AreTypes(req.SourceEntityType, req.DestinationEntityType, EntityType.VirtualSwitch, EntityType.VirtualMachine))
-            {
-                var (sourceEntityId, destinationEntityId) = ResolveEntityIdsOrder(req);
-
-                virtualNetworkConnection = await _virtualNetworkService.ConnectVirtualMachineToVirtualSwitch(sourceEntityId, destinationEntityId);
-            }
-
-            if (AreTypes(req.SourceEntityType, req.DestinationEntityType, EntityType.Internet, EntityType.VirtualMachine))
-            {
-                var (sourceEntityId, destinationEntityId) = ResolveEntityIdsOrder(req);
-
-                virtualNetworkConnection = await _virtualNetworkService.ConnectVirtualMachineToInternet(sourceEntityId, destinationEntityId);
-            }
-
-            if (AreTypes(req.SourceEntityType, req.DestinationEntityType, EntityType.VirtualSwitch, EntityType.VirtualSwitch))
-            {
-                virtualNetworkConnection = await _virtualNetworkService.ConnectTwoVirtualSwitches(req.SourceEntityId, req.DestinationEntityId);
-            }
-
-            if (virtualNetworkConnection is null)
-            {
-                throw new NotImplementedException("Unsuported entity types");
-            }
+            var virtualNetworkConnection = await _virtualNetworkService.ConnectTwoEntities(req.SourceEntityId, req.SourceEntityType, req.DestinationEntityId, req.DestinationEntityType);
 
             return VirtualNetworkConnectionsResponse.WithSuccess([virtualNetworkConnection]);
         }
@@ -111,22 +82,12 @@ namespace Controllers
             return InternetEntitiesResponse.WithSuccess([internetEntity]);
         }
 
-        private (int sourceEntityId, int destinationEntityId) ResolveEntityIdsOrder(ConnectEntitiesRequest req)
+        [HttpPost]
+        public async Task<StringResponse> DisconnectEntities(VirtualNetworkEntityConnectionRequest req)
         {
-            var sourceEntityId = req.SourceEntityId;
-            var destinationEntityId = req.DestinationEntityId;
+            await _virtualNetworkService.DisconnectEntities(req.Id);
 
-            if (req.SourceEntityType != EntityType.VirtualMachine)
-            {
-                (sourceEntityId, destinationEntityId) = (destinationEntityId, sourceEntityId);
-            }
-
-            return (sourceEntityId, destinationEntityId);
-        }
-
-        private bool AreTypes(EntityType sourceEntityType, EntityType destinationEntityType, EntityType firstEntityType, EntityType secondEntityType)
-        {
-            return (sourceEntityType == firstEntityType && destinationEntityType == secondEntityType) || (sourceEntityType == secondEntityType && destinationEntityType == firstEntityType);
+            return StringResponse.WithEmptySuccess();
         }
     }
 }

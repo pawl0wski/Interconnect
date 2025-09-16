@@ -5,9 +5,9 @@ namespace Hubs
 {
     public class ConnectionStatusHub : Hub
     {
-        public PingResponse Ping()
+        public StringResponse Ping()
         {
-            return PingResponse.WithSuccess("Pong");
+            return StringResponse.WithSuccess("Pong");
         }
     }
 }

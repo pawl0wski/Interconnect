@@ -34,6 +34,42 @@ namespace Services.Impl
             _networkRepository = networkRepository;
         }
 
+        public async Task<VirtualNetworkConnectionDTO> ConnectTwoEntities(int sourceEntityId, EntityType sourceEntityType, int destinationEntityId, EntityType destinationEntityType)
+        {
+            VirtualNetworkConnectionDTO? virtualNetworkConnection = null;
+
+            if (AreTypes(sourceEntityType, destinationEntityType, EntityType.VirtualMachine, EntityType.VirtualMachine))
+            {
+                virtualNetworkConnection = await ConnectTwoVirtualMachines(sourceEntityId, destinationEntityId);
+            }
+
+            if (AreTypes(sourceEntityType, destinationEntityType, EntityType.VirtualSwitch, EntityType.VirtualMachine))
+            {
+                (sourceEntityId, destinationEntityId) = ResolveEntityIdsOrder(sourceEntityId, sourceEntityType, destinationEntityId, destinationEntityType);
+
+                virtualNetworkConnection = await ConnectVirtualMachineToVirtualSwitch(sourceEntityId, destinationEntityId);
+            }
+
+            if (AreTypes(sourceEntityType, destinationEntityType, EntityType.Internet, EntityType.VirtualMachine))
+            {
+                (sourceEntityId, destinationEntityId) = ResolveEntityIdsOrder(sourceEntityId, sourceEntityType, destinationEntityId, destinationEntityType);
+
+                virtualNetworkConnection = await ConnectVirtualMachineToInternet(sourceEntityId, destinationEntityId);
+            }
+
+            if (AreTypes(sourceEntityType, destinationEntityType, EntityType.VirtualSwitch, EntityType.VirtualSwitch))
+            {
+                virtualNetworkConnection = await ConnectTwoVirtualSwitches(sourceEntityId, destinationEntityId);
+            }
+
+            if (virtualNetworkConnection is null)
+            {
+                throw new NotImplementedException("Unsuported entity types");
+            }
+
+            return virtualNetworkConnection;
+        }
+
         public async Task<VirtualNetworkConnectionDTO> ConnectTwoVirtualMachines(int sourceEntityId, int destinationEntityId)
         {
             var sourceEntity = await _vmEntityRepository.GetById(sourceEntityId);
@@ -183,6 +219,34 @@ namespace Services.Impl
             return VirtualNetworkEntityConnectionMapper.MapToDTO(connectionModel);
         }
 
+        public async Task<VirtualNetworkConnectionDTO> DisconnectEntities(int connectionId)
+        {
+            var connection = await _connectionRepository.GetById(connectionId);
+
+            if (AreTypes(connection.SourceEntityType, connection.DestinationEntityType, EntityType.VirtualMachine, EntityType.VirtualSwitch))
+            {
+                var (sourceEntityId, destinationEntityId) = ResolveEntityIdsOrder(connection.SourceEntityId, connection.SourceEntityType, connection.DestinationEntityId, connection.DestinationEntityType);
+
+                await DisconnectVirtualMachineToVirtualSwitch(connectionId, sourceEntityId, destinationEntityId);
+            }
+
+            return VirtualNetworkEntityConnectionMapper.MapToDTO(connection);
+        }
+
+        public async Task DisconnectVirtualMachineToVirtualSwitch(int connectionId, int sourceEntityId, int destinationEntityId)
+        {
+            var virtualMachine = await _vmEntityRepository.GetById(sourceEntityId);
+
+            if (virtualMachine.DeviceDefinition is null)
+            {
+                throw new NullReferenceException("VirtualMachine is not connected to anything");
+            }
+
+            _wrapper.DetachDeviceFromVirtualMachine(virtualMachine.VmUuid!.Value, virtualMachine.DeviceDefinition);
+
+            await _connectionRepository.Remove(connectionId);
+        }
+
         public async Task<List<VirtualNetworkConnectionDTO>> GetVirtualNetworkConnections()
         {
             var connections = await _connectionRepository.GetAll();
@@ -293,6 +357,21 @@ namespace Services.Impl
 
             vmEntity.DeviceDefinition = deviceDefinition;
             await _vmEntityRepository.Update(vmEntity);
+        }
+
+        private (int sourceEntityId, int destinationEntityId) ResolveEntityIdsOrder(int sourceEntityId, EntityType sourceEntityType, int destinationEntityId, EntityType destinationEntityType)
+        {
+            if (sourceEntityType != EntityType.VirtualMachine)
+            {
+                (sourceEntityId, destinationEntityId) = (destinationEntityId, sourceEntityId);
+            }
+
+            return (sourceEntityId, destinationEntityId);
+        }
+
+        private bool AreTypes(EntityType sourceEntityType, EntityType destinationEntityType, EntityType firstEntityType, EntityType secondEntityType)
+        {
+            return (sourceEntityType == firstEntityType && destinationEntityType == secondEntityType) || (sourceEntityType == secondEntityType && destinationEntityType == firstEntityType);
         }
 
         private string GetNetworkNameFromUuid(Guid uuid) =>

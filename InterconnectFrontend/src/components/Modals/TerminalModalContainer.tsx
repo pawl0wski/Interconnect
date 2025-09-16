@@ -2,7 +2,7 @@ import TerminalModel from "./TerminalModal.tsx";
 import { useCurrentVirtualMachineStore } from "../../store/currentVirtualMachineStore.ts";
 import { useCurrentVirtualMachineModalStore } from "../../store/modals/modalStores.ts";
 
-const TerminalModelContainer = () => {
+const TerminalModalContainer = () => {
     const currentVirtualMachineStore = useCurrentVirtualMachineStore();
     const currentVirtualMachineModalStore = useCurrentVirtualMachineModalStore();
 
@@ -16,4 +16,4 @@ const TerminalModelContainer = () => {
                        entity={currentVirtualMachineStore.currentEntity!} />;
 };
 
-export default TerminalModelContainer;
+export default TerminalModalContainer;
