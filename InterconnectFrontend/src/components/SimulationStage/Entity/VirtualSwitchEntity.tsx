@@ -15,35 +15,39 @@ interface VirtualSwitchEntityProps {
 }
 
 const VirtualSwitchEntity = ({
-                                 entity,
-                                 shapeName,
-                                 onDragMove,
-                                 onDragEnd,
-                                 onMouseOut,
-                                 onMouseOver,
-                                 onClick
-                             }: VirtualSwitchEntityProps) => {
+    entity,
+    shapeName,
+    onDragMove,
+    onDragEnd,
+    onMouseOut,
+    onMouseOver,
+    onClick,
+}: VirtualSwitchEntityProps) => {
     const [virtualSwitchImageElement] = useImage(virtualSwitchImage);
 
-    return <Group
-        draggable
-        name={shapeName}
-        x={entity.x}
-        y={entity.y}
-        onDragMove={onDragMove}
-        onDragEnd={onDragEnd}
-        onMouseOver={onMouseOver}
-        onMouseOut={onMouseOut}
-        onClick={onClick}
-    >
-        <Image
-            height={50}
-            width={50}
-            image={virtualSwitchImageElement}
-        />
-        <Circle />
-        <Text y={60} fontStyle="bold" align="center" width={50} text={entity.name ?? ""} />
-    </Group>;
+    return (
+        <Group
+            draggable
+            name={shapeName}
+            x={entity.x}
+            y={entity.y}
+            onDragMove={onDragMove}
+            onDragEnd={onDragEnd}
+            onMouseOver={onMouseOver}
+            onMouseOut={onMouseOut}
+            onClick={onClick}
+        >
+            <Image height={50} width={50} image={virtualSwitchImageElement} />
+            <Circle />
+            <Text
+                y={60}
+                fontStyle="bold"
+                align="center"
+                width={50}
+                text={entity.name ?? ""}
+            />
+        </Group>
+    );
 };
 
 export default VirtualSwitchEntity;

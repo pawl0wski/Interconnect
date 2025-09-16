@@ -6,30 +6,36 @@ import "../../internalization/i18n.ts";
 
 const mockUseConnectionStore = vi.hoisted(() => vi.fn());
 vi.mock("../../store/connectionStore.ts", () => ({
-    useConnectionStore: mockUseConnectionStore
+    useConnectionStore: mockUseConnectionStore,
 }));
 
 describe("ConnectionOverlay", () => {
     test("should show overlay if connection is unknown", () => {
         mockUseConnectionStore.mockReturnValue(ConnectionStatus.Unknown);
 
-        const screen = render(<MantineProvider>
-            <ConnectionOverlay />
-        </MantineProvider>);
+        const screen = render(
+            <MantineProvider>
+                <ConnectionOverlay />
+            </MantineProvider>,
+        );
 
         expect(screen.getByText("Łączenie z serwerem...")).toBeInTheDocument();
     });
 
-    test.each(
-        [ConnectionStatus.Alive]
-    )("should not show overlay if connection is not unknown",
+    test.each([ConnectionStatus.Alive])(
+        "should not show overlay if connection is not unknown",
         (status: ConnectionStatus) => {
             mockUseConnectionStore.mockReturnValue(status);
 
-            const screen = render(<MantineProvider>
-                <ConnectionOverlay />
-            </MantineProvider>);
+            const screen = render(
+                <MantineProvider>
+                    <ConnectionOverlay />
+                </MantineProvider>,
+            );
 
-            expect(screen.queryByText("Łączenie z serwerem...")).not.toBeInTheDocument();
-        });
+            expect(
+                screen.queryByText("Łączenie z serwerem..."),
+            ).not.toBeInTheDocument();
+        },
+    );
 });

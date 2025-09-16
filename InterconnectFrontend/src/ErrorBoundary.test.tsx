@@ -6,7 +6,7 @@ import { expect } from "vitest";
 const mockUseErrorStore = vi.hoisted(() => vi.fn());
 
 vi.mock("./store/errorStore.ts", () => ({
-    useErrorStore: mockUseErrorStore
+    useErrorStore: mockUseErrorStore,
 }));
 
 const TestComponent = () => {
@@ -23,9 +23,13 @@ describe("ErrorBoundary", () => {
     test("should setError when error occurred in app", async () => {
         const mockSetError = vi.fn();
         mockUseErrorStore.mockReturnValueOnce({
-            setError: mockSetError
+            setError: mockSetError,
         });
-        const screen = render(<ErrorBoundary><TestComponent /></ErrorBoundary>);
+        const screen = render(
+            <ErrorBoundary>
+                <TestComponent />
+            </ErrorBoundary>,
+        );
 
         const button = screen.getByRole("button");
         await userEvent.click(button);

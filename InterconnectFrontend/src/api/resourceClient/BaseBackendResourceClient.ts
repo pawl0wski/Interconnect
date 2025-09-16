@@ -5,11 +5,11 @@ import { getConfiguration } from "../../configuration.ts";
 abstract class BaseBackendResourceClient {
     protected async sendBackendRequest<
         TRequest extends BaseRequest,
-        TResponse extends BaseResponse<unknown>
+        TResponse extends BaseResponse<unknown>,
     >(
         url: string,
         method: string,
-        request: TRequest | null
+        request: TRequest | null,
     ): Promise<TResponse> {
         let fetchParams: RequestInit = { method };
         if (method !== "GET") {
@@ -17,14 +17,17 @@ abstract class BaseBackendResourceClient {
                 ...fetchParams,
                 body: JSON.stringify(request),
                 headers: {
-                    "Content-Type": "application/json"
-                }
+                    "Content-Type": "application/json",
+                },
             };
         }
 
-        const fetchResponse = await fetch(this.prepareBackendUrl(url), fetchParams);
+        const fetchResponse = await fetch(
+            this.prepareBackendUrl(url),
+            fetchParams,
+        );
 
-        const response = await fetchResponse.json() as BaseResponse<object>;
+        const response = (await fetchResponse.json()) as BaseResponse<object>;
         if (!response.success) {
             throw Error(response.errorMessage ?? undefined);
         }

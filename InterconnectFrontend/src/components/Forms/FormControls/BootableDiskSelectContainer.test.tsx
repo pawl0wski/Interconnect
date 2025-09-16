@@ -9,7 +9,7 @@ import { userEvent } from "@testing-library/user-event";
 const mockUseBootableDisksStore = vi.hoisted(() => vi.fn());
 
 vi.mock("../../../store/bootableDisksStore.ts", () => ({
-    useBootableDisksStore: mockUseBootableDisksStore
+    useBootableDisksStore: mockUseBootableDisksStore,
 }));
 
 describe("BootableDiskSelectContainer", () => {
@@ -17,37 +17,43 @@ describe("BootableDiskSelectContainer", () => {
         const mockFetchBootableDisks = vi.fn();
         mockUseBootableDisksStore.mockReturnValue({
             bootableDisks: [],
-            fetchBootableDisks: mockFetchBootableDisks
+            fetchBootableDisks: mockFetchBootableDisks,
         });
 
-        render(<MantineProvider>
-            <BootableDiskSelectContainer
-                selectedBootableDiskId={null}
-                error={null}
-                onBootableDiskChange={vi.fn()}
-            />
-        </MantineProvider>);
+        render(
+            <MantineProvider>
+                <BootableDiskSelectContainer
+                    selectedBootableDiskId={null}
+                    error={null}
+                    onBootableDiskChange={vi.fn()}
+                />
+            </MantineProvider>,
+        );
 
         expect(mockFetchBootableDisks).toHaveBeenCalled();
     });
 
     test("should display fetched bootable disks", async () => {
         mockUseBootableDisksStore.mockReturnValue({
-            bootableDisks: [{
-                id: 1,
-                name: "TestLinux",
-                version: "1.0.4",
-                operatingSystemType: OperatingSystemType.Linux
-            }],
-            fetchBootableDisks: vi.fn()
+            bootableDisks: [
+                {
+                    id: 1,
+                    name: "TestLinux",
+                    version: "1.0.4",
+                    operatingSystemType: OperatingSystemType.Linux,
+                },
+            ],
+            fetchBootableDisks: vi.fn(),
         });
-        const screen = render(<MantineProvider>
-            <BootableDiskSelectContainer
-                selectedBootableDiskId={null}
-                onBootableDiskChange={vi.fn()}
-                error={null}
-            />
-        </MantineProvider>);
+        const screen = render(
+            <MantineProvider>
+                <BootableDiskSelectContainer
+                    selectedBootableDiskId={null}
+                    onBootableDiskChange={vi.fn()}
+                    error={null}
+                />
+            </MantineProvider>,
+        );
 
         expect(screen.getByText("TestLinux 1.0.4")).toBeInTheDocument();
     });
@@ -55,15 +61,17 @@ describe("BootableDiskSelectContainer", () => {
     test("should display validation error", async () => {
         mockUseBootableDisksStore.mockReturnValue({
             bootableDisks: [],
-            fetchBootableDisks: vi.fn()
+            fetchBootableDisks: vi.fn(),
         });
-        const screen = render(<MantineProvider>
-            <BootableDiskSelectContainer
-                selectedBootableDiskId={null}
-                error="TestError"
-                onBootableDiskChange={vi.fn()}
-            />
-        </MantineProvider>);
+        const screen = render(
+            <MantineProvider>
+                <BootableDiskSelectContainer
+                    selectedBootableDiskId={null}
+                    error="TestError"
+                    onBootableDiskChange={vi.fn()}
+                />
+            </MantineProvider>,
+        );
 
         expect(screen.getByText("TestError")).toBeInTheDocument();
     });
@@ -71,21 +79,25 @@ describe("BootableDiskSelectContainer", () => {
     test("should select bootable disk when user select bootable disk", async () => {
         const mockOnBootableDiskChange = vi.fn();
         mockUseBootableDisksStore.mockReturnValue({
-            bootableDisks: [{
-                id: 1,
-                name: "TestLinux",
-                version: "1.0.4",
-                operatingSystemType: OperatingSystemType.Linux
-            }],
-            fetchBootableDisks: vi.fn()
+            bootableDisks: [
+                {
+                    id: 1,
+                    name: "TestLinux",
+                    version: "1.0.4",
+                    operatingSystemType: OperatingSystemType.Linux,
+                },
+            ],
+            fetchBootableDisks: vi.fn(),
         });
-        const screen = render(<MantineProvider>
-            <BootableDiskSelectContainer
-                selectedBootableDiskId={null}
-                error={null}
-                onBootableDiskChange={mockOnBootableDiskChange}
-            />
-        </MantineProvider>);
+        const screen = render(
+            <MantineProvider>
+                <BootableDiskSelectContainer
+                    selectedBootableDiskId={null}
+                    error={null}
+                    onBootableDiskChange={mockOnBootableDiskChange}
+                />
+            </MantineProvider>,
+        );
 
         const bootableDiskEntry = screen.getByText("TestLinux 1.0.4");
         await userEvent.click(bootableDiskEntry);

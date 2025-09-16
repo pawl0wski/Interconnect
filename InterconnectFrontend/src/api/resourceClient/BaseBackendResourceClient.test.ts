@@ -19,21 +19,22 @@ class TestBaseResourceClient extends BaseBackendResourceClient {
 }
 
 describe("BaseBackend", () => {
-    vi.mock(
-        "../../configuration.ts", () => ({
-            getConfiguration: () => ({ backendUrl: "http://test/" })
-        })
-    );
+    vi.mock("../../configuration.ts", () => ({
+        getConfiguration: () => ({ backendUrl: "http://test/" }),
+    }));
 
     test("should send request", async () => {
         // @ts-ignore
-        global.fetch = vi.fn(() => Promise.resolve({
-            json: () => Promise.resolve({
-                success: true,
-                errorMessage: null,
-                data: {}
-            } as BaseResponse<string>)
-        }));
+        global.fetch = vi.fn(() =>
+            Promise.resolve({
+                json: () =>
+                    Promise.resolve({
+                        success: true,
+                        errorMessage: null,
+                        data: {},
+                    } as BaseResponse<string>),
+            }),
+        );
         const client = new TestBaseResourceClient();
 
         await client.postTest();
@@ -42,20 +43,23 @@ describe("BaseBackend", () => {
             method: "POST",
             body: JSON.stringify({ test: true }),
             headers: {
-                "Content-Type": "application/json"
-            }
+                "Content-Type": "application/json",
+            },
         });
     });
 
     test("should throw error when backend return error", async () => {
         // @ts-ignore
-        global.fetch = vi.fn(() => Promise.resolve({
-            json: () => Promise.resolve({
-                success: false,
-                errorMessage: "Mock error",
-                data: {}
-            } as BaseResponse<string>)
-        }));
+        global.fetch = vi.fn(() =>
+            Promise.resolve({
+                json: () =>
+                    Promise.resolve({
+                        success: false,
+                        errorMessage: "Mock error",
+                        data: {},
+                    } as BaseResponse<string>),
+            }),
+        );
         const client = new TestBaseResourceClient();
 
         await expect(client.postTest()).rejects.toThrow("Mock error");
@@ -63,19 +67,22 @@ describe("BaseBackend", () => {
 
     test("should not send body when method is GET", async () => {
         // @ts-ignore
-        global.fetch = vi.fn(() => Promise.resolve({
-            json: () => Promise.resolve({
-                success: true,
-                errorMessage: null,
-                data: {}
-            } as BaseResponse<string>)
-        }));
+        global.fetch = vi.fn(() =>
+            Promise.resolve({
+                json: () =>
+                    Promise.resolve({
+                        success: true,
+                        errorMessage: null,
+                        data: {},
+                    } as BaseResponse<string>),
+            }),
+        );
         const client = new TestBaseResourceClient();
 
         await client.getTest();
 
         expect(fetch).toHaveBeenCalledWith("http://test/Test/testMethod", {
-            method: "GET"
+            method: "GET",
         });
     });
 });

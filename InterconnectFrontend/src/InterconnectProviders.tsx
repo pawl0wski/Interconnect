@@ -8,9 +8,7 @@ interface ProviderProps {
 
 const InterconnectProviders = ({ children }: ProviderProps) => (
     <ConnectionStatusProvider>
-        <ConnectionInfoProvider>
-            {children}
-        </ConnectionInfoProvider>
+        <ConnectionInfoProvider>{children}</ConnectionInfoProvider>
     </ConnectionStatusProvider>
 );
 

@@ -6,7 +6,9 @@ interface ConnectionInfoProviderProps {
 }
 
 const ConnectionInfoProvider = ({ children }: ConnectionInfoProviderProps) => {
-    const updateConnectionInfo = useConnectionInfoStore(s => s.updateConnectionInfo);
+    const updateConnectionInfo = useConnectionInfoStore(
+        (s) => s.updateConnectionInfo,
+    );
 
     useEffect(() => {
         updateConnectionInfo();

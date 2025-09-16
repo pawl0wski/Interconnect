@@ -1,6 +1,6 @@
 interface TerminalModel {
-    uuid: string,
-    data: string
+    uuid: string;
+    data: string;
 }
 
 export type { TerminalModel };

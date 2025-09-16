@@ -8,17 +8,22 @@ interface VirtualMachineCreateModalProps {
     onClose: () => void;
 }
 
-const VirtualMachineCreateModal = ({ opened, onClose }: VirtualMachineCreateModalProps) => {
+const VirtualMachineCreateModal = ({
+    opened,
+    onClose,
+}: VirtualMachineCreateModalProps) => {
     const { t } = useTranslation();
 
-    return <Modal
-        title={t("virtualMachine.configuration")}
-        opened={opened}
-        onClose={onClose}
-        centered
-    >
-        <VirtualMachineCreateFormContainer onFormSubmitted={onClose} />
-    </Modal>;
+    return (
+        <Modal
+            title={t("virtualMachine.configuration")}
+            opened={opened}
+            onClose={onClose}
+            centered
+        >
+            <VirtualMachineCreateFormContainer onFormSubmitted={onClose} />
+        </Modal>
+    );
 };
 
 export default VirtualMachineCreateModal;

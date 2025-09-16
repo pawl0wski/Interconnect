@@ -8,8 +8,11 @@ interface UseSimulationStageContextMenuReturnType {
     visible: boolean;
 }
 
-export const useSimulationStageContextMenuInfo = (entityType: EntityType): UseSimulationStageContextMenuReturnType => {
-    const simulationStageContextMenuStore = useSimulationStageContextMenusStore();
+export const useSimulationStageContextMenuInfo = (
+    entityType: EntityType,
+): UseSimulationStageContextMenuReturnType => {
+    const simulationStageContextMenuStore =
+        useSimulationStageContextMenusStore();
     const [position, setPosition] = useState<PositionModel>({ x: 0, y: 0 });
     const [visible, setVisible] = useState<boolean>(false);
 
@@ -20,7 +23,11 @@ export const useSimulationStageContextMenuInfo = (entityType: EntityType): UseSi
             return;
         }
         setVisible(false);
-    }, [entityType, simulationStageContextMenuStore.currentEntityType, simulationStageContextMenuStore.currentPosition]);
+    }, [
+        entityType,
+        simulationStageContextMenuStore.currentEntityType,
+        simulationStageContextMenuStore.currentPosition,
+    ]);
 
     return { position, visible };
 };

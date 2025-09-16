@@ -15,23 +15,41 @@ interface SimulationStageProps {
     onContextMenu: (e: KonvaEventObject<PointerEvent>) => void;
 }
 
-const SimulationStage = ({ showPlacementCursor, onClick, onContextMenu }: SimulationStageProps) => {
+const SimulationStage = ({
+    showPlacementCursor,
+    onClick,
+    onContextMenu,
+}: SimulationStageProps) => {
     const stageHeight = 2000;
     const stageWidth = 3000;
 
-    const divClasses = useMemo(() => (classNames(classes["simulation-stage"], showPlacementCursor ? classes["is-placing"] : "")), [showPlacementCursor]);
+    const divClasses = useMemo(
+        () =>
+            classNames(
+                classes["simulation-stage"],
+                showPlacementCursor ? classes["is-placing"] : "",
+            ),
+        [showPlacementCursor],
+    );
 
-    return <div className={divClasses}>
-        <SimulationContextMenuProvider />
-        <Stage width={stageWidth} height={stageHeight} onClick={onClick} onContextMenu={onContextMenu}>
-            <Layer>
-                <VirtualNetworkRenderer />
-                <VirtualMachineEntityRenderer />
-                <VirtualSwitchRenderer />
-                <InternetEntityRenderer />
-            </Layer>
-        </Stage>
-    </div>;
+    return (
+        <div className={divClasses}>
+            <SimulationContextMenuProvider />
+            <Stage
+                width={stageWidth}
+                height={stageHeight}
+                onClick={onClick}
+                onContextMenu={onContextMenu}
+            >
+                <Layer>
+                    <VirtualNetworkRenderer />
+                    <VirtualMachineEntityRenderer />
+                    <VirtualSwitchRenderer />
+                    <InternetEntityRenderer />
+                </Layer>
+            </Stage>
+        </div>
+    );
 };
 
 export default SimulationStage;

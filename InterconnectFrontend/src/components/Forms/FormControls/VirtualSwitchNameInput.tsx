@@ -10,12 +10,14 @@ interface VirtualSwitchNameInputProps {
 const VirtualSwitchNameInput = ({ form }: VirtualSwitchNameInputProps) => {
     const { t } = useTranslation();
 
-    return <TextInput
-        withAsterisk
-        label={t("virtualSwitch.form.name")}
-        key={form.key("name")}
-        {...form.getInputProps("name")}
-    />;
+    return (
+        <TextInput
+            withAsterisk
+            label={t("virtualSwitch.form.name")}
+            key={form.key("name")}
+            {...form.getInputProps("name")}
+        />
+    );
 };
 
 export default VirtualSwitchNameInput;

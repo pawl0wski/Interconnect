@@ -1,12 +1,12 @@
-import { describe, expect, test, vi, beforeEach } from "vitest";
-import { renderHook, act } from "@testing-library/react";
+import { beforeEach, describe, expect, test, vi } from "vitest";
+import { act, renderHook } from "@testing-library/react";
 import { useConnectionStore } from "./connectionStore.ts";
 
 const mockPing = vi.hoisted(() => vi.fn());
 vi.mock("../api/hubClient/ConnectionStatusHubClient.ts", () => ({
     connectionStatusHubClient: {
-        ping: mockPing
-    }
+        ping: mockPing,
+    },
 }));
 
 describe("connectionStore", () => {
@@ -18,7 +18,7 @@ describe("connectionStore", () => {
         mockPing.mockResolvedValue({
             success: true,
             message: "pong",
-            data: 1
+            data: 1,
         });
         const { result } = renderHook(() => useConnectionStore());
 

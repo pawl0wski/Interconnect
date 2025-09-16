@@ -7,10 +7,11 @@ describe("SimulationStageEntitiesUtils", () => {
     test("getTargetOrParentEntityInfo should get entity info from target", () => {
         const target = {
             name: () => "test",
-            parent: undefined
+            parent: undefined,
         };
 
-        const info = SimulationStageEntitiesUtils.getTargetOrParentEntityInfo(target);
+        const info =
+            SimulationStageEntitiesUtils.getTargetOrParentEntityInfo(target);
 
         expect(info).toBe("test");
     });
@@ -19,11 +20,12 @@ describe("SimulationStageEntitiesUtils", () => {
             name: () => undefined,
             parent: {
                 name: () => "testParent",
-                parent: undefined
-            }
+                parent: undefined,
+            },
         };
 
-        const info = SimulationStageEntitiesUtils.getTargetOrParentEntityInfo(target);
+        const info =
+            SimulationStageEntitiesUtils.getTargetOrParentEntityInfo(target);
 
         expect(info).toBe("testParent");
     });
@@ -32,31 +34,37 @@ describe("SimulationStageEntitiesUtils", () => {
             name: () => undefined,
             parent: {
                 name: () => undefined,
-                parent: undefined
-            }
+                parent: undefined,
+            },
         };
 
-        const info = SimulationStageEntitiesUtils.getTargetOrParentEntityInfo(target);
+        const info =
+            SimulationStageEntitiesUtils.getTargetOrParentEntityInfo(target);
 
         expect(info).toBeNull();
     });
     test("createShapeName should create shape name using id and type", () => {
         const entity = {
-            id: 123
+            id: 123,
         } as ObjectWithId;
 
-        const name = SimulationStageEntitiesUtils.createShapeName(entity, EntityType.VirtualMachine);
+        const name = SimulationStageEntitiesUtils.createShapeName(
+            entity,
+            EntityType.VirtualMachine,
+        );
 
         expect(name).toBe("vm-123");
     });
     test("parseShapeName should get id and type from entity name", () => {
-        const { type, id } = SimulationStageEntitiesUtils.parseShapeName("vm-123")!;
+        const { type, id } =
+            SimulationStageEntitiesUtils.parseShapeName("vm-123")!;
 
         expect(type).toBe(EntityType.VirtualMachine);
         expect(id).toBe(123);
     });
     test("parseShapeName should return unknown if entity name can not be resolved", () => {
-        const returnValue = SimulationStageEntitiesUtils.parseShapeName("gfds-123");
+        const returnValue =
+            SimulationStageEntitiesUtils.parseShapeName("gfds-123");
 
         expect(returnValue).toBeNull();
     });

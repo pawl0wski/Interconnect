@@ -10,7 +10,7 @@ export const createModalStore = () => {
     return create<ModalStore>((set) => ({
         opened: false,
         close: () => set({ opened: false }),
-        open: () => set({ opened: true })
+        open: () => set({ opened: true }),
     }));
 };
 

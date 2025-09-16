@@ -7,7 +7,7 @@ import { beforeEach } from "vitest";
 const mockUseErrorStore = vi.hoisted(() => vi.fn());
 
 vi.mock("../../store/errorStore.ts", () => ({
-    useErrorStore: mockUseErrorStore
+    useErrorStore: mockUseErrorStore,
 }));
 
 describe("ErrorModalContainer", () => {
@@ -18,12 +18,14 @@ describe("ErrorModalContainer", () => {
     test("should show error and stacktrace", () => {
         mockUseErrorStore.mockReturnValue({
             error: "Test",
-            stackTrace: "TestStackTrace"
+            stackTrace: "TestStackTrace",
         });
 
-        const screen = render(<MantineProvider>
-            <ErrorModalContainer />
-        </MantineProvider>);
+        const screen = render(
+            <MantineProvider>
+                <ErrorModalContainer />
+            </MantineProvider>,
+        );
 
         expect(screen.getByText("Wystąpił błąd")).toBeInTheDocument();
         expect(screen.getByText("Test")).toBeInTheDocument();
@@ -33,12 +35,14 @@ describe("ErrorModalContainer", () => {
     test("should not show modal when there is no error", () => {
         mockUseErrorStore.mockReturnValue({
             error: null,
-            stackTrace: null
+            stackTrace: null,
         });
 
-        const screen = render(<MantineProvider>
-            <ErrorModalContainer />
-        </MantineProvider>);
+        const screen = render(
+            <MantineProvider>
+                <ErrorModalContainer />
+            </MantineProvider>,
+        );
 
         expect(screen.queryByText("Wystąpił błąd")).not.toBeInTheDocument();
     });
@@ -46,12 +50,14 @@ describe("ErrorModalContainer", () => {
     test("should not show textarea when stack trace is not null", () => {
         mockUseErrorStore.mockReturnValue({
             error: "TestError",
-            stackTrace: null
+            stackTrace: null,
         });
 
-        const screen = render(<MantineProvider>
-            <ErrorModalContainer />
-        </MantineProvider>);
+        const screen = render(
+            <MantineProvider>
+                <ErrorModalContainer />
+            </MantineProvider>,
+        );
 
         expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
     });

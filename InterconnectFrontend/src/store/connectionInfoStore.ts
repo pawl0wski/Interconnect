@@ -12,17 +12,19 @@ interface ConnectionInfoStore {
 const useConnectionInfoStore = create<ConnectionInfoStore>((set) => ({
     connectionInfo: null,
     updateConnectionInfo: async () => {
-        const connectionInfo = (await hypervisorConnectionClient.connectionInfo()).data;
+        const connectionInfo = (
+            await hypervisorConnectionClient.connectionInfo()
+        ).data;
 
         set({
-            connectionInfo
+            connectionInfo,
         });
     },
     clearConnectionInfo: () => {
         set({
-            connectionInfo: null
+            connectionInfo: null,
         });
-    }
+    },
 }));
 
 export { useConnectionInfoStore };

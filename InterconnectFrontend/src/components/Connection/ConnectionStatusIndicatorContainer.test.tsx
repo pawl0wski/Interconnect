@@ -9,17 +9,17 @@ const mockUseConnectionStore = vi.hoisted(() => vi.fn());
 const mockUseConnectionInfoModalStore = vi.hoisted(() => vi.fn());
 
 vi.mock("../../store/connectionStore.ts", () => ({
-    useConnectionStore: mockUseConnectionStore
+    useConnectionStore: mockUseConnectionStore,
 }));
 
 vi.mock("../../store/modals/modalStores.ts", () => ({
-    useConnectionInfoModalStore: mockUseConnectionInfoModalStore
+    useConnectionInfoModalStore: mockUseConnectionInfoModalStore,
 }));
 
 vi.mock("react-icons/md", () => ({
     MdCloudDone: () => <div>CloudDoneIcon</div>,
     MdCloudOff: () => <div>CloudOffIcon</div>,
-    MdSync: () => <div>SyncIcon</div>
+    MdSync: () => <div>SyncIcon</div>,
 }));
 
 describe("ConnectionStatusIndicator", () => {
@@ -30,20 +30,24 @@ describe("ConnectionStatusIndicator", () => {
     test("should show alive connection status when connection is alive", () => {
         mockUseConnectionStore.mockReturnValue(ConnectionStatus.Alive);
 
-        const screen = render(<MantineProvider>
-            <ConnectionStatusIndicatorContainer />
-        </MantineProvider>);
+        const screen = render(
+            <MantineProvider>
+                <ConnectionStatusIndicatorContainer />
+            </MantineProvider>,
+        );
 
-        expect(screen.getByText(("Połączono"))).toBeInTheDocument();
+        expect(screen.getByText("Połączono")).toBeInTheDocument();
         expect(screen.getByText("CloudDoneIcon")).toBeInTheDocument();
     });
 
     test("should show dead connection status when connection is dead", () => {
         mockUseConnectionStore.mockReturnValue(ConnectionStatus.Dead);
 
-        const screen = render(<MantineProvider>
-            <ConnectionStatusIndicatorContainer />
-        </MantineProvider>);
+        const screen = render(
+            <MantineProvider>
+                <ConnectionStatusIndicatorContainer />
+            </MantineProvider>,
+        );
 
         expect(screen.getByText("Brak połączenia")).toBeInTheDocument();
         expect(screen.getByText("CloudOffIcon")).toBeInTheDocument();
@@ -53,12 +57,14 @@ describe("ConnectionStatusIndicator", () => {
         const mockOpen = vi.fn();
         mockUseConnectionStore.mockReturnValue(ConnectionStatus.Alive);
         mockUseConnectionInfoModalStore.mockReturnValue({
-            open: mockOpen
+            open: mockOpen,
         });
 
-        const screen = render(<MantineProvider>
-            <ConnectionStatusIndicatorContainer />
-        </MantineProvider>);
+        const screen = render(
+            <MantineProvider>
+                <ConnectionStatusIndicatorContainer />
+            </MantineProvider>,
+        );
 
         await userEvent.click(screen.getByText("Połączono"));
 
@@ -68,25 +74,30 @@ describe("ConnectionStatusIndicator", () => {
     test.each([
         {
             status: ConnectionStatus.Dead,
-            text: "Brak połączenia"
+            text: "Brak połączenia",
         },
         {
             status: ConnectionStatus.Dead,
-            text: "Brak połączenia"
-        }])("should not open connection info modal when user press at connection status while status is dead or unknown",
+            text: "Brak połączenia",
+        },
+    ])(
+        "should not open connection info modal when user press at connection status while status is dead or unknown",
         async ({ status, text }) => {
             const mockOpen = vi.fn();
             mockUseConnectionStore.mockReturnValue(status);
             mockUseConnectionInfoModalStore.mockReturnValue({
-                open: mockOpen
+                open: mockOpen,
             });
 
-            const screen = render(<MantineProvider>
-                <ConnectionStatusIndicatorContainer />
-            </MantineProvider>);
+            const screen = render(
+                <MantineProvider>
+                    <ConnectionStatusIndicatorContainer />
+                </MantineProvider>,
+            );
 
             await userEvent.click(screen.getByText(text));
 
             expect(mockOpen).not.toHaveBeenCalled();
-        });
+        },
+    );
 });

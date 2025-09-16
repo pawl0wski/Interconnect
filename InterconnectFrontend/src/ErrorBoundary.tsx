@@ -24,14 +24,12 @@ const ErrorBoundary = ({ children }: ErrorBoundaryProps) => {
             window.removeEventListener("error", onError);
             window.removeEventListener(
                 "unhandledrejection",
-                onUnhandledRejection
+                onUnhandledRejection,
             );
         };
     }, [errorStore]);
 
-    return <>
-        {children}
-    </>;
+    return <>{children}</>;
 };
 
 export default ErrorBoundary;

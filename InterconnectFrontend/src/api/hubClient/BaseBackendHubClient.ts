@@ -12,13 +12,19 @@ abstract class BaseBackendHubClient {
         await this.connection.start();
     }
 
-    protected startListeningForMessages<T>(methodName: string, onMessage: (response: T) => void) {
+    protected startListeningForMessages<T>(
+        methodName: string,
+        onMessage: (response: T) => void,
+    ) {
         this.connection?.on(methodName, (message: string) => {
             onMessage(JSON.parse(message));
         });
     }
 
-    protected async sendHubRequest<TRequest, TResponse>(methodName: string, request?: TRequest): Promise<TResponse> {
+    protected async sendHubRequest<TRequest, TResponse>(
+        methodName: string,
+        request?: TRequest,
+    ): Promise<TResponse> {
         await this.reconnectIfThereIsNoConnectionEstablished();
 
         let response;
@@ -44,7 +50,6 @@ abstract class BaseBackendHubClient {
         const hubName = this.getHubName();
         return `${config.backendUrl}${hubName}`;
     }
-
 
     protected abstract getHubName(): string;
 }

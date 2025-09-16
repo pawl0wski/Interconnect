@@ -13,7 +13,9 @@ export interface VirtualSwitchCreateFormValues {
     name: string;
 }
 
-const VirtualSwitchCreateFormContainer = ({ onFormSubmitted }: VirtualSwitchCreateFormContainerProps) => {
+const VirtualSwitchCreateFormContainer = ({
+    onFormSubmitted,
+}: VirtualSwitchCreateFormContainerProps) => {
     const [isCreating, setIsCreating] = useState(false);
     const virtualSwitchCreateStore = useVirtualSwitchCreateStore();
     const virtualSwitchEntitiesStore = useVirtualSwitchEntitiesStore();
@@ -21,33 +23,41 @@ const VirtualSwitchCreateFormContainer = ({ onFormSubmitted }: VirtualSwitchCrea
     const form = useForm<VirtualSwitchCreateFormValues>({
         mode: "uncontrolled",
         initialValues: {
-            name: ""
+            name: "",
         },
         validate: {
             name: (value) => {
                 if (!value) {
                     return "Nazwa nie może być pusta";
                 }
-            }
-        }
+            },
+        },
     });
 
-    const handleFormSubmitted = useCallback(async (values: VirtualSwitchCreateFormValues) => {
-        setIsCreating(true);
-        try {
-            virtualSwitchCreateStore.updateName(values.name);
-            await virtualSwitchCreateStore.create();
-            await virtualSwitchEntitiesStore.fetchEntities();
-            onFormSubmitted();
-        } finally {
-            setIsCreating(false);
-        }
-    }, [onFormSubmitted, virtualSwitchCreateStore, virtualSwitchEntitiesStore]);
+    const handleFormSubmitted = useCallback(
+        async (values: VirtualSwitchCreateFormValues) => {
+            setIsCreating(true);
+            try {
+                virtualSwitchCreateStore.updateName(values.name);
+                await virtualSwitchCreateStore.create();
+                await virtualSwitchEntitiesStore.fetchEntities();
+                onFormSubmitted();
+            } finally {
+                setIsCreating(false);
+            }
+        },
+        [onFormSubmitted, virtualSwitchCreateStore, virtualSwitchEntitiesStore],
+    );
 
-    return <>
-        <LoadingOverlay visible={isCreating} />
-        <VirtualSwitchCreateForm form={form} onFormSubmit={handleFormSubmitted} />
-    </>;
+    return (
+        <>
+            <LoadingOverlay visible={isCreating} />
+            <VirtualSwitchCreateForm
+                form={form}
+                onFormSubmit={handleFormSubmitted}
+            />
+        </>
+    );
 };
 
 export default VirtualSwitchCreateFormContainer;

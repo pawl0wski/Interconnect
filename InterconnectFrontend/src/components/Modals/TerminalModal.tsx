@@ -12,16 +12,18 @@ interface TerminalModelProps {
 const TerminalModal = ({ opened, entity, onClose }: TerminalModelProps) => {
     const { name, vmUuid } = entity;
 
-    return <Modal
-        title={name}
-        opened={opened}
-        onClose={onClose}
-        size="xl"
-        closeOnEscape={false}
-        centered
-    >
-        <VirtualMachineTerminalView uuid={vmUuid!} />
-    </Modal>;
+    return (
+        <Modal
+            title={name}
+            opened={opened}
+            onClose={onClose}
+            size="xl"
+            closeOnEscape={false}
+            centered
+        >
+            <VirtualMachineTerminalView uuid={vmUuid!} />
+        </Modal>
+    );
 };
 
 export default TerminalModal;

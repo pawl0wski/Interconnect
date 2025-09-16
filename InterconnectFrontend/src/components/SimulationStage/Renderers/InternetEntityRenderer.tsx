@@ -11,8 +11,9 @@ const InternetEntityRenderer = () => {
         })();
     }, []);
 
-    return internetEntitiesStore.entities.map(e =>
-        <InternetEntityContainer key={e.id} entity={e} />);
+    return internetEntitiesStore.entities.map((e) => (
+        <InternetEntityContainer key={e.id} entity={e} />
+    ));
 };
 
 export default InternetEntityRenderer;

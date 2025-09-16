@@ -5,7 +5,10 @@ import { VirtualMachineEntityModel } from "../models/VirtualMachineEntityModel.t
 
 describe("currentVirtualMachineStore", () => {
     test("should update entity when updateEntity is called", async () => {
-        const entityToUpdate = { vmUuid: "123", name: "TestVm" } as VirtualMachineEntityModel;
+        const entityToUpdate = {
+            vmUuid: "123",
+            name: "TestVm",
+        } as VirtualMachineEntityModel;
         const { result } = renderHook(() => useCurrentVirtualMachineStore());
 
         act(() => {

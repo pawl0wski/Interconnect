@@ -6,22 +6,22 @@ const mockGetAvailableBootableDisks = vi.hoisted(() => vi.fn());
 
 vi.mock("../api/resourceClient/VirtualMachineResourceClient.ts", () => ({
     virtualMachineResourceClient: {
-        getAvailableBootableDisks: mockGetAvailableBootableDisks
-    }
+        getAvailableBootableDisks: mockGetAvailableBootableDisks,
+    },
 }));
 
 describe("bootableDiskStore", () => {
     test("should fetch bootable disks from api", async () => {
         mockGetAvailableBootableDisks.mockResolvedValue({
-            "data": [
+            data: [
                 {
-                    "id": 128,
-                    "vmUuid": "fed610a3-e346-415c-b966-73c86d4b1cf8",
-                    "name": "Test",
-                    "x": 944,
-                    "y": 379
-                }
-            ]
+                    id: 128,
+                    vmUuid: "fed610a3-e346-415c-b966-73c86d4b1cf8",
+                    name: "Test",
+                    x: 944,
+                    y: 379,
+                },
+            ],
         });
         const { result } = renderHook(() => useBootableDisksStore());
 
@@ -31,11 +31,11 @@ describe("bootableDiskStore", () => {
 
         expect(result.current.bootableDisks.length).toBe(1);
         expect(result.current.bootableDisks[0]).toStrictEqual({
-            "id": 128,
-            "vmUuid": "fed610a3-e346-415c-b966-73c86d4b1cf8",
-            "name": "Test",
-            "x": 944,
-            "y": 379
+            id: 128,
+            vmUuid: "fed610a3-e346-415c-b966-73c86d4b1cf8",
+            name: "Test",
+            x: 944,
+            y: 379,
         });
     });
 });

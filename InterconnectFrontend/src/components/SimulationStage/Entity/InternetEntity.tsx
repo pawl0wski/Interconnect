@@ -12,26 +12,36 @@ interface InternetEntityProps {
     onMouseOut: (e: KonvaEventObject<MouseEvent>) => void;
 }
 
-const InternetEntity = ({ entity, onDragMove, onDragEnd, onMouseOver, onMouseOut }: InternetEntityProps) => {
+const InternetEntity = ({
+    entity,
+    onDragMove,
+    onDragEnd,
+    onMouseOver,
+    onMouseOut,
+}: InternetEntityProps) => {
     const [internetActiveElement] = useImage(internetActive);
 
-    return <Group
-        x={entity.x}
-        y={entity.y}
-        onDragMove={onDragMove}
-        onDragEnd={onDragEnd}
-        onMouseOver={onMouseOver}
-        onMouseOut={onMouseOut}
-        draggable
-    >
-        <Image
-            height={50}
-            width={50}
-            image={internetActiveElement}
-        />
-        <Circle />
-        <Text y={60} fontStyle="bold" align="center" width={50} text="Internet" />
-    </Group>;
+    return (
+        <Group
+            x={entity.x}
+            y={entity.y}
+            onDragMove={onDragMove}
+            onDragEnd={onDragEnd}
+            onMouseOver={onMouseOver}
+            onMouseOut={onMouseOut}
+            draggable
+        >
+            <Image height={50} width={50} image={internetActiveElement} />
+            <Circle />
+            <Text
+                y={60}
+                fontStyle="bold"
+                align="center"
+                width={50}
+                text="Internet"
+            />
+        </Group>
+    );
 };
 
 export default InternetEntity;

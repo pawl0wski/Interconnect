@@ -3,7 +3,10 @@ import { expect } from "vitest";
 
 describe("ObjectUtils", () => {
     test("should get value when value is defined in record", () => {
-        const result = ObjectUtils.getValueOrNull({ testKey: "testValue" }, "testKey");
+        const result = ObjectUtils.getValueOrNull(
+            { testKey: "testValue" },
+            "testKey",
+        );
 
         expect(result).toBe("testValue");
     });

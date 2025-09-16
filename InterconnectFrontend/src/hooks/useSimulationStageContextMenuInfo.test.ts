@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react";
-import { describe, test, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 import { useSimulationStageContextMenuInfo } from "./useSimulationStageContextMenuInfo";
 import { PositionModel } from "../models/PositionModel";
 import { EntityType } from "../models/enums/EntityType";
@@ -8,12 +8,12 @@ const { mockStore } = vi.hoisted(() => ({
     mockStore: {
         currentEntityType: null as EntityType | null,
         currentEntityId: null,
-        currentPosition: { x: 0, y: 0 }
-    }
+        currentPosition: { x: 0, y: 0 },
+    },
 }));
 
 vi.mock("../store/simulationStageContextMenus.ts", () => ({
-    useSimulationStageContextMenusStore: () => mockStore
+    useSimulationStageContextMenusStore: () => mockStore,
 }));
 
 describe("useSimulationStageContextMenuInfo", () => {
@@ -29,7 +29,7 @@ describe("useSimulationStageContextMenuInfo", () => {
         mockStore.currentPosition = position;
 
         const { result } = renderHook(() =>
-            useSimulationStageContextMenuInfo(EntityType.VirtualMachine)
+            useSimulationStageContextMenuInfo(EntityType.VirtualMachine),
         );
 
         expect(result.current.visible).toBe(true);
@@ -41,7 +41,7 @@ describe("useSimulationStageContextMenuInfo", () => {
         mockStore.currentPosition = { x: 111, y: 222 };
 
         const { result } = renderHook(() =>
-            useSimulationStageContextMenuInfo(EntityType.VirtualMachine)
+            useSimulationStageContextMenuInfo(EntityType.VirtualMachine),
         );
 
         expect(result.current.visible).toBe(false);

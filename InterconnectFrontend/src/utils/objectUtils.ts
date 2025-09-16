@@ -5,7 +5,7 @@ const ObjectUtils = {
         }
         const value = obj[key];
         return value === undefined ? null : (value as T);
-    }
+    },
 };
 
 export default ObjectUtils;

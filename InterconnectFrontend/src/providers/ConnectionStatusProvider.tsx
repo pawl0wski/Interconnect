@@ -5,8 +5,12 @@ interface ConnectionStatusProviderProps {
     children: ReactNode;
 }
 
-const ConnectionStatusProvider = ({ children }: ConnectionStatusProviderProps) => {
-    const updateConnectionStatus = useConnectionStore((state) => state.updateConnectionStatus);
+const ConnectionStatusProvider = ({
+    children,
+}: ConnectionStatusProviderProps) => {
+    const updateConnectionStatus = useConnectionStore(
+        (state) => state.updateConnectionStatus,
+    );
     const [intervalId, setIntervalId] = useState<number | null>(null);
 
     useEffect(() => {
@@ -16,14 +20,16 @@ const ConnectionStatusProvider = ({ children }: ConnectionStatusProviderProps) =
 
         updateConnectionStatus();
 
-        setIntervalId(setInterval(() => {
-            try {
-                updateConnectionStatus();
-            } catch (e) {
-                setIntervalId(null);
-                throw e;
-            }
-        }, 5000));
+        setIntervalId(
+            setInterval(() => {
+                try {
+                    updateConnectionStatus();
+                } catch (e) {
+                    setIntervalId(null);
+                    throw e;
+                }
+            }, 5000),
+        );
 
         return () => {
             if (!intervalId) {

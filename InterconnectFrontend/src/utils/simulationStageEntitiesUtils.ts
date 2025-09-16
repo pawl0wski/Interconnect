@@ -4,7 +4,7 @@ import { ObjectWithId } from "../models/interfaces/ObjectWithId.ts";
 
 interface EntityTypeWithId {
     id: number;
-    type: EntityType,
+    type: EntityType;
 }
 
 const SimulationStageEntitiesUtils = {
@@ -46,8 +46,7 @@ const SimulationStageEntitiesUtils = {
         }
 
         return { type: entityType, id: parseInt(id) };
-    }
-
+    },
 };
 
 export default SimulationStageEntitiesUtils;

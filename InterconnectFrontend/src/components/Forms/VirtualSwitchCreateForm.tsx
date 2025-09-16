@@ -9,17 +9,24 @@ interface VirtualSwitchCreateFormProps {
     onFormSubmit: (values: VirtualSwitchCreateFormValues) => void;
 }
 
-const VirtualSwitchCreateForm = ({ form, onFormSubmit }: VirtualSwitchCreateFormProps) => {
+const VirtualSwitchCreateForm = ({
+    form,
+    onFormSubmit,
+}: VirtualSwitchCreateFormProps) => {
     const { t } = useTranslation();
 
-    return <form onSubmit={form.onSubmit(onFormSubmit)}>
-        <Fieldset>
-            <VirtualSwitchNameInput form={form} />
-        </Fieldset>
-        <Flex justify="end" mt={10}>
-            <Button type="submit">{t("virtualSwitch.form.createVirtualSwitch")}</Button>
-        </Flex>
-    </form>;
+    return (
+        <form onSubmit={form.onSubmit(onFormSubmit)}>
+            <Fieldset>
+                <VirtualSwitchNameInput form={form} />
+            </Fieldset>
+            <Flex justify="end" mt={10}>
+                <Button type="submit">
+                    {t("virtualSwitch.form.createVirtualSwitch")}
+                </Button>
+            </Flex>
+        </form>
+    );
 };
 
 export default VirtualSwitchCreateForm;

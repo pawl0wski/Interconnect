@@ -1,6 +1,9 @@
 import { create } from "zustand/react";
 import { EntityType } from "../models/enums/EntityType.ts";
-import { useVirtualMachineCreateModalStore, useVirtualSwitchCreateModalStore } from "./modals/modalStores.ts";
+import {
+    useVirtualMachineCreateModalStore,
+    useVirtualSwitchCreateModalStore,
+} from "./modals/modalStores.ts";
 import { useVirtualMachineCreateStore } from "./virtualMachineCreateStore.ts";
 import useNetworkPlacementStore from "./networkPlacementStore.ts";
 import virtualNetworkResourceClient from "../api/resourceClient/VirtualNetworkResourceClient.ts";
@@ -26,7 +29,8 @@ const useEntityPlacementStore = create<EntityPlacementStore>()((set, get) => ({
             useVirtualMachineCreateStore.getState();
         const virtualMachineCreateModalStore =
             useVirtualMachineCreateModalStore.getState();
-        const virtualSwitchCreateModalStore = useVirtualSwitchCreateModalStore.getState();
+        const virtualSwitchCreateModalStore =
+            useVirtualSwitchCreateModalStore.getState();
         const virtualSwitchCreateStore = useVirtualSwitchCreateStore.getState();
         const networkPlacementStore = useNetworkPlacementStore.getState();
         const networkConnectionsStore = useNetworkConnectionsStore.getState();
@@ -38,8 +42,7 @@ const useEntityPlacementStore = create<EntityPlacementStore>()((set, get) => ({
                 virtualMachineCreateModalStore.open();
                 break;
             case EntityType.Network:
-                const req = networkPlacementStore
-                    .combineAsRequest();
+                const req = networkPlacementStore.combineAsRequest();
                 await virtualNetworkResourceClient.connectEntities(req);
                 networkPlacementStore.clear();
                 await networkConnectionsStore.fetch();
@@ -49,14 +52,19 @@ const useEntityPlacementStore = create<EntityPlacementStore>()((set, get) => ({
                 virtualSwitchCreateModalStore.open();
                 break;
             case EntityType.Internet:
-                const resp = await virtualNetworkResourceClient.createInternet();
+                const resp =
+                    await virtualNetworkResourceClient.createInternet();
                 await internetEntitiesStore.fetchEntities();
-                await internetEntitiesStore.updateEntityPosition(resp.data[0].id, x, y);
+                await internetEntitiesStore.updateEntityPosition(
+                    resp.data[0].id,
+                    x,
+                    y,
+                );
                 break;
         }
         set({ currentEntityType: null });
     },
-    discardPlacingEntity: () => set({ currentEntityType: null })
+    discardPlacingEntity: () => set({ currentEntityType: null }),
 }));
 
 export { useEntityPlacementStore };

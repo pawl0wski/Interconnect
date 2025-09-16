@@ -6,9 +6,12 @@ interface CurrentVirtualMachineStore {
     setCurrentEntity: (entity: VirtualMachineEntityModel) => void;
 }
 
-const useCurrentVirtualMachineStore = create<CurrentVirtualMachineStore>((set) => ({
-    currentEntity: null,
-    setCurrentEntity: (entity: VirtualMachineEntityModel) => set({ currentEntity: entity })
-}));
+const useCurrentVirtualMachineStore = create<CurrentVirtualMachineStore>(
+    (set) => ({
+        currentEntity: null,
+        setCurrentEntity: (entity: VirtualMachineEntityModel) =>
+            set({ currentEntity: entity }),
+    }),
+);
 
 export { useCurrentVirtualMachineStore };

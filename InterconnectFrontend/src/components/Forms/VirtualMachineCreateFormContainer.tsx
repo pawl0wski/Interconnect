@@ -12,13 +12,15 @@ interface VirtualMachineCreateFormContainerProps {
 }
 
 export interface VirtualMachineCreateFormValues {
-    name: string,
-    memory: number,
-    virtualCPUs: number,
-    bootableDiskId: string | null,
+    name: string;
+    memory: number;
+    virtualCPUs: number;
+    bootableDiskId: string | null;
 }
 
-const VirtualMachineCreateFormContainer = ({ onFormSubmitted }: VirtualMachineCreateFormContainerProps) => {
+const VirtualMachineCreateFormContainer = ({
+    onFormSubmitted,
+}: VirtualMachineCreateFormContainerProps) => {
     const virtualMachineCreateStore = useVirtualMachineCreateStore();
     const errorStore = useErrorStore();
     const virtualMachineEntityStore = useVirtualMachineEntitiesStore();
@@ -31,7 +33,7 @@ const VirtualMachineCreateFormContainer = ({ onFormSubmitted }: VirtualMachineCr
             name: "",
             memory: 0,
             virtualCPUs: 0,
-            bootableDiskId: null
+            bootableDiskId: null,
         },
         validate: {
             name: (value) => {
@@ -41,7 +43,9 @@ const VirtualMachineCreateFormContainer = ({ onFormSubmitted }: VirtualMachineCr
             },
             virtualCPUs: (value) => {
                 if (!value) {
-                    return t("virtualMachine.form.virtualCpuNotSetValidationError");
+                    return t(
+                        "virtualMachine.form.virtualCpuNotSetValidationError",
+                    );
                 }
             },
             memory: (value) => {
@@ -51,16 +55,23 @@ const VirtualMachineCreateFormContainer = ({ onFormSubmitted }: VirtualMachineCr
             },
             bootableDiskId: (value) => {
                 if (!value) {
-                    return t("virtualMachine.form.bootableDiskNotSelectedValidationError");
+                    return t(
+                        "virtualMachine.form.bootableDiskNotSelectedValidationError",
+                    );
                 }
-            }
-        }
+            },
+        },
     });
 
-    const handleCreateVirtualMachine = async (values: VirtualMachineCreateFormValues) => {
+    const handleCreateVirtualMachine = async (
+        values: VirtualMachineCreateFormValues,
+    ) => {
         setIsCreating(true);
         try {
-            virtualMachineCreateStore.update({ ...values, bootableDiskId: parseInt(form.values.bootableDiskId!) });
+            virtualMachineCreateStore.update({
+                ...values,
+                bootableDiskId: parseInt(form.values.bootableDiskId!),
+            });
             await virtualMachineCreateStore.createVirtualMachine();
             await virtualMachineEntityStore.fetchEntities();
             onFormSubmitted();
@@ -71,10 +82,15 @@ const VirtualMachineCreateFormContainer = ({ onFormSubmitted }: VirtualMachineCr
         }
     };
 
-    return <>
-        <LoadingOverlay visible={isCreating} />
-        <VirtualMachineCreateForm form={form} onFormSubmit={handleCreateVirtualMachine} />
-    </>;
+    return (
+        <>
+            <LoadingOverlay visible={isCreating} />
+            <VirtualMachineCreateForm
+                form={form}
+                onFormSubmit={handleCreateVirtualMachine}
+            />
+        </>
+    );
 };
 
 export default VirtualMachineCreateFormContainer;

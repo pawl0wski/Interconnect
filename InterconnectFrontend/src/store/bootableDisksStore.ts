@@ -13,14 +13,15 @@ const useBootableDisksStore = create<BootableDisksStore>()((set) => ({
     isFetching: true,
     fetchBootableDisks: async () => {
         set({
-            isFetching: true
+            isFetching: true,
         });
-        const bootableDisks = await virtualMachineResourceClient.getAvailableBootableDisks();
+        const bootableDisks =
+            await virtualMachineResourceClient.getAvailableBootableDisks();
         set({
             bootableDisks: bootableDisks.data,
-            isFetching: false
+            isFetching: false,
         });
-    }
+    },
 }));
 
 export { useBootableDisksStore };

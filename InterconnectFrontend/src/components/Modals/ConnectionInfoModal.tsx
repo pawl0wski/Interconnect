@@ -7,9 +7,18 @@ interface ConnectionInfoModalProps {
     closeModal: () => void;
 }
 
-const ConnectionInfoModal = ({ connectionInfo, opened, closeModal }: ConnectionInfoModalProps) => {
+const ConnectionInfoModal = ({
+    connectionInfo,
+    opened,
+    closeModal,
+}: ConnectionInfoModalProps) => {
     return (
-        <Modal opened={opened} onClose={closeModal} title="Informacje o połączeniu" centered>
+        <Modal
+            opened={opened}
+            onClose={closeModal}
+            title="Informacje o połączeniu"
+            centered
+        >
             {!connectionInfo ? (
                 <Center>
                     <Loader />

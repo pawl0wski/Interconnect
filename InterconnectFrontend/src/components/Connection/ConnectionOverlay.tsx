@@ -7,15 +7,27 @@ const ConnectionOverlay = () => {
     const connectionStatus = useConnectionStore((s) => s.connectionStatus);
     const { t } = useTranslation();
 
-    return <LoadingOverlay
-        visible={connectionStatus == ConnectionStatus.Unknown || connectionStatus == ConnectionStatus.Dead}
-        loaderProps={{
-            children:
-                <Flex direction="column" align="center" justify="space-between" gap="md">
-                    <Loader />
-                    <Text>{t("connectingToServer")}</Text>
-                </Flex>
-        }} />;
+    return (
+        <LoadingOverlay
+            visible={
+                connectionStatus == ConnectionStatus.Unknown ||
+                connectionStatus == ConnectionStatus.Dead
+            }
+            loaderProps={{
+                children: (
+                    <Flex
+                        direction="column"
+                        align="center"
+                        justify="space-between"
+                        gap="md"
+                    >
+                        <Loader />
+                        <Text>{t("connectingToServer")}</Text>
+                    </Flex>
+                ),
+            }}
+        />
+    );
 };
 
 export default ConnectionOverlay;

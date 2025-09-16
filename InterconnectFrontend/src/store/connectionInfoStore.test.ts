@@ -5,8 +5,8 @@ import { useConnectionInfoStore } from "./connectionInfoStore.ts";
 const mockConnectionInfo = vi.hoisted(() => vi.fn());
 vi.mock("../api/resourceClient/HypervisorConnectionResourceClient.ts", () => ({
     hypervisorConnectionClient: {
-        connectionInfo: mockConnectionInfo
-    }
+        connectionInfo: mockConnectionInfo,
+    },
 }));
 
 describe("connectionStore", () => {
@@ -18,7 +18,7 @@ describe("connectionStore", () => {
         mockConnectionInfo.mockResolvedValue({
             success: true,
             message: { testKey: "testValue" },
-            data: 1
+            data: 1,
         });
         const { result } = renderHook(() => useConnectionInfoStore());
 

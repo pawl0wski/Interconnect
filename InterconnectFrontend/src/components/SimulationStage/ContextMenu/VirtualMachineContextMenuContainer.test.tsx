@@ -8,41 +8,56 @@ const {
     mockCurrentVirtualMachineModalStore,
     mockCurrentVirtualMachineStore,
     mockUseSimulationStageContextMenuInfo,
-    mockUseSimulationStageContextMenuClose
+    mockUseSimulationStageContextMenuClose,
 } = vi.hoisted(() => ({
-    mockSimulationStageContextMenusStore: { currentEntityId: 1 as number | undefined },
-    mockVirtualMachineEntitiesStore: { getById: vi.fn(() => ({ id: 1, name: "TestVM" })) },
+    mockSimulationStageContextMenusStore: {
+        currentEntityId: 1 as number | undefined,
+    },
+    mockVirtualMachineEntitiesStore: {
+        getById: vi.fn(() => ({ id: 1, name: "TestVM" })),
+    },
     mockCurrentVirtualMachineModalStore: { open: vi.fn() },
     mockCurrentVirtualMachineStore: { setCurrentEntity: vi.fn() },
-    mockUseSimulationStageContextMenuInfo: { position: { x: 10, y: 20 }, visible: true },
-    mockUseSimulationStageContextMenuClose: { closeContextMenu: vi.fn() }
+    mockUseSimulationStageContextMenuInfo: {
+        position: { x: 10, y: 20 },
+        visible: true,
+    },
+    mockUseSimulationStageContextMenuClose: { closeContextMenu: vi.fn() },
 }));
 
 vi.mock("../../../store/simulationStageContextMenus.ts", () => ({
-    useSimulationStageContextMenusStore: () => mockSimulationStageContextMenusStore
+    useSimulationStageContextMenusStore: () =>
+        mockSimulationStageContextMenusStore,
 }));
 vi.mock("../../../store/virtualMachineEntitiesStore.ts", () => ({
-    useVirtualMachineEntitiesStore: () => mockVirtualMachineEntitiesStore
+    useVirtualMachineEntitiesStore: () => mockVirtualMachineEntitiesStore,
 }));
 vi.mock("../../../store/currentVirtualMachineStore.ts", () => ({
-    useCurrentVirtualMachineStore: () => mockCurrentVirtualMachineStore
+    useCurrentVirtualMachineStore: () => mockCurrentVirtualMachineStore,
 }));
 vi.mock("../../../store/modals/currentVirtualMachineModalStore.ts", () => ({
-    useCurrentVirtualMachineModalStore: () => mockCurrentVirtualMachineModalStore
+    useCurrentVirtualMachineModalStore: () =>
+        mockCurrentVirtualMachineModalStore,
 }));
 vi.mock("../../../hooks/useSimulationStageContextMenuInfo.ts", () => ({
-    useSimulationStageContextMenuInfo: () => mockUseSimulationStageContextMenuInfo
+    useSimulationStageContextMenuInfo: () =>
+        mockUseSimulationStageContextMenuInfo,
 }));
 vi.mock("../../../hooks/useSimulationStageContextMenuClose.ts", () => ({
-    default: () => mockUseSimulationStageContextMenuClose
+    default: () => mockUseSimulationStageContextMenuClose,
 }));
 
 vi.mock("./VirtualMachineContextMenu.tsx", () => ({
     default: ({ title, isVisible, openVirtualMachineConsole }: any) => (
-        <div data-testid="context-menu" data-title={title} data-visible={isVisible} onClick={openVirtualMachineConsole}>
+        <div
+            data-testid="context-menu"
+            data-title={title}
+            data-visible={isVisible}
+            onClick={openVirtualMachineConsole}
+        >
             ContextMenu
         </div>
-    )
+    ),
 }));
 
 describe("VirtualMachineContextMenuContainer", () => {
@@ -57,8 +72,12 @@ describe("VirtualMachineContextMenuContainer", () => {
 
         fireEvent.click(menu);
 
-        expect(mockCurrentVirtualMachineStore.setCurrentEntity).not.toHaveBeenCalled();
+        expect(
+            mockCurrentVirtualMachineStore.setCurrentEntity,
+        ).not.toHaveBeenCalled();
         expect(mockCurrentVirtualMachineModalStore.open).not.toHaveBeenCalled();
-        expect(mockUseSimulationStageContextMenuClose.closeContextMenu).not.toHaveBeenCalled();
+        expect(
+            mockUseSimulationStageContextMenuClose.closeContextMenu,
+        ).not.toHaveBeenCalled();
     });
 });

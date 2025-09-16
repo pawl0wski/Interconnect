@@ -11,9 +11,11 @@ const VirtualNetworkEntityRenderer = () => {
         })();
     }, []);
 
-    return virtualNetworkEntitiesStore.networkConnections.map(e => (
-        <VirtualNetworkConnectionContainer key={e.id}
-                                           virtualNetworkEntity={e} />
+    return virtualNetworkEntitiesStore.networkConnections.map((e) => (
+        <VirtualNetworkConnectionContainer
+            key={e.id}
+            virtualNetworkEntity={e}
+        />
     ));
 };
 

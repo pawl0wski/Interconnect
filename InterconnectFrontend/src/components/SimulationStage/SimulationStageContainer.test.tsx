@@ -9,49 +9,58 @@ const { mockEntityPlacementStore, mockContextMenuStore } = vi.hoisted(() => ({
         currentEntityType: null as EntityType | null,
         placeCurrentEntity: vi.fn(),
         discardPlacingEntity: vi.fn(),
-        setCurrentEntity: vi.fn()
+        setCurrentEntity: vi.fn(),
     },
     mockContextMenuStore: {
         currentEntityType: null as EntityType | null,
         currentEntityId: null,
         currentPosition: { x: 0, y: 0 },
         setCurrentContextMenu: vi.fn(),
-        clearCurrentContextMenu: vi.fn()
-    }
+        clearCurrentContextMenu: vi.fn(),
+    },
 }));
 
 vi.mock("../../store/entityPlacementStore.ts", () => ({
-    useEntityPlacementStore: () => mockEntityPlacementStore
+    useEntityPlacementStore: () => mockEntityPlacementStore,
 }));
 
 vi.mock("../../store/simulationStageContextMenus.ts", () => ({
-    useSimulationStageContextMenusStore: () => mockContextMenuStore
+    useSimulationStageContextMenusStore: () => mockContextMenuStore,
 }));
 
 vi.mock("./SimulationStage.tsx", () => ({
     default: ({ onClick, onContextMenu, showPlacementCursor }: any) => (
-        <div data-testid="stage"
-             onClick={(e) =>
-                 onClick({ evt: { button: e.button, x: e.clientX, y: e.clientY } })
-             }
-             onContextMenu={(e) => onContextMenu({
-                 evt: {
-                     x: e.clientX, y: e.clientY, preventDefault: () => {
-                     }
-                 }, target: { name: "entity-1" }
-             })}
+        <div
+            data-testid="stage"
+            onClick={(e) =>
+                onClick({
+                    evt: { button: e.button, x: e.clientX, y: e.clientY },
+                })
+            }
+            onContextMenu={(e) =>
+                onContextMenu({
+                    evt: {
+                        x: e.clientX,
+                        y: e.clientY,
+                        preventDefault: () => {},
+                    },
+                    target: { name: "entity-1" },
+                })
+            }
         >
             {showPlacementCursor ? "cursor" : null}
         </div>
-    )
+    ),
 }));
-
 
 vi.mock("../../utils/simulationStageEntitiesUtils.ts", () => ({
     default: {
         getTargetOrParentEntityInfo: vi.fn(() => "entity-1"),
-        parseShapeName: vi.fn(() => ({ type: EntityType.VirtualMachine, id: 1 }))
-    }
+        parseShapeName: vi.fn(() => ({
+            type: EntityType.VirtualMachine,
+            id: 1,
+        })),
+    },
 }));
 
 describe("SimulationStageContainer", () => {
@@ -68,7 +77,9 @@ describe("SimulationStageContainer", () => {
         fireEvent.click(stage, { button: 0, clientX: 50, clientY: 60 });
 
         expect(mockContextMenuStore.clearCurrentContextMenu).toHaveBeenCalled();
-        expect(mockEntityPlacementStore.placeCurrentEntity).toHaveBeenCalledWith(50, 60);
+        expect(
+            mockEntityPlacementStore.placeCurrentEntity,
+        ).toHaveBeenCalledWith(50, 60);
     });
 
     test("should set current context menu on right click over entity", () => {
@@ -77,12 +88,18 @@ describe("SimulationStageContainer", () => {
 
         fireEvent.contextMenu(stage);
 
-        expect(SimulationStageEntitiesUtils.getTargetOrParentEntityInfo).toHaveBeenCalled();
+        expect(
+            SimulationStageEntitiesUtils.getTargetOrParentEntityInfo,
+        ).toHaveBeenCalled();
         expect(SimulationStageEntitiesUtils.parseShapeName).toHaveBeenCalled();
-        expect(mockContextMenuStore.setCurrentContextMenu).toHaveBeenCalledWith(EntityType.VirtualMachine, 1, {
-            x: 0,
-            y: 0
-        });
+        expect(mockContextMenuStore.setCurrentContextMenu).toHaveBeenCalledWith(
+            EntityType.VirtualMachine,
+            1,
+            {
+                x: 0,
+                y: 0,
+            },
+        );
     });
 
     test("should show placement cursor when currentEntityType is set", () => {

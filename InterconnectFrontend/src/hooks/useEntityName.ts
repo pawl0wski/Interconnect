@@ -1,7 +1,9 @@
 import { EntityType } from "../models/enums/EntityType.ts";
-import { useVirtualMachineEntitiesStore, useVirtualSwitchEntitiesStore } from "../store/entitiesStore.ts";
+import {
+    useVirtualMachineEntitiesStore,
+    useVirtualSwitchEntitiesStore,
+} from "../store/entitiesStore.ts";
 import { useTranslation } from "react-i18next";
-
 
 const useEntityName = (id: number, type: EntityType) => {
     const virtualMachineEntitiesStore = useVirtualMachineEntitiesStore();

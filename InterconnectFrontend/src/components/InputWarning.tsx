@@ -6,14 +6,14 @@ interface InputWarningProps {
 }
 
 const InputWarning = ({ text }: InputWarningProps) => {
-    return <div className={classes["input-warning"]}>
-        <div className={classes["input-warning__icon"]}>
-            <MdWarning size={20} />
+    return (
+        <div className={classes["input-warning"]}>
+            <div className={classes["input-warning__icon"]}>
+                <MdWarning size={20} />
+            </div>
+            <div className={classes["input-warning__text"]}>{text}</div>
         </div>
-        <div className={classes["input-warning__text"]}>
-            {text}
-        </div>
-    </div>;
+    );
 };
 
 export default InputWarning;

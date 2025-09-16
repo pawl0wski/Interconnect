@@ -8,41 +8,57 @@ interface NetworkPlacementStore {
     sourceEntityType: EntityType | null;
     destinationEntity: BaseEntity | null;
     destinationEntityType: EntityType | null;
-    setSourceEntity: (sourceEntity: BaseEntity, sourceEntityType: EntityType) => void;
-    setDestinationEntity: (destinationEntity: BaseEntity, destinationEntityType: EntityType) => void;
+    setSourceEntity: (
+        sourceEntity: BaseEntity,
+        sourceEntityType: EntityType,
+    ) => void;
+    setDestinationEntity: (
+        destinationEntity: BaseEntity,
+        destinationEntityType: EntityType,
+    ) => void;
     combineAsRequest: () => ConnectEntitiesRequest;
     clear: () => void;
 }
 
-const useNetworkPlacementStore = create<NetworkPlacementStore>()((set, get) => ({
-    sourceEntity: null,
-    sourceEntityType: null,
-    destinationEntity: null,
-    destinationEntityType: null,
-    setSourceEntity: (sourceEntity: BaseEntity, sourceEntityType: EntityType) => set({
-        sourceEntity,
-        sourceEntityType,
-    }),
-    setDestinationEntity: (destinationEntity: BaseEntity, destinationEntityType: EntityType) => set({
-        destinationEntity,
-        destinationEntityType,
-    }),
-    combineAsRequest: (): ConnectEntitiesRequest => {
-        const {
-            sourceEntity,
-            sourceEntityType,
-            destinationEntity,
-            destinationEntityType,
-        } = get();
+const useNetworkPlacementStore = create<NetworkPlacementStore>()(
+    (set, get) => ({
+        sourceEntity: null,
+        sourceEntityType: null,
+        destinationEntity: null,
+        destinationEntityType: null,
+        setSourceEntity: (
+            sourceEntity: BaseEntity,
+            sourceEntityType: EntityType,
+        ) =>
+            set({
+                sourceEntity,
+                sourceEntityType,
+            }),
+        setDestinationEntity: (
+            destinationEntity: BaseEntity,
+            destinationEntityType: EntityType,
+        ) =>
+            set({
+                destinationEntity,
+                destinationEntityType,
+            }),
+        combineAsRequest: (): ConnectEntitiesRequest => {
+            const {
+                sourceEntity,
+                sourceEntityType,
+                destinationEntity,
+                destinationEntityType,
+            } = get();
 
-        return {
-            sourceEntityId: sourceEntity!.id!,
-            sourceEntityType: sourceEntityType!,
-            destinationEntityId: destinationEntity!.id!,
-            destinationEntityType: destinationEntityType!,
-        };
-    },
-    clear: () => set({ sourceEntity: null })
-}));
+            return {
+                sourceEntityId: sourceEntity!.id!,
+                sourceEntityType: sourceEntityType!,
+                destinationEntityId: destinationEntity!.id!,
+                destinationEntityType: destinationEntityType!,
+            };
+        },
+        clear: () => set({ sourceEntity: null }),
+    }),
+);
 
 export default useNetworkPlacementStore;

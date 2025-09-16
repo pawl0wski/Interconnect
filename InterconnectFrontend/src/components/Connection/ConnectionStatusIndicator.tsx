@@ -9,15 +9,26 @@ interface ConnectionStatusIndicatorProps {
     onClick: () => void;
 }
 
-const ConnectionStatusIndicator = ({ connectionStatus, onClick }: ConnectionStatusIndicatorProps) => {
+const ConnectionStatusIndicator = ({
+    connectionStatus,
+    onClick,
+}: ConnectionStatusIndicatorProps) => {
     const componentClassName = "connection-status-indicator";
 
     const statusText = useMemo(() => {
         switch (connectionStatus) {
             case ConnectionStatus.Alive:
-                return <span className={`${componentClassName}__text--is-alive`}>Połączono</span>;
+                return (
+                    <span className={`${componentClassName}__text--is-alive`}>
+                        Połączono
+                    </span>
+                );
             case ConnectionStatus.Dead:
-                return <span className={`${componentClassName}__text--is-dead`}>Brak połączenia</span>;
+                return (
+                    <span className={`${componentClassName}__text--is-dead`}>
+                        Brak połączenia
+                    </span>
+                );
             case ConnectionStatus.Unknown:
                 return <span>Nieznane</span>;
         }
@@ -26,23 +37,30 @@ const ConnectionStatusIndicator = ({ connectionStatus, onClick }: ConnectionStat
     const statusIcon = useMemo(() => {
         switch (connectionStatus) {
             case ConnectionStatus.Alive:
-                return <MdCloudDone
-                    className={`${componentClassName}__icon ${componentClassName}__icon--is-alive`} />;
+                return (
+                    <MdCloudDone
+                        className={`${componentClassName}__icon ${componentClassName}__icon--is-alive`}
+                    />
+                );
             case ConnectionStatus.Dead:
-                return <MdCloudOff
-                    className={`${componentClassName}__icon ${componentClassName}__icon--is-dead`} />;
+                return (
+                    <MdCloudOff
+                        className={`${componentClassName}__icon ${componentClassName}__icon--is-dead`}
+                    />
+                );
             case ConnectionStatus.Unknown:
-                return <MdSync
-                    className={`${componentClassName}__icon`} />;
+                return <MdSync className={`${componentClassName}__icon`} />;
         }
     }, [connectionStatus]);
 
-    return <Button onClick={onClick} variant="transparent" py="0">
-        <Flex direction="row" align="center" gap={5}>
-            {statusIcon}
-            {statusText}
-        </Flex>
-    </Button>;
+    return (
+        <Button onClick={onClick} variant="transparent" py="0">
+            <Flex direction="row" align="center" gap={5}>
+                {statusIcon}
+                {statusText}
+            </Flex>
+        </Button>
+    );
 };
 
 export default ConnectionStatusIndicator;

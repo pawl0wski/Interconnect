@@ -10,7 +10,7 @@ const MemoryValueParser = {
             return null;
         }
         return parsedValue / 1024;
-    }
+    },
 };
 
 export default MemoryValueParser;

@@ -4,7 +4,7 @@ import {
     EntitiesStore,
     useInternetEntitiesStore,
     useVirtualMachineEntitiesStore,
-    useVirtualSwitchEntitiesStore
+    useVirtualSwitchEntitiesStore,
 } from "../store/entitiesStore.ts";
 import BaseEntity from "../models/interfaces/BaseEntity.ts";
 
@@ -13,10 +13,11 @@ const useEntityPosition = (entityId: number, entityType: EntityType) => {
     const entitiesStoresMap = new Map([
         [EntityType.VirtualMachine, useVirtualMachineEntitiesStore()],
         [EntityType.VirtualSwitch, useVirtualSwitchEntitiesStore()],
-        [EntityType.Internet, useInternetEntitiesStore()]
+        [EntityType.Internet, useInternetEntitiesStore()],
     ]);
 
-    const entitiesStoreToUpdatePosition: EntitiesStore<BaseEntity> | undefined = entitiesStoresMap.get(entityType);
+    const entitiesStoreToUpdatePosition: EntitiesStore<BaseEntity> | undefined =
+        entitiesStoresMap.get(entityType);
     if (!entitiesStoreToUpdatePosition) {
         return position;
     }

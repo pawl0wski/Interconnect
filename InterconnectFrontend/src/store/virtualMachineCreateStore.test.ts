@@ -7,14 +7,14 @@ const mockUpdateEntityPosition = vi.hoisted(() => vi.fn());
 
 vi.mock("../api/resourceClient/VirtualMachineResourceClient.ts", () => ({
     virtualMachineResourceClient: {
-        createVirtualMachine: mockCreateVirtualMachine
-    }
+        createVirtualMachine: mockCreateVirtualMachine,
+    },
 }));
 
 vi.mock("../api/resourceClient/VirtualMachineEntityResourceClient.ts", () => ({
     virtualMachineEntityResourceClient: {
-        updateEntityPosition: mockUpdateEntityPosition
-    }
+        updateEntityPosition: mockUpdateEntityPosition,
+    },
 }));
 
 describe("virtualMachineCreateStore", () => {
@@ -26,7 +26,12 @@ describe("virtualMachineCreateStore", () => {
         const { result } = renderHook(() => useVirtualMachineCreateStore());
 
         act(() => {
-            result.current.update({ name: "Test", virtualCPUs: 4, memory: 1024, bootableDiskId: 1 });
+            result.current.update({
+                name: "Test",
+                virtualCPUs: 4,
+                memory: 1024,
+                bootableDiskId: 1,
+            });
         });
 
         expect(result.current.name).toBe("Test");
@@ -42,13 +47,20 @@ describe("virtualMachineCreateStore", () => {
                 vmUuid: "d57ba30f-118d-4d22-8c82-a1cca2dc23a6",
                 name: "Test",
                 x: 25,
-                y: 25
-            }
+                y: 25,
+            },
         });
         const { result } = renderHook(() => useVirtualMachineCreateStore());
 
         await act(async () => {
-            result.current.update({ name: "Test", virtualCPUs: 4, memory: 1024, bootableDiskId: 1, x: 43, y: 25 });
+            result.current.update({
+                name: "Test",
+                virtualCPUs: 4,
+                memory: 1024,
+                bootableDiskId: 1,
+                x: 43,
+                y: 25,
+            });
             await result.current.createVirtualMachine();
         });
 
@@ -56,8 +68,12 @@ describe("virtualMachineCreateStore", () => {
             name: "Test",
             memory: 1024,
             virtualCpus: 4,
-            bootableDiskId: 1
+            bootableDiskId: 1,
         });
-        expect(mockUpdateEntityPosition).toHaveBeenCalledWith({ id: 1, x: 43, y: 25 });
+        expect(mockUpdateEntityPosition).toHaveBeenCalledWith({
+            id: 1,
+            x: 43,
+            y: 25,
+        });
     });
 });

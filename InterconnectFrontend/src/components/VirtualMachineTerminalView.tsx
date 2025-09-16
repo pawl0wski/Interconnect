@@ -12,9 +12,12 @@ const VirtualMachineTerminalView = ({ uuid }: TerminalProps) => {
     const terminalRef = useRef<HTMLDivElement>(null);
     const terminal = useRef<Terminal>(null);
 
-    const handleTerminalOnKey = useCallback((data: string) => {
-        virtualMachineConsoleHubClient.sendDataToConsole(uuid, data);
-    }, [uuid]);
+    const handleTerminalOnKey = useCallback(
+        (data: string) => {
+            virtualMachineConsoleHubClient.sendDataToConsole(uuid, data);
+        },
+        [uuid],
+    );
 
     const writeDataToTerminal = useCallback((base64Data: string) => {
         const byteTerminalData = Base64.decode(base64Data);
@@ -37,12 +40,17 @@ const VirtualMachineTerminalView = ({ uuid }: TerminalProps) => {
 
     useEffect(() => {
         (async () => {
-            const resp = await virtualMachineConsoleHubClient.getInitialDataForConsole(uuid);
+            const resp =
+                await virtualMachineConsoleHubClient.getInitialDataForConsole(
+                    uuid,
+                );
             writeDataToTerminal(resp.data.data);
             await virtualMachineConsoleHubClient.joinConsoleGroup(uuid);
-            virtualMachineConsoleHubClient.startListeningForNewTerminalData((resp: TerminalDataResponse) => {
-                writeDataToTerminal(resp.data.data);
-            });
+            virtualMachineConsoleHubClient.startListeningForNewTerminalData(
+                (resp: TerminalDataResponse) => {
+                    writeDataToTerminal(resp.data.data);
+                },
+            );
         })();
 
         return () => {
@@ -55,7 +63,7 @@ const VirtualMachineTerminalView = ({ uuid }: TerminalProps) => {
             ref={terminalRef}
             style={{
                 width: "100%",
-                height: "100%"
+                height: "100%",
             }}
         />
     );

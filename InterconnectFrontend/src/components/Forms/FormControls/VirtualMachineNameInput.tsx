@@ -10,12 +10,14 @@ interface VirtualMachineNameInputProps {
 const VirtualMachineNameInput = ({ form }: VirtualMachineNameInputProps) => {
     const { t } = useTranslation();
 
-    return <TextInput
-        withAsterisk
-        label={t("virtualMachine.name")}
-        key={form.key("name")}
-        {...form.getInputProps("name")}
-    />;
+    return (
+        <TextInput
+            withAsterisk
+            label={t("virtualMachine.name")}
+            key={form.key("name")}
+            {...form.getInputProps("name")}
+        />
+    );
 };
 
 export default VirtualMachineNameInput;

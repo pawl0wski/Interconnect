@@ -10,7 +10,11 @@ interface MemoryInputContainerProps {
     onMemoryChange: (value: number) => void;
 }
 
-const MemoryInputContainer = ({ memory, error, onMemoryChange }: MemoryInputContainerProps) => {
+const MemoryInputContainer = ({
+    memory,
+    error,
+    onMemoryChange,
+}: MemoryInputContainerProps) => {
     const defaultStringMemory = "0 B";
     const connectionInfoStore = useConnectionInfoStore();
     const [memoryLabel, setMemoryLabel] = useState(defaultStringMemory);
@@ -22,7 +26,8 @@ const MemoryInputContainer = ({ memory, error, onMemoryChange }: MemoryInputCont
 
     const handleChangeMemoryUsingSlider = (memory: number) => {
         onMemoryChange(memory);
-        const memoryHumanReadable = MemoryValueParser.valueMemoryToHumanReadable(memory);
+        const memoryHumanReadable =
+            MemoryValueParser.valueMemoryToHumanReadable(memory);
 
         if (memoryHumanReadable) {
             setMemoryInput(memoryHumanReadable);
@@ -32,26 +37,32 @@ const MemoryInputContainer = ({ memory, error, onMemoryChange }: MemoryInputCont
     const handleChangeMemoryUsingInput = (memory: string) => {
         setMemoryInput(memory);
 
-        const parsedBytes = MemoryValueParser.humanReadableMemoryToValue(memory);
+        const parsedBytes =
+            MemoryValueParser.humanReadableMemoryToValue(memory);
         if (parsedBytes) {
             onMemoryChange(parsedBytes);
         }
     };
 
     useEffect(() => {
-        setMemoryLabel(MemoryValueParser.valueMemoryToHumanReadable(memory) ?? defaultStringMemory);
+        setMemoryLabel(
+            MemoryValueParser.valueMemoryToHumanReadable(memory) ??
+                defaultStringMemory,
+        );
     }, [memory]);
 
-    return <MemoryInput
-        memorySlider={memory}
-        memoryInput={memoryInput}
-        memorySliderLabel={memoryLabel}
-        maxTotalMemory={maxMemory}
-        showSafeMemoryWarning={memory > safeMaxMemory}
-        error={error}
-        changeSelectedMemoryUsingSlider={handleChangeMemoryUsingSlider}
-        changeSelectedMemoryUsingInput={handleChangeMemoryUsingInput}
-    />;
+    return (
+        <MemoryInput
+            memorySlider={memory}
+            memoryInput={memoryInput}
+            memorySliderLabel={memoryLabel}
+            maxTotalMemory={maxMemory}
+            showSafeMemoryWarning={memory > safeMaxMemory}
+            error={error}
+            changeSelectedMemoryUsingSlider={handleChangeMemoryUsingSlider}
+            changeSelectedMemoryUsingInput={handleChangeMemoryUsingInput}
+        />
+    );
 };
 
 export default MemoryInputContainer;

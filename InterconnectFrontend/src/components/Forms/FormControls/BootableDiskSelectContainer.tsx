@@ -10,10 +10,10 @@ interface BootableDiskSelectContainerProps {
 }
 
 const BootableDiskSelectContainer = ({
-                                         selectedBootableDiskId,
-                                         error,
-                                         onBootableDiskChange
-                                     }: BootableDiskSelectContainerProps) => {
+    selectedBootableDiskId,
+    error,
+    onBootableDiskChange,
+}: BootableDiskSelectContainerProps) => {
     const bootableDisksStore = useBootableDisksStore();
 
     useEffect(() => {
@@ -21,21 +21,30 @@ const BootableDiskSelectContainer = ({
     }, []);
 
     const bootableDiskComboboxItems = useMemo<ComboboxItem[]>(() => {
-        return bootableDisksStore.bootableDisks.map((bootableDisk) => ({
-            label: `${bootableDisk.name} ${bootableDisk.version}`,
-            value: bootableDisk.id.toString()
-        } as unknown as ComboboxItem));
+        return bootableDisksStore.bootableDisks.map(
+            (bootableDisk) =>
+                ({
+                    label: `${bootableDisk.name} ${bootableDisk.version}`,
+                    value: bootableDisk.id.toString(),
+                }) as unknown as ComboboxItem,
+        );
     }, [bootableDisksStore.bootableDisks]);
 
-    return bootableDisksStore.isFetching ?
-        <Center><Loader /></Center> :
+    return bootableDisksStore.isFetching ? (
+        <Center>
+            <Loader />
+        </Center>
+    ) : (
         <BootableDiskSelect
             withAsterisk
             selectedBootableDiskId={selectedBootableDiskId}
             bootableDiskItems={bootableDiskComboboxItems}
             error={error}
-            onSelectedBootableDiskChange={(bootableDiskId) => onBootableDiskChange(bootableDiskId)}
-        />;
+            onSelectedBootableDiskChange={(bootableDiskId) =>
+                onBootableDiskChange(bootableDiskId)
+            }
+        />
+    );
 };
 
 export default BootableDiskSelectContainer;

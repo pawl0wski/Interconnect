@@ -6,10 +6,10 @@ import VirtualMachineEntityContainer from "./VirtualMachineEntityContainer.tsx";
 const mockVirtualMachineEntitiesStore = vi.hoisted(() => vi.fn());
 const mockCurrentVirtualMachineStore = vi.hoisted(() => vi.fn());
 vi.mock("../../../store/entitiesStore.ts", () => ({
-    useVirtualMachineEntitiesStore: mockVirtualMachineEntitiesStore
+    useVirtualMachineEntitiesStore: mockVirtualMachineEntitiesStore,
 }));
 vi.mock("../../../store/currentVirtualMachineStore.ts", () => ({
-    useCurrentVirtualMachineStore: mockCurrentVirtualMachineStore
+    useCurrentVirtualMachineStore: mockCurrentVirtualMachineStore,
 }));
 
 describe("VirtualMachineEntityContainer", () => {
@@ -18,19 +18,21 @@ describe("VirtualMachineEntityContainer", () => {
             id: 1,
             name: "VM1",
             x: 12,
-            y: 43
+            y: 43,
         } as VirtualMachineEntityModel;
         const mockUpdateEntityPosition = vi.fn();
-        mockVirtualMachineEntitiesStore.mockReturnValueOnce(({
+        mockVirtualMachineEntitiesStore.mockReturnValueOnce({
             entities: [testEntity],
-            updateEntityPosition: mockUpdateEntityPosition
-        }));
+            updateEntityPosition: mockUpdateEntityPosition,
+        });
 
-        const screen = render(<Stage data-testid="test-canvas" width={1000} height={1000}>
-            <Layer>
-                <VirtualMachineEntityContainer entity={testEntity} />
-            </Layer>
-        </Stage>);
+        const screen = render(
+            <Stage data-testid="test-canvas" width={1000} height={1000}>
+                <Layer>
+                    <VirtualMachineEntityContainer entity={testEntity} />
+                </Layer>
+            </Stage>,
+        );
         const canvas = screen.getByRole("presentation");
 
         fireEvent.mouseDown(canvas, { clientX: 12, clientY: 43 });

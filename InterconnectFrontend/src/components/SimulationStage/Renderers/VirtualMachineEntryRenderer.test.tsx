@@ -5,12 +5,13 @@ import { VirtualMachineEntityModel } from "../../../models/VirtualMachineEntityM
 
 const mockVirtualMachineEntitiesStore = vi.hoisted(() => vi.fn());
 vi.mock("../../../store/entitiesStore.ts", () => ({
-    useVirtualMachineEntitiesStore: mockVirtualMachineEntitiesStore
+    useVirtualMachineEntitiesStore: mockVirtualMachineEntitiesStore,
 }));
 vi.mock("../Entity/VirtualMachineEntityContainer.tsx", () => ({
-    default: ({ entity }: { entity: VirtualMachineEntityModel }) => <p>{entity.name}</p>
+    default: ({ entity }: { entity: VirtualMachineEntityModel }) => (
+        <p>{entity.name}</p>
+    ),
 }));
-
 
 describe("VirtualMachineEntityRenderer", async () => {
     beforeEach(() => {
@@ -21,12 +22,10 @@ describe("VirtualMachineEntityRenderer", async () => {
         const mockFetchEntities = vi.fn();
         mockVirtualMachineEntitiesStore.mockReturnValueOnce({
             entities: [],
-            fetchEntities: mockFetchEntities
+            fetchEntities: mockFetchEntities,
         });
 
-        render(
-            <VirtualMachineEntityRenderer />
-        );
+        render(<VirtualMachineEntityRenderer />);
 
         expect(mockFetchEntities).toHaveBeenCalled();
     });
@@ -38,21 +37,21 @@ describe("VirtualMachineEntityRenderer", async () => {
                     id: 1,
                     name: "VM1",
                     x: 1,
-                    y: 4
+                    y: 4,
                 },
                 {
                     id: 2,
                     name: "VM2",
                     x: 1,
-                    y: 4
-                }
+                    y: 4,
+                },
             ] as VirtualMachineEntityModel[],
-            fetchEntities: vi.fn()
+            fetchEntities: vi.fn(),
         });
 
         const screen = render(<VirtualMachineEntityRenderer />);
 
-        expect(screen.getByText(("VM1"))).toBeInTheDocument();
-        expect(screen.getByText(("VM2"))).toBeInTheDocument();
+        expect(screen.getByText("VM1")).toBeInTheDocument();
+        expect(screen.getByText("VM2")).toBeInTheDocument();
     });
 });

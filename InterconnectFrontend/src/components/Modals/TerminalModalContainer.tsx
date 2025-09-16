@@ -4,16 +4,22 @@ import { useCurrentVirtualMachineModalStore } from "../../store/modals/modalStor
 
 const TerminalModalContainer = () => {
     const currentVirtualMachineStore = useCurrentVirtualMachineStore();
-    const currentVirtualMachineModalStore = useCurrentVirtualMachineModalStore();
+    const currentVirtualMachineModalStore =
+        useCurrentVirtualMachineModalStore();
 
     const handleModalClose = () => {
         currentVirtualMachineModalStore.close();
     };
 
-    return currentVirtualMachineStore.currentEntity &&
-        <TerminalModel opened={currentVirtualMachineModalStore.opened}
-                       onClose={handleModalClose}
-                       entity={currentVirtualMachineStore.currentEntity!} />;
+    return (
+        currentVirtualMachineStore.currentEntity && (
+            <TerminalModel
+                opened={currentVirtualMachineModalStore.opened}
+                onClose={handleModalClose}
+                entity={currentVirtualMachineStore.currentEntity!}
+            />
+        )
+    );
 };
 
 export default TerminalModalContainer;

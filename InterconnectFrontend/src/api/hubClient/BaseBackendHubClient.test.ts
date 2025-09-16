@@ -1,12 +1,18 @@
-import { describe, test, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 import BaseBackendHubClient from "./BaseBackendHubClient.ts";
 
-const { mockConnect, mockWithUrl, mockWithAutomaticReconnect, mockBuild, MockHubConnectionBuilder } = vi.hoisted(() => {
+const {
+    mockConnect,
+    mockWithUrl,
+    mockWithAutomaticReconnect,
+    mockBuild,
+    MockHubConnectionBuilder,
+} = vi.hoisted(() => {
     const mockConnect = vi.fn();
     const mockWithUrl = vi.fn();
     const mockWithAutomaticReconnect = vi.fn();
     const mockBuild = vi.fn(() => ({
-        start: mockConnect
+        start: mockConnect,
     }));
 
     class MockHubConnectionBuilder {
@@ -15,7 +21,13 @@ const { mockConnect, mockWithUrl, mockWithAutomaticReconnect, mockBuild, MockHub
         public build = mockBuild;
     }
 
-    return { mockConnect, mockWithUrl, mockWithAutomaticReconnect, mockBuild, MockHubConnectionBuilder };
+    return {
+        mockConnect,
+        mockWithUrl,
+        mockWithAutomaticReconnect,
+        mockBuild,
+        MockHubConnectionBuilder,
+    };
 });
 
 class TestBaseBackendHubClient extends BaseBackendHubClient {
@@ -33,14 +45,12 @@ class TestBaseBackendHubClient extends BaseBackendHubClient {
 }
 
 vi.mock("@microsoft/signalr", () => ({
-    HubConnectionBuilder: MockHubConnectionBuilder
+    HubConnectionBuilder: MockHubConnectionBuilder,
 }));
 
-vi.mock(
-    "../../configuration.ts", () => ({
-        getConfiguration: () => ({ backendUrl: "http://test/" })
-    })
-);
+vi.mock("../../configuration.ts", () => ({
+    getConfiguration: () => ({ backendUrl: "http://test/" }),
+}));
 
 describe("BaseBackendHubClient", () => {
     beforeEach(() => {
@@ -63,7 +73,7 @@ describe("BaseBackendHubClient", () => {
         mockBuild.mockImplementation(() => ({
             start: mockConnect,
             invoke: vi.fn(),
-            connectionId: "123"
+            connectionId: "123",
         }));
         const testHub = new TestBaseBackendHubClient();
 
@@ -76,7 +86,7 @@ describe("BaseBackendHubClient", () => {
     test("should attempt to reconnect to hub if sending a request over an inactive connection", async () => {
         mockBuild.mockImplementation(() => ({
             start: mockConnect,
-            connectionId: null
+            connectionId: null,
         }));
         const testHub = new TestBaseBackendHubClient();
 
@@ -97,7 +107,7 @@ describe("BaseBackendHubClient", () => {
         const mockInvoke = vi.fn();
         mockBuild.mockImplementation(() => ({
             start: mockConnect,
-            invoke: mockInvoke
+            invoke: mockInvoke,
         }));
         const testHub = new TestBaseBackendHubClient();
 
@@ -110,7 +120,7 @@ describe("BaseBackendHubClient", () => {
         const mockInvoke = vi.fn();
         mockBuild.mockImplementation(() => ({
             start: mockConnect,
-            invoke: mockInvoke
+            invoke: mockInvoke,
         }));
         const testHub = new TestBaseBackendHubClient();
 
@@ -123,7 +133,7 @@ describe("BaseBackendHubClient", () => {
         const mockInvoke = vi.fn(() => ({ testKey: "testValue" }));
         mockBuild.mockImplementation(() => ({
             start: mockConnect,
-            invoke: mockInvoke
+            invoke: mockInvoke,
         }));
         const testHub = new TestBaseBackendHubClient();
 

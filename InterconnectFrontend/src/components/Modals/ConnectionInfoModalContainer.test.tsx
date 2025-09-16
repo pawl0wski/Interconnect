@@ -7,10 +7,10 @@ const mockUseConnectionInfoModalStore = vi.hoisted(() => vi.fn());
 const mockUseConnectionInfoStore = vi.hoisted(() => vi.fn());
 
 vi.mock("../../store/connectionInfoStore.ts", () => ({
-    useConnectionInfoStore: mockUseConnectionInfoStore
+    useConnectionInfoStore: mockUseConnectionInfoStore,
 }));
 vi.mock("../../store/modals/modalStores.ts", () => ({
-    useConnectionInfoModalStore: mockUseConnectionInfoModalStore
+    useConnectionInfoModalStore: mockUseConnectionInfoModalStore,
 }));
 
 describe("ConnectionInfoModalContainer", () => {
@@ -22,12 +22,14 @@ describe("ConnectionInfoModalContainer", () => {
     test("should display connection info", () => {
         mockUseConnectionInfoModalStore.mockReturnValue({ opened: true });
         mockUseConnectionInfoStore.mockReturnValue({
-            connectionInfo: { testKey: "testValue" }
+            connectionInfo: { testKey: "testValue" },
         });
 
-        const screen = render(<MantineProvider>
-            <ConnectionInfoModalContainer />
-        </MantineProvider>);
+        const screen = render(
+            <MantineProvider>
+                <ConnectionInfoModalContainer />
+            </MantineProvider>,
+        );
 
         expect(screen.getByText("testKey")).toBeInTheDocument();
         expect(screen.getByText("testValue")).toBeInTheDocument();

@@ -14,11 +14,15 @@ class VirtualMachineConsoleHubClient extends BaseBackendHubClient {
         return await this.sendHubRequest("SendDataToConsole", { uuid, data });
     }
 
-    public async getInitialDataForConsole(uuid: string): Promise<TerminalDataResponse> {
+    public async getInitialDataForConsole(
+        uuid: string,
+    ): Promise<TerminalDataResponse> {
         return await this.sendHubRequest("GetInitialDataForConsole", uuid);
     }
 
-    public startListeningForNewTerminalData(callback: (resp: TerminalDataResponse) => void) {
+    public startListeningForNewTerminalData(
+        callback: (resp: TerminalDataResponse) => void,
+    ) {
         return this.startListeningForMessages("NewTerminalData", callback);
     }
 

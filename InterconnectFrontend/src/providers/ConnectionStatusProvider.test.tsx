@@ -5,14 +5,17 @@ import { expect } from "vitest";
 const mockUpdateConnectionStatus = vi.fn();
 
 vi.mock("../store/connectionStore", () => ({
-    useConnectionStore: (selector: any) => selector({ updateConnectionStatus: mockUpdateConnectionStatus })
+    useConnectionStore: (selector: any) =>
+        selector({ updateConnectionStatus: mockUpdateConnectionStatus }),
 }));
 
 describe("ConnectionStatusProvider", () => {
     test("should fetch connection status on mount", () => {
-        render(<ConnectionStatusProvider>
-            <div>Test</div>
-        </ConnectionStatusProvider>);
+        render(
+            <ConnectionStatusProvider>
+                <div>Test</div>
+            </ConnectionStatusProvider>,
+        );
 
         expect(mockUpdateConnectionStatus).toHaveBeenCalledTimes(1);
     });
@@ -23,7 +26,7 @@ describe("ConnectionStatusProvider", () => {
         render(
             <ConnectionStatusProvider>
                 <div>test</div>
-            </ConnectionStatusProvider>
+            </ConnectionStatusProvider>,
         );
 
         expect(mockUpdateConnectionStatus).toHaveBeenCalledTimes(2);

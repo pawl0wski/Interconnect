@@ -10,10 +10,17 @@ const InternetEntityTrayButtonContainer = () => {
         entityPlacementStore.setCurrentEntityType(EntityType.Internet);
     };
 
-    const isActive = useMemo(() => (entityPlacementStore.currentEntityType == EntityType.Internet), [entityPlacementStore.currentEntityType]);
+    const isActive = useMemo(
+        () => entityPlacementStore.currentEntityType == EntityType.Internet,
+        [entityPlacementStore.currentEntityType],
+    );
 
-
-    return <InternetEntityTrayButton onClick={handleCreateInternet} active={isActive} />;
+    return (
+        <InternetEntityTrayButton
+            onClick={handleCreateInternet}
+            active={isActive}
+        />
+    );
 };
 
 export default InternetEntityTrayButtonContainer;

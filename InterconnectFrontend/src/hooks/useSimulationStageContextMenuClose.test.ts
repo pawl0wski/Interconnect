@@ -1,15 +1,15 @@
-import { renderHook, act } from "@testing-library/react";
-import { describe, test, expect, vi, beforeEach } from "vitest";
+import { act, renderHook } from "@testing-library/react";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 import useSimulationStageContextMenuClose from "./useSimulationStageContextMenuClose";
 
 const { mockClear } = vi.hoisted(() => ({
-    mockClear: vi.fn()
+    mockClear: vi.fn(),
 }));
 
 vi.mock("../store/simulationStageContextMenus.ts", () => ({
     useSimulationStageContextMenusStore: () => ({
-        clearCurrentContextMenu: mockClear
-    })
+        clearCurrentContextMenu: mockClear,
+    }),
 }));
 
 describe("useSimulationStageContextMenuClose", () => {
@@ -18,7 +18,9 @@ describe("useSimulationStageContextMenuClose", () => {
     });
 
     test("should call clearCurrentContextMenu when closeContextMenu is invoked", () => {
-        const { result } = renderHook(() => useSimulationStageContextMenuClose());
+        const { result } = renderHook(() =>
+            useSimulationStageContextMenuClose(),
+        );
 
         act(() => {
             result.current.closeContextMenu();

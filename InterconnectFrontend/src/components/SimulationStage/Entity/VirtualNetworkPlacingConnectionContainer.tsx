@@ -8,12 +8,17 @@ import { EntityType } from "../../../models/enums/EntityType.ts";
 const VirtualNetworkPlacingConnectionContainer = () => {
     const networkPlacementStore = useNetworkPlacementStore();
     const entityPlacementStore = useEntityPlacementStore();
-    const [destinationPosition, setDestinationPosition] = useState<PositionModel>({ x: 0, y: 0 });
-    const [sourcePosition, setSourcePosition] = useState<PositionModel>({ x: 0, y: 0 });
+    const [destinationPosition, setDestinationPosition] =
+        useState<PositionModel>({ x: 0, y: 0 });
+    const [sourcePosition, setSourcePosition] = useState<PositionModel>({
+        x: 0,
+        y: 0,
+    });
 
     const visible = useMemo(
         () => entityPlacementStore.currentEntityType === EntityType.Network,
-        [entityPlacementStore.currentEntityType]);
+        [entityPlacementStore.currentEntityType],
+    );
 
     useEffect(() => {
         if (!networkPlacementStore.sourceEntity) {
@@ -37,11 +42,17 @@ const VirtualNetworkPlacingConnectionContainer = () => {
         };
     }, []);
 
-    return <>{
-        entityPlacementStore.currentEntityType &&
-        <VirtualNetworkEntity visible={visible} destinationPosition={destinationPosition}
-                              sourcePosition={sourcePosition} />
-    }</>;
+    return (
+        <>
+            {entityPlacementStore.currentEntityType && (
+                <VirtualNetworkEntity
+                    visible={visible}
+                    destinationPosition={destinationPosition}
+                    sourcePosition={sourcePosition}
+                />
+            )}
+        </>
+    );
 };
 
 export default VirtualNetworkPlacingConnectionContainer;

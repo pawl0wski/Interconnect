@@ -10,14 +10,12 @@ import { useState } from "react";
 const mockUseConnectionInfoStore = vi.hoisted(() => vi.fn());
 
 vi.mock("../../../store/connectionInfoStore.ts", () => ({
-    useConnectionInfoStore: mockUseConnectionInfoStore
+    useConnectionInfoStore: mockUseConnectionInfoStore,
 }));
 
-vi.mock(
-    "../../../configuration.ts", () => ({
-        getConfiguration: () => ({ maxSafeVirtualMachineMemoryPercent: 0.4 })
-    })
-);
+vi.mock("../../../configuration.ts", () => ({
+    getConfiguration: () => ({ maxSafeVirtualMachineMemoryPercent: 0.4 }),
+}));
 
 const MemoryWrapperWithState = () => {
     const [memory, setMemory] = useState(0);
@@ -40,18 +38,20 @@ describe("MemoryInputContainer", () => {
     test("should change memory using slider", async () => {
         mockUseConnectionInfoStore.mockReturnValue({
             connectionInfo: {
-                totalMemory: 1024
-            } as ConnectionInfoModel
+                totalMemory: 1024,
+            } as ConnectionInfoModel,
         });
         const user = userEvent.setup();
         const mockOnMemoryChange = vi.fn();
-        const screen = render(<MantineProvider>
-            <MemoryInputContainer
-                memory={0}
-                error={null}
-                onMemoryChange={mockOnMemoryChange}
-            />
-        </MantineProvider>);
+        const screen = render(
+            <MantineProvider>
+                <MemoryInputContainer
+                    memory={0}
+                    error={null}
+                    onMemoryChange={mockOnMemoryChange}
+                />
+            </MantineProvider>,
+        );
 
         const sliderThumb = screen.getByRole("slider");
         await user.click(sliderThumb);
@@ -63,20 +63,25 @@ describe("MemoryInputContainer", () => {
     test("should change memory using input", async () => {
         mockUseConnectionInfoStore.mockReturnValue({
             connectionInfo: {
-                totalMemory: 1073741824
-            } as ConnectionInfoModel
+                totalMemory: 1073741824,
+            } as ConnectionInfoModel,
         });
         const mockOnMemoryChange = vi.fn();
-        const screen = render(<MantineProvider>
-            <MemoryInputContainer
-                memory={0}
-                error={null}
-                onMemoryChange={mockOnMemoryChange}
-            />
-        </MantineProvider>);
+        const screen = render(
+            <MantineProvider>
+                <MemoryInputContainer
+                    memory={0}
+                    error={null}
+                    onMemoryChange={mockOnMemoryChange}
+                />
+            </MantineProvider>,
+        );
 
         const inputElement = screen.getByRole("textbox");
-        await userEvent.type(inputElement, "{backspace}{backspace}{backspace}512Mb");
+        await userEvent.type(
+            inputElement,
+            "{backspace}{backspace}{backspace}512Mb",
+        );
 
         expect(mockOnMemoryChange).toHaveBeenLastCalledWith(524288);
     });
@@ -84,14 +89,22 @@ describe("MemoryInputContainer", () => {
     test("should display warning when user hit max safe memory limit", () => {
         mockUseConnectionInfoStore.mockReturnValue({
             connectionInfo: {
-                totalMemory: 1024
-            } as ConnectionInfoModel
+                totalMemory: 1024,
+            } as ConnectionInfoModel,
         });
-        const screen = render(<MantineProvider>
-            <MemoryInputContainer memory={512} error={null} onMemoryChange={vi.fn()} />
-        </MantineProvider>);
+        const screen = render(
+            <MantineProvider>
+                <MemoryInputContainer
+                    memory={512}
+                    error={null}
+                    onMemoryChange={vi.fn()}
+                />
+            </MantineProvider>,
+        );
 
-        const warningElement = screen.getByText("Chcesz zadeklarować więcej niż 40% dostępnej pamięci operacyjnej. Może to spowodować spowolnienie działania systemu gospodarza lub innych maszyn wirtualnych.");
+        const warningElement = screen.getByText(
+            "Chcesz zadeklarować więcej niż 40% dostępnej pamięci operacyjnej. Może to spowodować spowolnienie działania systemu gospodarza lub innych maszyn wirtualnych.",
+        );
 
         expect(warningElement).toBeInTheDocument();
     });
@@ -99,13 +112,15 @@ describe("MemoryInputContainer", () => {
     test("should update input when user use slider", async () => {
         mockUseConnectionInfoStore.mockReturnValue({
             connectionInfo: {
-                totalMemory: 1024
-            } as ConnectionInfoModel
+                totalMemory: 1024,
+            } as ConnectionInfoModel,
         });
         const user = userEvent.setup();
-        const screen = render(<MantineProvider>
-            <MemoryWrapperWithState />
-        </MantineProvider>);
+        const screen = render(
+            <MantineProvider>
+                <MemoryWrapperWithState />
+            </MantineProvider>,
+        );
 
         const sliderThumb = screen.getByRole("slider");
         await user.click(sliderThumb);
@@ -118,12 +133,18 @@ describe("MemoryInputContainer", () => {
     test("should show memory label", async () => {
         mockUseConnectionInfoStore.mockReturnValue({
             connectionInfo: {
-                totalMemory: 1024
-            } as ConnectionInfoModel
+                totalMemory: 1024,
+            } as ConnectionInfoModel,
         });
-        const screen = render(<MantineProvider>
-            <MemoryInputContainer memory={512} error={null} onMemoryChange={vi.fn()} />
-        </MantineProvider>);
+        const screen = render(
+            <MantineProvider>
+                <MemoryInputContainer
+                    memory={512}
+                    error={null}
+                    onMemoryChange={vi.fn()}
+                />
+            </MantineProvider>,
+        );
 
         const sliderThumb = screen.getByRole("slider");
         await userEvent.hover(sliderThumb);
@@ -134,16 +155,18 @@ describe("MemoryInputContainer", () => {
     test("should display validation error", () => {
         mockUseConnectionInfoStore.mockReturnValue({
             connectionInfo: {
-                totalMemory: 1024
-            } as ConnectionInfoModel
+                totalMemory: 1024,
+            } as ConnectionInfoModel,
         });
-        const screen = render(<MantineProvider>
-            <MemoryInputContainer
-                memory={0}
-                error="TestError"
-                onMemoryChange={vi.fn()}
-            />
-        </MantineProvider>);
+        const screen = render(
+            <MantineProvider>
+                <MemoryInputContainer
+                    memory={0}
+                    error="TestError"
+                    onMemoryChange={vi.fn()}
+                />
+            </MantineProvider>,
+        );
 
         expect(screen.getByText("TestError")).toBeInTheDocument();
     });

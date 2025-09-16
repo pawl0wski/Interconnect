@@ -15,30 +15,35 @@ const HomePage = () => {
     const footerHeight = 40;
     const trayHeight = 70;
 
-    return <AppShell
-        header={{ height: headerHeight }}
-        footer={{ height: footerHeight }}
-        padding="md"
-    >
-        <ConnectionOverlay />
-        <AppShell.Header>
-            <Header />
-        </AppShell.Header>
+    return (
+        <AppShell
+            header={{ height: headerHeight }}
+            footer={{ height: footerHeight }}
+            padding="md"
+        >
+            <ConnectionOverlay />
+            <AppShell.Header>
+                <Header />
+            </AppShell.Header>
 
-        <AppShell.Main h={`calc( 100vh - ${headerHeight + footerHeight + trayHeight}px)`}
-                       pt={`${headerHeight}px`}
-                       pb={`${footerHeight + trayHeight}px`} px={0}>
-            <SimulationStageContainer />
-        </AppShell.Main>
+            <AppShell.Main
+                h={`calc( 100vh - ${headerHeight + footerHeight + trayHeight}px)`}
+                pt={`${headerHeight}px`}
+                pb={`${footerHeight + trayHeight}px`}
+                px={0}
+            >
+                <SimulationStageContainer />
+            </AppShell.Main>
 
-        <Tray />
-        <Footer />
-        <VirtualMachineCreateModalContainer />
-        <VirtualSwitchCreateModalContainer />
-        <ConnectionInfoModalContainer />
-        <TerminalModalContainer />
-        <ErrorModalContainer />
-    </AppShell>;
+            <Tray />
+            <Footer />
+            <VirtualMachineCreateModalContainer />
+            <VirtualSwitchCreateModalContainer />
+            <ConnectionInfoModalContainer />
+            <TerminalModalContainer />
+            <ErrorModalContainer />
+        </AppShell>
+    );
 };
 
 export default HomePage;

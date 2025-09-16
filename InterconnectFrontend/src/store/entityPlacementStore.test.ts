@@ -1,24 +1,24 @@
 import { act, renderHook } from "@testing-library/react";
-import { expect, describe, test, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 import { useEntityPlacementStore } from "./entityPlacementStore.ts";
 import { EntityType } from "../models/enums/EntityType.ts";
 
 const { mockUpdate, mockOpen } = vi.hoisted(() => ({
     mockUpdate: vi.fn(),
-    mockOpen: vi.fn()
+    mockOpen: vi.fn(),
 }));
 
 vi.mock("./virtualMachineCreateStore.ts", () => ({
     useVirtualMachineCreateStore: {
-        getState: vi.fn(() => ({ update: mockUpdate }))
-    }
+        getState: vi.fn(() => ({ update: mockUpdate })),
+    },
 }));
 
 vi.mock("./modals/modalStores.ts", async () => ({
     ...(await vi.importActual("./modals/modalStores.ts")),
     useVirtualMachineCreateModalStore: {
-        getState: vi.fn(() => ({ open: mockOpen }))
-    }
+        getState: vi.fn(() => ({ open: mockOpen })),
+    },
 }));
 
 describe("entityPlacementStore", () => {
@@ -34,7 +34,9 @@ describe("entityPlacementStore", () => {
             result.current.setCurrentEntityType(EntityType.VirtualMachine);
         });
 
-        expect(result.current.currentEntityType).toEqual(EntityType.VirtualMachine);
+        expect(result.current.currentEntityType).toEqual(
+            EntityType.VirtualMachine,
+        );
     });
 
     test("should call update and open modal when placing VirtualMachine", () => {

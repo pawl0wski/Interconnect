@@ -2,10 +2,12 @@ import VirtualNetworkPlacingConnectionContainer from "../Entity/VirtualNetworkPl
 import VirtualNetworkEntityRenderer from "./VirtualNetworkEntityRenderer.tsx";
 
 const VirtualNetworkRenderer = () => {
-    return <>
-        <VirtualNetworkPlacingConnectionContainer />
-        <VirtualNetworkEntityRenderer />
-    </>;
+    return (
+        <>
+            <VirtualNetworkPlacingConnectionContainer />
+            <VirtualNetworkEntityRenderer />
+        </>
+    );
 };
 
 export default VirtualNetworkRenderer;

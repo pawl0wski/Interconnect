@@ -10,9 +10,18 @@ const VirtualMachineCreateEntityTrayButtonContainer = () => {
         entityPlacementStore.setCurrentEntityType(EntityType.VirtualMachine);
     };
 
-    const isActive = useMemo(() => (entityPlacementStore.currentEntityType == EntityType.VirtualMachine), [entityPlacementStore.currentEntityType]);
+    const isActive = useMemo(
+        () =>
+            entityPlacementStore.currentEntityType == EntityType.VirtualMachine,
+        [entityPlacementStore.currentEntityType],
+    );
 
-    return <VirtualMachineCreateEntityTrayButton active={isActive} onClick={handleCreateVirtualMachine} />;
+    return (
+        <VirtualMachineCreateEntityTrayButton
+            active={isActive}
+            onClick={handleCreateVirtualMachine}
+        />
+    );
 };
 
 export default VirtualMachineCreateEntityTrayButtonContainer;

@@ -13,13 +13,18 @@ interface VirtualSwitchEntityContainerProps {
     entity: VirtualSwitchEntityModel;
 }
 
-const VirtualSwitchEntityContainer = ({ entity }: VirtualSwitchEntityContainerProps) => {
+const VirtualSwitchEntityContainer = ({
+    entity,
+}: VirtualSwitchEntityContainerProps) => {
     const virtualSwitchEntitiesStore = useVirtualSwitchEntitiesStore();
     const entityPlacementStore = useEntityPlacementStore();
     const networkPlacementStore = useNetworkPlacementStore();
 
     const shapeName = useMemo(() => {
-        return simulationStageEntitiesUtils.createShapeName({ id: entity.id! }, EntityType.VirtualSwitch);
+        return simulationStageEntitiesUtils.createShapeName(
+            { id: entity.id! },
+            EntityType.VirtualSwitch,
+        );
     }, [entity.id]);
 
     const changeCursor = useChangeCursor();
@@ -33,12 +38,21 @@ const VirtualSwitchEntityContainer = ({ entity }: VirtualSwitchEntityContainerPr
     };
 
     const handleDragEnd = (e: KonvaEventObject<DragEvent>) => {
-        virtualSwitchEntitiesStore.updateEntityPosition(entity.id, e.target.x(), e.target.y(), true);
+        virtualSwitchEntitiesStore.updateEntityPosition(
+            entity.id,
+            e.target.x(),
+            e.target.y(),
+            true,
+        );
         changeCursor(e, "grab");
     };
 
     const handleDragMove = (e: KonvaEventObject<DragEvent>) => {
-        virtualSwitchEntitiesStore.updateEntityPosition(entity.id, e.target.x(), e.target.y());
+        virtualSwitchEntitiesStore.updateEntityPosition(
+            entity.id,
+            e.target.x(),
+            e.target.y(),
+        );
         changeCursor(e, "grabbing");
     };
 
@@ -53,15 +67,25 @@ const VirtualSwitchEntityContainer = ({ entity }: VirtualSwitchEntityContainerPr
             return false;
         }
 
-        networkPlacementStore.setDestinationEntity(entity, EntityType.VirtualSwitch);
+        networkPlacementStore.setDestinationEntity(
+            entity,
+            EntityType.VirtualSwitch,
+        );
         await entityPlacementStore.placeCurrentEntity(0, 0);
         return true;
     };
 
-    return <VirtualSwitchEntity entity={entity} shapeName={shapeName ?? ""} onDragEnd={handleDragEnd}
-                                onDragMove={handleDragMove}
-                                onMouseOut={handleOnMouseOut} onMouseOver={handleOnMouseOver}
-                                onClick={handleOnClick} />;
+    return (
+        <VirtualSwitchEntity
+            entity={entity}
+            shapeName={shapeName ?? ""}
+            onDragEnd={handleDragEnd}
+            onDragMove={handleDragMove}
+            onMouseOut={handleOnMouseOut}
+            onMouseOver={handleOnMouseOver}
+            onClick={handleOnClick}
+        />
+    );
 };
 
 export default VirtualSwitchEntityContainer;

@@ -15,7 +15,12 @@ const ConnectionStatusIndicatorContainer = () => {
         connectionInfoModal.open();
     }, [connectionInfoModal, connectionStatus]);
 
-    return <ConnectionStatusIndicator connectionStatus={connectionStatus} onClick={handleClick} />;
+    return (
+        <ConnectionStatusIndicator
+            connectionStatus={connectionStatus}
+            onClick={handleClick}
+        />
+    );
 };
 
 export default ConnectionStatusIndicatorContainer;

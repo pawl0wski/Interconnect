@@ -1,4 +1,4 @@
-import { Flex, Modal, Textarea, Text } from "@mantine/core";
+import { Flex, Modal, Text, Textarea } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import { MdErrorOutline } from "react-icons/md";
 
@@ -12,24 +12,34 @@ interface ErrorModalProps {
 const ErrorModalTitle = () => {
     const { t } = useTranslation();
 
-    return <Flex direction="row" justify="center" align="center" gap="0.5rem">
-        <MdErrorOutline size="24" />
-        <Text size="md">{t("errorOccurred")}</Text>
-    </Flex>;
+    return (
+        <Flex direction="row" justify="center" align="center" gap="0.5rem">
+            <MdErrorOutline size="24" />
+            <Text size="md">{t("errorOccurred")}</Text>
+        </Flex>
+    );
 };
 
-const ErrorModal = ({ error, stackTrace, opened, onModalClose }: ErrorModalProps) => {
-    return <Modal
-        zIndex={400}
-        title={<ErrorModalTitle />}
-        opened={opened}
-        onClose={onModalClose}
-        centered>
-        <p>{error}</p>
-        {
-            stackTrace && <Textarea readOnly autosize maxRows={10} value={stackTrace} />
-        }
-    </Modal>;
+const ErrorModal = ({
+    error,
+    stackTrace,
+    opened,
+    onModalClose,
+}: ErrorModalProps) => {
+    return (
+        <Modal
+            zIndex={400}
+            title={<ErrorModalTitle />}
+            opened={opened}
+            onClose={onModalClose}
+            centered
+        >
+            <p>{error}</p>
+            {stackTrace && (
+                <Textarea readOnly autosize maxRows={10} value={stackTrace} />
+            )}
+        </Modal>
+    );
 };
 
 export default ErrorModal;

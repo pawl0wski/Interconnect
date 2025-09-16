@@ -13,36 +13,56 @@ interface VirtualMachineCreateFormProps {
     onFormSubmit: (values: VirtualMachineCreateFormValues) => void;
 }
 
-const VirtualMachineCreateForm = ({ form, onFormSubmit }: VirtualMachineCreateFormProps) => {
+const VirtualMachineCreateForm = ({
+    form,
+    onFormSubmit,
+}: VirtualMachineCreateFormProps) => {
     const { t } = useTranslation();
 
-    return <form onSubmit={form.onSubmit(onFormSubmit)}>
-        <Fieldset legend={t("virtualMachine.form.informationSection")}>
-            <VirtualMachineNameInput form={form} />
-        </Fieldset>
-        <Fieldset legend={t("virtualMachine.form.resourcesSection")}>
-            <Flex gap="md" direction="column">
-                <VirtualCPUsSliderContainer
-                    virtualCPUs={form.values.virtualCPUs}
-                    error={ObjectUtils.getValueOrNull<string>(form.errors, "virtualCPUs")}
-                    onVirtualCPUsChange={(v) => form.setFieldValue("virtualCPUs", v)}
-                />
-                <MemoryInputContainer
-                    memory={form.values.memory}
-                    error={ObjectUtils.getValueOrNull<string>(form.errors, "memory")}
-                    onMemoryChange={(v) => form.setFieldValue("memory", v)}
-                />
-                <BootableDiskSelectContainer
-                    selectedBootableDiskId={form.values.bootableDiskId}
-                    error={ObjectUtils.getValueOrNull<string>(form.errors, "bootableDiskId")}
-                    onBootableDiskChange={(v) => form.setFieldValue("bootableDiskId", v)}
-                />
+    return (
+        <form onSubmit={form.onSubmit(onFormSubmit)}>
+            <Fieldset legend={t("virtualMachine.form.informationSection")}>
+                <VirtualMachineNameInput form={form} />
+            </Fieldset>
+            <Fieldset legend={t("virtualMachine.form.resourcesSection")}>
+                <Flex gap="md" direction="column">
+                    <VirtualCPUsSliderContainer
+                        virtualCPUs={form.values.virtualCPUs}
+                        error={ObjectUtils.getValueOrNull<string>(
+                            form.errors,
+                            "virtualCPUs",
+                        )}
+                        onVirtualCPUsChange={(v) =>
+                            form.setFieldValue("virtualCPUs", v)
+                        }
+                    />
+                    <MemoryInputContainer
+                        memory={form.values.memory}
+                        error={ObjectUtils.getValueOrNull<string>(
+                            form.errors,
+                            "memory",
+                        )}
+                        onMemoryChange={(v) => form.setFieldValue("memory", v)}
+                    />
+                    <BootableDiskSelectContainer
+                        selectedBootableDiskId={form.values.bootableDiskId}
+                        error={ObjectUtils.getValueOrNull<string>(
+                            form.errors,
+                            "bootableDiskId",
+                        )}
+                        onBootableDiskChange={(v) =>
+                            form.setFieldValue("bootableDiskId", v)
+                        }
+                    />
+                </Flex>
+            </Fieldset>
+            <Flex direction="row" justify="flex-end" mt={10}>
+                <Button type="submit">
+                    {t("virtualMachine.form.createVirtualMachine")}
+                </Button>
             </Flex>
-        </Fieldset>
-        <Flex direction="row" justify="flex-end" mt={10}>
-            <Button type="submit">{t("virtualMachine.form.createVirtualMachine")}</Button>
-        </Flex>
-    </form>;
+        </form>
+    );
 };
 
 export default VirtualMachineCreateForm;

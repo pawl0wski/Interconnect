@@ -11,9 +11,13 @@ const ConnectionInfoModalContainer = () => {
         connectionInfoModalStore.close();
     }, [connectionInfoModalStore]);
 
-    return <ConnectionInfoModal connectionInfo={connectionInfoStore.connectionInfo}
-                                opened={connectionInfoModalStore.opened}
-                                closeModal={onCloseModal} />;
+    return (
+        <ConnectionInfoModal
+            connectionInfo={connectionInfoStore.connectionInfo}
+            opened={connectionInfoModalStore.opened}
+            closeModal={onCloseModal}
+        />
+    );
 };
 
 export default ConnectionInfoModalContainer;

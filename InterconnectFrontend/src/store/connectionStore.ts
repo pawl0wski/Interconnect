@@ -22,9 +22,9 @@ const useConnectionStore = create<ConnectionStoreState>()((set) => ({
             connectionStatus = ConnectionStatus.Dead;
         }
         set({
-            connectionStatus
+            connectionStatus,
         });
-    }
+    },
 }));
 
 export { useConnectionStore };

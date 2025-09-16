@@ -17,12 +17,20 @@ class VirtualNetworkResourceClient extends BaseBackendResourceClient {
         return this.sendBackendRequest("GetAllConnections", "GET", {});
     }
 
-    public createVirtualSwitch(req: CreateVirtualSwitchRequest): Promise<VirtualSwitchesResponse> {
+    public createVirtualSwitch(
+        req: CreateVirtualSwitchRequest,
+    ): Promise<VirtualSwitchesResponse> {
         return this.sendBackendRequest("CreateVirtualSwitch", "POST", req);
     }
 
-    public updateVirtualSwitchEntityPosition(req: UpdateEntityPositionRequest): Promise<VirtualSwitchesResponse> {
-        return this.sendBackendRequest("UpdateVirtualSwitchEntityPosition", "POST", req);
+    public updateVirtualSwitchEntityPosition(
+        req: UpdateEntityPositionRequest,
+    ): Promise<VirtualSwitchesResponse> {
+        return this.sendBackendRequest(
+            "UpdateVirtualSwitchEntityPosition",
+            "POST",
+            req,
+        );
     }
 
     public getVirtualSwitchEntities(): Promise<VirtualSwitchesResponse> {
@@ -37,11 +45,19 @@ class VirtualNetworkResourceClient extends BaseBackendResourceClient {
         return this.sendBackendRequest("GetInternetEntities", "GET", {});
     }
 
-    public updateInternetEntityPosition(req: UpdateEntityPositionRequest): Promise<InternetEntitiesResponse> {
-        return this.sendBackendRequest("UpdateInternetEntityPosition", "POST", req);
+    public updateInternetEntityPosition(
+        req: UpdateEntityPositionRequest,
+    ): Promise<InternetEntitiesResponse> {
+        return this.sendBackendRequest(
+            "UpdateInternetEntityPosition",
+            "POST",
+            req,
+        );
     }
 
-    public disconnectEntities(req: VirtualNetworkEntityConnectionRequest): Promise<StringResponse> {
+    public disconnectEntities(
+        req: VirtualNetworkEntityConnectionRequest,
+    ): Promise<StringResponse> {
         return this.sendBackendRequest("DisconnectEntities", "POST", req);
     }
 
@@ -53,4 +69,3 @@ class VirtualNetworkResourceClient extends BaseBackendResourceClient {
 const virtualNetworkResourceClient = new VirtualNetworkResourceClient();
 
 export default virtualNetworkResourceClient;
-

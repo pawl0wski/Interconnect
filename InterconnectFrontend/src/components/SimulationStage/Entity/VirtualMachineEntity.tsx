@@ -19,18 +19,22 @@ interface VirtualMachineEntityProps {
 }
 
 const VirtualMachineEntity = ({
-                                  entity,
-                                  shapeName,
-                                  draggable,
-                                  onDragEnd,
-                                  onDragMove,
-                                  onMouseOver,
-                                  onMouseOut,
-                                  onClick
-                              }: VirtualMachineEntityProps) => {
+    entity,
+    shapeName,
+    draggable,
+    onDragEnd,
+    onDragMove,
+    onMouseOver,
+    onMouseOut,
+    onClick,
+}: VirtualMachineEntityProps) => {
     const { name, x, y } = entity;
-    const [virtualMachineDefaultImageElement] = useImage(virtualMachineImageDefault);
-    const [virtualMachineRunningImageElement] = useImage(virtualMachineImageRunning);
+    const [virtualMachineDefaultImageElement] = useImage(
+        virtualMachineImageDefault,
+    );
+    const [virtualMachineRunningImageElement] = useImage(
+        virtualMachineImageRunning,
+    );
 
     const virtualMachineImage = useMemo(() => {
         switch (entity.state) {
@@ -39,27 +43,35 @@ const VirtualMachineEntity = ({
             default:
                 return virtualMachineDefaultImageElement;
         }
-    }, [entity.state, virtualMachineDefaultImageElement, virtualMachineRunningImageElement]);
+    }, [
+        entity.state,
+        virtualMachineDefaultImageElement,
+        virtualMachineRunningImageElement,
+    ]);
 
-    return <Group
-        x={x}
-        y={y}
-        name={shapeName}
-        onMouseOver={onMouseOver}
-        onMouseOut={onMouseOut}
-        onDragMove={onDragMove}
-        onDragEnd={onDragEnd}
-        onClick={onClick}
-        draggable={draggable}
-    >
-        <Image
-            height={50}
-            width={50}
-            image={virtualMachineImage}
-        />
-        <Circle />
-        <Text y={60} fontStyle="bold" align="center" width={50} text={name} />
-    </Group>;
+    return (
+        <Group
+            x={x}
+            y={y}
+            name={shapeName}
+            onMouseOver={onMouseOver}
+            onMouseOut={onMouseOut}
+            onDragMove={onDragMove}
+            onDragEnd={onDragEnd}
+            onClick={onClick}
+            draggable={draggable}
+        >
+            <Image height={50} width={50} image={virtualMachineImage} />
+            <Circle />
+            <Text
+                y={60}
+                fontStyle="bold"
+                align="center"
+                width={50}
+                text={name}
+            />
+        </Group>
+    );
 };
 
 export default VirtualMachineEntity;

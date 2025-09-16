@@ -7,14 +7,20 @@ interface VirtualMachineCreateEntityTrayButtonProps {
     onClick: () => void;
 }
 
-const VirtualMachineCreateEntityTrayButton = ({ active, onClick }: VirtualMachineCreateEntityTrayButtonProps) => {
+const VirtualMachineCreateEntityTrayButton = ({
+    active,
+    onClick,
+}: VirtualMachineCreateEntityTrayButtonProps) => {
     const { t } = useTranslation();
 
-    return <TrayButton
-        active={active}
-        icon={<MdComputer size={30} />}
-        text={t("virtualMachine.virtualMachine")}
-        onClick={onClick} />;
+    return (
+        <TrayButton
+            active={active}
+            icon={<MdComputer size={30} />}
+            text={t("virtualMachine.virtualMachine")}
+            onClick={onClick}
+        />
+    );
 };
 
 export default VirtualMachineCreateEntityTrayButton;

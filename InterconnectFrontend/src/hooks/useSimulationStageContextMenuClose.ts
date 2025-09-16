@@ -5,14 +5,16 @@ interface UseSimulationStageContextMenuCloseReturnType {
     closeContextMenu: () => void;
 }
 
-const useSimulationStageContextMenuClose = (): UseSimulationStageContextMenuCloseReturnType => {
-    const simulationStageContextMenusStore = useSimulationStageContextMenusStore();
+const useSimulationStageContextMenuClose =
+    (): UseSimulationStageContextMenuCloseReturnType => {
+        const simulationStageContextMenusStore =
+            useSimulationStageContextMenusStore();
 
-    const closeContextMenu = useCallback(() => {
-        simulationStageContextMenusStore.clearCurrentContextMenu();
-    }, [simulationStageContextMenusStore]);
+        const closeContextMenu = useCallback(() => {
+            simulationStageContextMenusStore.clearCurrentContextMenu();
+        }, [simulationStageContextMenusStore]);
 
-    return { closeContextMenu };
-};
+        return { closeContextMenu };
+    };
 
 export default useSimulationStageContextMenuClose;

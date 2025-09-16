@@ -2,7 +2,7 @@ import InputWarning from "./InputWarning.tsx";
 import { render } from "@testing-library/react";
 
 vi.mock("react-icons/md", () => ({
-    MdWarning: () => <svg data-testid="warning-icon" />
+    MdWarning: () => <svg data-testid="warning-icon" />,
 }));
 
 describe("InputWarning", () => {

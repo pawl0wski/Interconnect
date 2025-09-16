@@ -5,11 +5,13 @@ import VirtualSwitchCreateEntityTrayButtonContainer from "./Buttons/VirtualSwitc
 import InternetEntityTrayButtonContainer from "./Buttons/InternetEntityTrayButtonContainer.tsx";
 
 const Tray = () => {
-    return <Flex className={classes["tray"]} mx="lg" justify="start" gap="lg">
-        <VirtualMachineCreateEntityTrayButtonContainer />
-        <VirtualSwitchCreateEntityTrayButtonContainer />
-        <InternetEntityTrayButtonContainer />
-    </Flex>;
+    return (
+        <Flex className={classes["tray"]} mx="lg" justify="start" gap="lg">
+            <VirtualMachineCreateEntityTrayButtonContainer />
+            <VirtualSwitchCreateEntityTrayButtonContainer />
+            <InternetEntityTrayButtonContainer />
+        </Flex>
+    );
 };
 
 export default Tray;

@@ -10,9 +10,18 @@ const VirtualSwitchCreateEntityTrayButtonContainer = () => {
         entityPlacementStore.setCurrentEntityType(EntityType.VirtualSwitch);
     };
 
-    const isActive = useMemo(() => (entityPlacementStore.currentEntityType == EntityType.VirtualSwitch), [entityPlacementStore.currentEntityType]);
+    const isActive = useMemo(
+        () =>
+            entityPlacementStore.currentEntityType == EntityType.VirtualSwitch,
+        [entityPlacementStore.currentEntityType],
+    );
 
-    return <VirtualSwitchCreateEntityTrayButton active={isActive} onClick={handleCreateVirtualMachine} />;
+    return (
+        <VirtualSwitchCreateEntityTrayButton
+            active={isActive}
+            onClick={handleCreateVirtualMachine}
+        />
+    );
 };
 
 export default VirtualSwitchCreateEntityTrayButtonContainer;

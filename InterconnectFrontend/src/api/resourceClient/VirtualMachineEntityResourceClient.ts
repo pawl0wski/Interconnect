@@ -4,12 +4,22 @@ import VirtualMachinesEntitiesResponse from "../responses/VirtualMachinesEntitie
 import UpdateEntityPositionRequest from "../requests/UpdateEntityPositionRequest.ts";
 
 class VirtualMachineEntityResourceClient extends BaseBackendResourceClient {
-    public async updateEntityPosition(req: UpdateEntityPositionRequest): Promise<VirtualMachineEntityResponse> {
-        return await this.sendBackendRequest("UpdateVirtualMachineEntityPosition", "POST", req);
+    public async updateEntityPosition(
+        req: UpdateEntityPositionRequest,
+    ): Promise<VirtualMachineEntityResponse> {
+        return await this.sendBackendRequest(
+            "UpdateVirtualMachineEntityPosition",
+            "POST",
+            req,
+        );
     }
 
     public async getListOfEntities(): Promise<VirtualMachinesEntitiesResponse> {
-        return await this.sendBackendRequest("GetVirtualMachineEntities", "GET", null);
+        return await this.sendBackendRequest(
+            "GetVirtualMachineEntities",
+            "GET",
+            null,
+        );
     }
 
     protected getResourceName(): string {
@@ -17,6 +27,7 @@ class VirtualMachineEntityResourceClient extends BaseBackendResourceClient {
     }
 }
 
-const virtualMachineEntityResourceClient = new VirtualMachineEntityResourceClient();
+const virtualMachineEntityResourceClient =
+    new VirtualMachineEntityResourceClient();
 
 export { virtualMachineEntityResourceClient };
