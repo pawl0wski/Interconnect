@@ -9,6 +9,7 @@ import Header from "../components/Header/Header.tsx";
 import ConnectionOverlay from "../components/Connection/ConnectionOverlay.tsx";
 import SimulationStageContainer from "../components/SimulationStage/SimulationStageContainer.tsx";
 import VirtualSwitchCreateModalContainer from "../components/Modals/VirtualSwitchCreateModalContainer.tsx";
+import FullscreenLoader from "../components/FullscreenLoader.tsx";
 
 const HomePage = () => {
     const headerHeight = 60;
@@ -42,6 +43,7 @@ const HomePage = () => {
             <ConnectionInfoModalContainer />
             <TerminalModalContainer />
             <ErrorModalContainer />
+            <FullscreenLoader />
         </AppShell>
     );
 };

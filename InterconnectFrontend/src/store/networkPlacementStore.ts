@@ -57,7 +57,7 @@ const useNetworkPlacementStore = create<NetworkPlacementStore>()(
                 destinationEntityType: destinationEntityType!,
             };
         },
-        clear: () => set({ sourceEntity: null }),
+        clear: () => set({ sourceEntity: null, destinationEntity: null }),
     }),
 );
 

@@ -11,6 +11,7 @@ import { useEntityPlacementStore } from "../../../store/entityPlacementStore.ts"
 import { useVirtualMachineEntitiesStore } from "../../../store/entitiesStore.ts";
 import useNetworkPlacementStore from "../../../store/networkPlacementStore.ts";
 import useChangeCursor from "../../../hooks/useChangeCursor.ts";
+import useFullscreenLoader from "../../../hooks/useFullscreenLoader.ts";
 
 interface VirtualMachineEntityContainerProps {
     entity: VirtualMachineEntityModel;
@@ -25,6 +26,7 @@ const VirtualMachineEntityContainer = ({
         useCurrentVirtualMachineModalStore();
     const entityPlacementStore = useEntityPlacementStore();
     const networkPlacementStore = useNetworkPlacementStore();
+    const { startLoading, stopLoading } = useFullscreenLoader();
 
     const draggable = useIsEntityDraggable();
 
@@ -73,12 +75,17 @@ const VirtualMachineEntityContainer = ({
         if (entityPlacementStore.currentEntityType !== EntityType.Network) {
             return false;
         }
+        startLoading();
 
-        networkPlacementStore.setDestinationEntity(
-            entity,
-            EntityType.VirtualMachine,
-        );
-        await entityPlacementStore.placeCurrentEntity(0, 0);
+        try {
+            networkPlacementStore.setDestinationEntity(
+                entity,
+                EntityType.VirtualMachine,
+            );
+            await entityPlacementStore.placeCurrentEntity(0, 0);
+        } finally {
+            stopLoading();
+        }
         return true;
     };
 

@@ -5,6 +5,7 @@ import useEntityName from "../../../../hooks/useEntityName.ts";
 import useNetworkConnectionsStore from "../../../../store/networkConnectionsStore.ts";
 import useSimulationStageContextMenuClose from "../../../../hooks/useSimulationStageContextMenuClose.ts";
 import { EntityType } from "../../../../models/enums/EntityType.ts";
+import useFullscreenLoader from "../../../../hooks/useFullscreenLoader.ts";
 
 interface NetworkConnectionMenuItemContainerProps {
     parentEntityId: number;
@@ -19,6 +20,7 @@ const NetworkConnectionMenuItemContainer = ({
 }: NetworkConnectionMenuItemContainerProps) => {
     const networkConnectionsStore = useNetworkConnectionsStore();
     const { closeContextMenu } = useSimulationStageContextMenuClose();
+    const { startLoading, stopLoading } = useFullscreenLoader();
 
     const targetId = useMemo(
         () =>
@@ -52,9 +54,17 @@ const NetworkConnectionMenuItemContainer = ({
     const entityName = useEntityName(targetId, targetType);
 
     const handleNetworkConnectionDisconnect = useCallback(async () => {
+        startLoading();
         await networkConnectionsStore.disconnectConnection(connection.id);
         closeContextMenu();
-    }, [closeContextMenu, connection.id, networkConnectionsStore]);
+        stopLoading();
+    }, [
+        closeContextMenu,
+        connection.id,
+        networkConnectionsStore,
+        startLoading,
+        stopLoading,
+    ]);
 
     return (
         <NetworkConnectionMenuItem

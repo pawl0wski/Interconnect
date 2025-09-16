@@ -8,6 +8,7 @@ import useNetworkPlacementStore from "../../../store/networkPlacementStore.ts";
 import { EntityType } from "../../../models/enums/EntityType.ts";
 import { useMemo } from "react";
 import simulationStageEntitiesUtils from "../../../utils/simulationStageEntitiesUtils.ts";
+import useFullscreenLoader from "../../../hooks/useFullscreenLoader.ts";
 
 interface VirtualSwitchEntityContainerProps {
     entity: VirtualSwitchEntityModel;
@@ -19,6 +20,7 @@ const VirtualSwitchEntityContainer = ({
     const virtualSwitchEntitiesStore = useVirtualSwitchEntitiesStore();
     const entityPlacementStore = useEntityPlacementStore();
     const networkPlacementStore = useNetworkPlacementStore();
+    const { startLoading, stopLoading } = useFullscreenLoader();
 
     const shapeName = useMemo(() => {
         return simulationStageEntitiesUtils.createShapeName(
@@ -66,12 +68,17 @@ const VirtualSwitchEntityContainer = ({
         if (entityPlacementStore.currentEntityType !== EntityType.Network) {
             return false;
         }
+        startLoading();
 
-        networkPlacementStore.setDestinationEntity(
-            entity,
-            EntityType.VirtualSwitch,
-        );
-        await entityPlacementStore.placeCurrentEntity(0, 0);
+        try {
+            networkPlacementStore.setDestinationEntity(
+                entity,
+                EntityType.VirtualSwitch,
+            );
+            await entityPlacementStore.placeCurrentEntity(0, 0);
+        } finally {
+            stopLoading();
+        }
         return true;
     };
 

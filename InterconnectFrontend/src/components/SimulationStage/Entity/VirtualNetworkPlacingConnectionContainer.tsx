@@ -22,7 +22,6 @@ const VirtualNetworkPlacingConnectionContainer = () => {
 
     useEffect(() => {
         if (!networkPlacementStore.sourceEntity) {
-            setSourcePosition({ x: 0, y: 0 });
             return;
         }
 
@@ -32,6 +31,10 @@ const VirtualNetworkPlacingConnectionContainer = () => {
 
     useEffect(() => {
         const handleMouseMove = (event: MouseEvent) => {
+            if (networkPlacementStore.destinationEntity) {
+                return;
+            }
+
             setDestinationPosition({ x: event.layerX, y: event.layerY });
         };
 

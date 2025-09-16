@@ -6,6 +6,7 @@ const pl = {
     slot: "Slot {{number}}",
     disconnectWith: "Rozłącz z {{entityName}}",
     connectWithAnotherEntity: "Połącz z innym urządzeniem",
+    performingActions: "Wykonywanie akcji...",
     virtualSwitch: {
         virtualSwitch: "Switch",
         form: {
