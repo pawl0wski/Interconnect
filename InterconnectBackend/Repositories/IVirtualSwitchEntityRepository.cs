@@ -11,5 +11,6 @@ namespace Repositories
         public Task<VirtualSwitchEntityModel> GetById(int id);
         public Task<VirtualSwitchEntityModel> UpdateEntityPosition(int id, int x, int y);
         public Task<VirtualSwitchEntityModel> UpdateNetwork(int id, VirtualNetworkModel virtualNetwork);
+        public Task Remove(int id);
     }
 }

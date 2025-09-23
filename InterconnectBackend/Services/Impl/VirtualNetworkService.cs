@@ -227,13 +227,20 @@ namespace Services.Impl
             {
                 var (sourceEntityId, destinationEntityId) = ResolveEntityIdsOrder(connection.SourceEntityId, connection.SourceEntityType, connection.DestinationEntityId, connection.DestinationEntityType);
 
-                await DisconnectVirtualMachineToVirtualSwitch(connectionId, sourceEntityId, destinationEntityId);
+                await DisconnectVirtualMachineFromVirtualSwitch(connectionId, sourceEntityId, destinationEntityId);
+                return VirtualNetworkEntityConnectionMapper.MapToDTO(connection);
             }
 
-            return VirtualNetworkEntityConnectionMapper.MapToDTO(connection);
+            if (AreTypes(connection.SourceEntityType, connection.DestinationEntityType, EntityType.VirtualMachine, EntityType.VirtualMachine))
+            {
+                await DisconnectVirtualMachineFromVirtualMachine(connectionId, connection.SourceEntityId, connection.DestinationEntityId);
+                return VirtualNetworkEntityConnectionMapper.MapToDTO(connection);
+            }
+
+            throw new NotImplementedException("Disconnect entities not implemented with provided entity types");
         }
 
-        public async Task DisconnectVirtualMachineToVirtualSwitch(int connectionId, int sourceEntityId, int destinationEntityId)
+        public async Task DisconnectVirtualMachineFromVirtualSwitch(int connectionId, int sourceEntityId, int destinationEntityId)
         {
             var virtualMachine = await _vmEntityRepository.GetById(sourceEntityId);
 
@@ -244,6 +251,39 @@ namespace Services.Impl
 
             _wrapper.DetachDeviceFromVirtualMachine(virtualMachine.VmUuid!.Value, virtualMachine.DeviceDefinition);
 
+            await _connectionRepository.Remove(connectionId);
+        }
+
+        public async Task DisconnectVirtualMachineFromVirtualMachine(int connectionId, int sourceEntityId, int destinationEntityId)
+        {
+            var sourceVirtualMachine = await _vmEntityRepository.GetById(sourceEntityId);
+            var destinationVirtualMachine = await _vmEntityRepository.GetById(destinationEntityId);
+            var connection = await _connectionRepository.GetById(connectionId);
+
+            if (sourceVirtualMachine.DeviceDefinition is null || destinationVirtualMachine.DeviceDefinition is null)
+            {
+                throw new NullReferenceException("VirtualMachine is not connected to anything");
+            }
+
+            var networkName = VirtualNetworkDefinitionUtils.GetNetworkNameFromDefinition(sourceVirtualMachine.DeviceDefinition);
+
+            if (networkName is null)
+            {
+                throw new NullReferenceException("Can't get network name from network definition");
+            }
+
+            var virtualNetworkUuid = Guid.Parse(networkName.Replace("InterconnectSwitch-", ""));
+            var virtualNetwork = await _networkRepository.GetByUuidWithVirtualSwitches(virtualNetworkUuid);
+            var virtualSwitch = virtualNetwork.VirtualSwitches.First();
+
+
+            _wrapper.DetachDeviceFromVirtualMachine(sourceVirtualMachine.VmUuid!.Value, sourceVirtualMachine.DeviceDefinition);
+            _wrapper.DetachDeviceFromVirtualMachine(destinationVirtualMachine.VmUuid!.Value, destinationVirtualMachine.DeviceDefinition);
+
+            _wrapper.DestroyNetwork(GetNetworkNameFromUuid(virtualSwitch.VirtualNetwork.Uuid));
+
+            await _switchRepository.Remove(virtualSwitch.Id);
+            await _networkRepository.Remove(virtualNetwork.Id);
             await _connectionRepository.Remove(connectionId);
         }
 
@@ -271,6 +311,7 @@ namespace Services.Impl
             {
                 virtualSwitchEntity = await _switchRepository.Create(name, virtualNetwork);
             }
+            virtualSwitchEntity.VirtualNetwork = virtualNetwork;
 
             return VirtualSwitchEntityMapper.MapToDTO(virtualSwitchEntity);
         }

@@ -55,6 +55,14 @@ namespace Repositories.Impl
             return _context.VirtualSwitchEntityModels.Include(x => x.VirtualNetwork).Where(m => m.Visible).ToListAsync();
         }
 
+        public async Task Remove(int id)
+        {
+            var virtualSwitch = await GetById(id);
+
+            _context.VirtualSwitchEntityModels.Remove(virtualSwitch);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<VirtualSwitchEntityModel> UpdateEntityPosition(int id, int x, int y)
         {
             var model = await GetById(id);

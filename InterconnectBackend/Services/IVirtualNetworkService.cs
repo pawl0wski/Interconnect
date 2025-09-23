@@ -11,7 +11,8 @@ namespace Services
         Task<VirtualNetworkConnectionDTO> ConnectVirtualMachineToInternet(int sourceEntityId, int destinationEntityId);
         Task<VirtualNetworkConnectionDTO> ConnectTwoVirtualSwitches(int sourceEntityId, int destinationEntityId);
         Task<VirtualNetworkConnectionDTO> DisconnectEntities(int connectionId);
-        Task DisconnectVirtualMachineToVirtualSwitch(int connectionId, int sourceEntityId, int destinationEntityId);
+        Task DisconnectVirtualMachineFromVirtualSwitch(int connectionId, int sourceEntityId, int destinationEntityId);
+        Task DisconnectVirtualMachineFromVirtualMachine(int connectionId, int sourceEntityId, int destinationEntityId);
         Task<List<VirtualNetworkConnectionDTO>> GetVirtualNetworkConnections();
         Task<VirtualSwitchEntityDTO> CreateVirtualSwitch(string? name);
         Task<List<VirtualSwitchEntityDTO>> GetVisibleVirtualSwitchEntities();

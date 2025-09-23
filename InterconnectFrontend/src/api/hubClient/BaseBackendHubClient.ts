@@ -45,13 +45,13 @@ abstract class BaseBackendHubClient {
         await this.connect();
     }
 
+    protected abstract getHubName(): string;
+
     private prepareBackendUrl(): string {
         const config = getConfiguration();
         const hubName = this.getHubName();
         return `${config.backendUrl}${hubName}`;
     }
-
-    protected abstract getHubName(): string;
 }
 
 export default BaseBackendHubClient;

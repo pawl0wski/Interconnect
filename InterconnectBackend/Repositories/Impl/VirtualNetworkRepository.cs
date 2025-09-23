@@ -31,5 +31,28 @@ namespace Repositories.Impl
         {
             return await _context.VirtualNetworkModels.FirstAsync(x => x.Id == id);
         }
+
+        public async Task<VirtualNetworkModel> GetByUuid(Guid uuid)
+        {
+            return await _context.VirtualNetworkModels.FirstAsync(x => x.Uuid == uuid);
+        }
+
+        public async Task<VirtualNetworkModel> GetByUuidWithVirtualSwitches(Guid uuid)
+        {
+            return await _context.VirtualNetworkModels.Include(x => x.VirtualSwitches).FirstAsync(x => x.Uuid == uuid);
+        }
+
+        public async Task Remove(int id)
+        {
+            var virtualNetwork = await GetById(id);
+
+            if (virtualNetwork is null)
+            {
+                throw new NullReferenceException("Can't find virtual network");
+            }
+
+            _context.VirtualNetworkModels.Remove(virtualNetwork);
+            await _context.SaveChangesAsync();
+        }
     }
 }

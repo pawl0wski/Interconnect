@@ -11,6 +11,7 @@ namespace Mappers
             {
                 Id = model.Id,
                 Name = model.Name,
+                Uuid = model.VirtualNetwork.Uuid,
                 X = model.X,
                 Y = model.Y
             };

@@ -85,8 +85,9 @@ namespace ServicesTests
                 Y = 13,
                 VmUuid = vmUuid
             });
-            MockConnectionCrepositoryCreateMethod();
+            MockConnectionRepositoryCreateMethod();
             MockSwitchRepositoryCreateInvisibleMethod();
+            MockNetworkRepositoryCreateMethod();
 
             await _vnService.ConnectTwoVirtualMachines(1, 1);
 
@@ -106,8 +107,9 @@ namespace ServicesTests
                 Y = 13,
                 VmUuid = entityId == 1 ? sourceVmUuid : destinationVmUuid
             });
-            MockConnectionCrepositoryCreateMethod();
+            MockConnectionRepositoryCreateMethod();
             MockSwitchRepositoryCreateInvisibleMethod();
+            MockNetworkRepositoryCreateMethod();
 
             await _vnService.ConnectTwoVirtualMachines(1, 2);
 
@@ -126,10 +128,11 @@ namespace ServicesTests
                 Name = $"Entity{entityId}",
                 X = 12,
                 Y = 13,
-                VmUuid = entityId == 1 ? sourceVmUuid : destinationVmUuid
+                VmUuid = entityId == 1 ? sourceVmUuid : destinationVmUuid,
             });
-            MockConnectionCrepositoryCreateMethod();
+            MockConnectionRepositoryCreateMethod();
             MockSwitchRepositoryCreateInvisibleMethod();
+            MockNetworkRepositoryCreateMethod();
 
             await _vnService.ConnectTwoVirtualMachines(1, 2);
 
@@ -147,6 +150,7 @@ namespace ServicesTests
         {
             MockSwitchRepositoryCreateMethod();
             MockSwitchRepositoryCreateInvisibleMethod();
+            MockNetworkRepositoryCreateMethod();
 
             await _vnService.CreateVirtualSwitch(name);
 
@@ -157,6 +161,7 @@ namespace ServicesTests
         public async Task CreateVirtualSwitch_WhenInvokedWithoutName_ShouldCreateInvisibleVirtualSwitch()
         {
             MockSwitchRepositoryCreateInvisibleMethod();
+            MockNetworkRepositoryCreateMethod();
 
             await _vnService.CreateVirtualSwitch(null);
 
@@ -167,6 +172,7 @@ namespace ServicesTests
         public async Task CreateVirtualSwitch_WhenInvokedWithName_ShouldCreateVisibleVirtualSwitch()
         {
             MockSwitchRepositoryCreateMethod();
+            MockNetworkRepositoryCreateMethod();
 
             await _vnService.CreateVirtualSwitch("testName");
 
@@ -203,7 +209,7 @@ namespace ServicesTests
                     Visible = true,
                 };
             });
-            MockConnectionCrepositoryCreateMethod();
+            MockConnectionRepositoryCreateMethod();
             MockSwitchRepositoryCreateMethod();
 
             await _vnService.ConnectVirtualMachineToVirtualSwitch(1, 2);
@@ -242,7 +248,7 @@ namespace ServicesTests
             });
         }
 
-        private void MockConnectionCrepositoryCreateMethod()
+        private void MockConnectionRepositoryCreateMethod()
         {
             _connectionRepository.Setup(r => r.Create(It.IsAny<int>(), It.IsAny<EntityType>(), It.IsAny<int>(), It.IsAny<EntityType>())).ReturnsAsync(
             (int sourceEntityId, EntityType sourceEntityType, int destinationEntityId, EntityType destinationEntityType) =>
@@ -253,6 +259,19 @@ namespace ServicesTests
                     SourceEntityType = sourceEntityType,
                     DestinationEntityId = destinationEntityId,
                     DestinationEntityType = destinationEntityType
+                };
+            });
+        }
+
+        private void MockNetworkRepositoryCreateMethod()
+        {
+            _networkRepository.Setup(r => r.Create(It.IsAny<string>(), It.IsAny<Guid>())).ReturnsAsync(
+            (string bridgeName, Guid newtorkUuid) =>
+            {
+                return new VirtualNetworkModel
+                {
+                    BridgeName = bridgeName,
+                    Uuid = newtorkUuid,
                 };
             });
         }
