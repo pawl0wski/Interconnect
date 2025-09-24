@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Repositories;
 using Services.Impl;
 
 namespace Services
@@ -16,6 +15,10 @@ namespace Services
             serviceCollection.AddScoped<IVirtualNetworkService, VirtualNetworkService>();
             serviceCollection.AddScoped<IVirtualMachineEntityService, VirtualMachineEntityService>();
             serviceCollection.AddScoped<IBootableDiskProviderService, BootableDiskProviderService>();
+            serviceCollection.AddScoped<IVirtualSwitchConnector, VirtualSwitchConnector>();
+            serviceCollection.AddScoped<IInternetEntityService, InternetEntityService>();
+            serviceCollection.AddScoped<IEntitiesDisconnectorService, EntitiesDisconnectorService>();
+            serviceCollection.AddScoped<IEntitiesConnectorService, EntitiesConnectorService>();
         }
     }
 }

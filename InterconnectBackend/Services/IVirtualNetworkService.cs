@@ -1,24 +1,18 @@
-﻿using Models.DTO;
-using Models.Enums;
+﻿using Models;
+using Models.Database;
+using Models.DTO;
 
 namespace Services
 {
     public interface IVirtualNetworkService
     {
-        Task<VirtualNetworkConnectionDTO> ConnectTwoEntities(int sourceEntityId, EntityType sourceEntityType, int destinationEntitiyId, EntityType destinationEntityType);
-        Task<VirtualNetworkConnectionDTO> ConnectTwoVirtualMachines(int sourceEntityId, int destinationEntityId);
-        Task<VirtualNetworkConnectionDTO> ConnectVirtualMachineToVirtualSwitch(int sourceEntityId, int destinationEntityId);
-        Task<VirtualNetworkConnectionDTO> ConnectVirtualMachineToInternet(int sourceEntityId, int destinationEntityId);
-        Task<VirtualNetworkConnectionDTO> ConnectTwoVirtualSwitches(int sourceEntityId, int destinationEntityId);
-        Task<VirtualNetworkConnectionDTO> DisconnectEntities(int connectionId);
-        Task DisconnectVirtualMachineFromVirtualSwitch(int connectionId, int sourceEntityId, int destinationEntityId);
-        Task DisconnectVirtualMachineFromVirtualMachine(int connectionId, int sourceEntityId, int destinationEntityId);
         Task<List<VirtualNetworkConnectionDTO>> GetVirtualNetworkConnections();
         Task<VirtualSwitchEntityDTO> CreateVirtualSwitch(string? name);
         Task<List<VirtualSwitchEntityDTO>> GetVisibleVirtualSwitchEntities();
         Task<VirtualSwitchEntityDTO> UpdateVirtualSwitchEntityPosition(int entityId, int x, int y);
-        Task<InternetEntityModelDTO> CreateInternet();
-        Task<List<InternetEntityModelDTO>> GetInternetEntities();
-        Task<InternetEntityModelDTO> UpdateInternetEntityPosition(int entityId, int x, int y);
+        Task AttachNetworkInterfaceToVirtualMachine(int id, VirtualNetworkInterfaceCreateDefinition interfaceDefinition);
+        Task UpdateNetworkForVirtualMachineNetworkInterface(int id, string networkName);
+        Task<VirtualNetworkModel> CreateInternetVirtualNetwork();
+        Task<VirtualNetworkModel> CreateSwitchVirtualNetwork();
     }
 }
