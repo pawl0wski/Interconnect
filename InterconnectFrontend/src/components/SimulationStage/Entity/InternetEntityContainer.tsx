@@ -7,6 +7,8 @@ import { EntityType } from "../../../models/enums/EntityType.ts";
 import { useEntityPlacementStore } from "../../../store/entityPlacementStore.ts";
 import useFullscreenLoader from "../../../hooks/useFullscreenLoader.ts";
 import useNetworkPlacementStore from "../../../store/networkPlacementStore.ts";
+import { useMemo } from "react";
+import simulationStageEntitiesUtils from "../../../utils/simulationStageEntitiesUtils.ts";
 
 interface InternetEntityContainerProps {
     entity: InternetEntityModel;
@@ -72,9 +74,17 @@ const InternetEntityContainer = ({ entity }: InternetEntityContainerProps) => {
         await attachVirtualNetwork();
     };
 
+    const shapeName = useMemo(() => {
+        return simulationStageEntitiesUtils.createShapeName(
+            { id: entity.id! },
+            EntityType.Internet,
+        );
+    }, [entity.id]);
+
     return (
         <InternetEntity
             entity={entity}
+            shapeName={shapeName ?? ""}
             onClick={handleOnClick}
             onMouseOver={handleOnMouseOver}
             onMouseOut={handleOnMouseOut}

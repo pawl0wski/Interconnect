@@ -27,6 +27,8 @@ const SimulationStageEntitiesUtils = {
                 return `vm-${entity.id}`;
             case EntityType.VirtualSwitch:
                 return `sw-${entity.id}`;
+            case EntityType.Internet:
+                return `in-${entity.id}`;
         }
     },
     parseShapeName(name: string): EntityTypeWithId | null {
@@ -38,6 +40,9 @@ const SimulationStageEntitiesUtils = {
                 break;
             case "sw":
                 entityType = EntityType.VirtualSwitch;
+                break;
+            case "in":
+                entityType = EntityType.Internet;
                 break;
         }
 

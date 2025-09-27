@@ -63,6 +63,13 @@ namespace Services.Impl
                 return VirtualNetworkEntityConnectionMapper.MapToDTO(connection);
             }
 
+            if (EntitiesUtils.AreTypes(connection.SourceEntityType, connection.DestinationEntityType, EntityType.VirtualMachine, EntityType.Internet))
+            {
+                var (virtualMachineEntityId, internetEntityId) = EntitiesUtils.GetVirtualMachineEntityIdFirst(connection.SourceEntityId, connection.SourceEntityType, connection.DestinationEntityId, connection.DestinationEntityType);
+                await DisconnectVirtualMachineFromInternet(connectionId, virtualMachineEntityId, internetEntityId);
+                return VirtualNetworkEntityConnectionMapper.MapToDTO(connection);
+            }
+
             throw new NotImplementedException("Disconnect entities not implemented with provided entity types");
         }
 
@@ -117,6 +124,23 @@ namespace Services.Impl
             destinationVirtualMachine.DeviceDefinition = null;
             await _vmEntityRepository.Update(sourceVirtualMachine);
             await _vmEntityRepository.Update(destinationVirtualMachine);
+        }
+
+        public async Task DisconnectVirtualMachineFromInternet(int connectionId, int virtualMachineEntityId, int internetEntityId)
+        {
+            var virtualMachine = await _vmEntityRepository.GetById(virtualMachineEntityId);
+
+            if (virtualMachine.DeviceDefinition is null)
+            {
+                throw new NullReferenceException("VirtualMachine is not connected to anything");
+            }
+
+            _wrapper.DetachDeviceFromVirtualMachine(virtualMachine.VmUuid!.Value, virtualMachine.DeviceDefinition);
+
+            virtualMachine.DeviceDefinition = null;
+            await _vmEntityRepository.Update(virtualMachine);
+
+            await _connectionRepository.Remove(connectionId);
         }
     }
 }
