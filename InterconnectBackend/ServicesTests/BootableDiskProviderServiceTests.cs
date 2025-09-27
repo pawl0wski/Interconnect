@@ -36,7 +36,6 @@ namespace ServicesTests
                     Name = "TestDisk",
                     Version = "1.0.0",
                     Path = _testBootableDiskPath,
-                    OperatingSystemType = OperatingSystemType.Windows
                 },
                 new BootableDiskModel
                 {
@@ -44,7 +43,6 @@ namespace ServicesTests
                     Name = "TestDiskWithoutPath",
                     Version = "1.0.0",
                     Path = null,
-                    OperatingSystemType = OperatingSystemType.Linux
                 }
                 ]);
 
@@ -64,7 +62,6 @@ namespace ServicesTests
                 Name = "TestDisk",
                 Version = "1.0.0",
                 Path = _testBootableDiskPath,
-                OperatingSystemType = OperatingSystemType.Windows
             });
 
             var bootableDisk = await bootableDiskProviderService.GetBootableDiskPathById(1);

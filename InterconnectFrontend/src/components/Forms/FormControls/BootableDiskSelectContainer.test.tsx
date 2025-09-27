@@ -1,4 +1,3 @@
-import { OperatingSystemType } from "../../../models/enums/OperatingSystemType.ts";
 import { render } from "@testing-library/react";
 import BootableDiskSelectContainer from "./BootableDiskSelectContainer.tsx";
 import { MantineProvider } from "@mantine/core";
@@ -40,7 +39,6 @@ describe("BootableDiskSelectContainer", () => {
                     id: 1,
                     name: "TestLinux",
                     version: "1.0.4",
-                    operatingSystemType: OperatingSystemType.Linux,
                 },
             ],
             fetchBootableDisks: vi.fn(),
@@ -84,7 +82,6 @@ describe("BootableDiskSelectContainer", () => {
                     id: 1,
                     name: "TestLinux",
                     version: "1.0.4",
-                    operatingSystemType: OperatingSystemType.Linux,
                 },
             ],
             fetchBootableDisks: vi.fn(),

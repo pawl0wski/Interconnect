@@ -1,6 +1,5 @@
 using Database;
 using Models.Database;
-using Models.Enums;
 using Repositories;
 using Repositories.Impl;
 using TestUtils;
@@ -34,7 +33,6 @@ namespace RepositoriesTests
                 Name = "TestDisk",
                 Version = "1.0.0",
                 Path = "123",
-                OperatingSystemType = OperatingSystemType.Windows
             });
             _context.BootableDiskModels.Add(new BootableDiskModel
             {
@@ -42,7 +40,6 @@ namespace RepositoriesTests
                 Name = "TestDiskWithoutPath",
                 Version = "1.0.0",
                 Path = null,
-                OperatingSystemType = OperatingSystemType.Linux
             });
             await _context.SaveChangesAsync();
 
@@ -61,7 +58,6 @@ namespace RepositoriesTests
                 Name = "TestDisk",
                 Version = "1.0.0",
                 Path = "123",
-                OperatingSystemType = OperatingSystemType.Windows
             });
             await _context.SaveChangesAsync();
 

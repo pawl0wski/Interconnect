@@ -12,7 +12,6 @@ namespace Mappers
                 Id = model.Id,
                 Name = model.Name,
                 Version = model.Version,
-                OperatingSystemType = model.OperatingSystemType,
             };
         }
     }
