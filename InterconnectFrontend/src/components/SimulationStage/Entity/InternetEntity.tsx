@@ -46,6 +46,13 @@ const InternetEntity = ({
                 width={50}
                 text="Internet"
             />
+            <Text
+                x={-5}
+                y={80}
+                fill="gray"
+                align="center"
+                text={entity.ipAddress}
+            />
         </Group>
     );
 };

@@ -1,5 +1,7 @@
 import BaseEntity from "./interfaces/BaseEntity.ts";
 
-type InternetEntityModel = BaseEntity;
+interface InternetEntityModel extends BaseEntity {
+    ipAddress: string;
+}
 
 export default InternetEntityModel;
