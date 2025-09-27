@@ -1,4 +1,5 @@
 ﻿using Mappers;
+using Models;
 using Models.Database;
 using Models.DTO;
 using Repositories;
@@ -8,16 +9,38 @@ namespace Services.Impl
     public class VirtualMachineEntityService : IVirtualMachineEntityService
     {
         private readonly IVirtualMachineEntityRepository _repository;
-        private readonly IVirtualMachineManagerService _machineManagerService;
+        private readonly IBootableDiskProviderService _bootableDiskProviderService;
+        private readonly IVirtualMachineManagerService _vmManagerService;
 
-        public VirtualMachineEntityService(IVirtualMachineEntityRepository repository, IVirtualMachineManagerService machineManagerService)
+        public VirtualMachineEntityService(
+            IVirtualMachineEntityRepository repository,
+            IBootableDiskProviderService bootableDiskProviderService,
+            IVirtualMachineManagerService vmManagerService
+            )
         {
             _repository = repository;
-            _machineManagerService = machineManagerService;
+            _bootableDiskProviderService = bootableDiskProviderService;
+            _vmManagerService = vmManagerService;
         }
 
-        public async Task<VirtualMachineEntityDTO> CreateEntity(string name, int x, int y)
+        public async Task<VirtualMachineEntityDTO> CreateEntity(string name, int bootableDiskId, uint memory, uint virtualCpus, int x, int y)
         {
+            var bootableDiskPath = await _bootableDiskProviderService.GetBootableDiskPathById(bootableDiskId);
+            if (bootableDiskPath == null)
+            {
+                throw new Exception("Provided unknown bootableDiskId");
+            }
+
+            var vmCreateDefinition = new VirtualMachineCreateDefinition
+            {
+                Name = name,
+                VirtualCpus = virtualCpus,
+                Memory = memory,
+                BootableDiskPath = bootableDiskPath
+            };
+
+            var vmInfo = _vmManagerService.CreateVirtualMachine(vmCreateDefinition);
+
             var entity = new VirtualMachineEntityModel
             {
                 Name = name,
@@ -26,6 +49,7 @@ namespace Services.Impl
             };
 
             await _repository.Add(entity);
+            await UpdateEntityVmUUID(entity.Id, vmInfo.Uuid);
 
             return VirtualMachineEntityMapper.MapToDTO(entity);
         }
@@ -35,7 +59,7 @@ namespace Services.Impl
             var entities = await _repository.GetAll();
 
             List<VirtualMachineEntityDTO> entitiesDto = [.. entities.Select(VirtualMachineEntityMapper.MapToDTO)];
-            var virtualMachines = _machineManagerService.GetListOfVirtualMachines();
+            var virtualMachines = _vmManagerService.GetListOfVirtualMachines();
             entitiesDto = [.. entitiesDto.Select(e =>
             {
                 var vm = virtualMachines.FirstOrDefault(v => v.Uuid == e.VmUuid.ToString());

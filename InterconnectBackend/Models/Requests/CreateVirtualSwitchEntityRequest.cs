@@ -1,6 +1,6 @@
 ﻿namespace Models.Requests
 {
-    public class CreateVirtualSwitchRequest 
+    public class CreateVirtualSwitchEntityRequest 
     {
         public required string Name { get; set; }
     }

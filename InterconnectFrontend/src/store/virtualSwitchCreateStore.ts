@@ -1,7 +1,8 @@
 import { create } from "zustand/react";
 import { PositionModel } from "../models/PositionModel.ts";
 import VirtualSwitchEntityModel from "../models/VirtualSwitchEntityModel.ts";
-import virtualNetworkResourceClient from "../api/resourceClient/VirtualNetworkResourceClient.ts";
+import entityResourceClient from "../api/resourceClient/EntityResourceClient.ts";
+import { EntityType } from "../models/enums/EntityType.ts";
 
 interface VirtualSwitchCreateStoreProps {
     name: string | null;
@@ -27,17 +28,16 @@ const useVirtualSwitchCreateStore = create<VirtualSwitchCreateStoreProps>()(
                 throw new Error("Name or position is not set");
             }
 
-            const resp = await virtualNetworkResourceClient.createVirtualSwitch(
-                { name },
-            );
+            const resp = await entityResourceClient.createVirtualSwitchEntity({
+                name,
+            });
             const entity = resp.data[0];
-            await virtualNetworkResourceClient.updateVirtualSwitchEntityPosition(
-                {
-                    id: entity.id,
-                    x: position.x,
-                    y: position.y,
-                },
-            );
+            await entityResourceClient.updateEntityPosition({
+                id: entity.id,
+                type: EntityType.VirtualSwitch,
+                x: position.x,
+                y: position.y,
+            });
 
             return entity;
         },

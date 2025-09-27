@@ -1,7 +1,7 @@
 import { create } from "zustand/react";
-import { virtualMachineResourceClient } from "../api/resourceClient/VirtualMachineResourceClient.ts";
 import { VirtualMachineEntityModel } from "../models/VirtualMachineEntityModel.ts";
-import { virtualMachineEntityResourceClient } from "../api/resourceClient/VirtualMachineEntityResourceClient.ts";
+import entityResourceClient from "../api/resourceClient/EntityResourceClient.ts";
+import { EntityType } from "../models/enums/EntityType.ts";
 
 interface VirtualMachineCreateStore {
     name: string;
@@ -29,18 +29,19 @@ const useVirtualMachineCreateStore = create<VirtualMachineCreateStore>()(
             const { name, memory, virtualCPUs, bootableDiskId, x, y } = get();
 
             const response =
-                await virtualMachineResourceClient.createVirtualMachine({
+                await entityResourceClient.createVirtualMachineEntity({
                     name: name,
                     memory: memory,
                     virtualCpus: virtualCPUs,
                     bootableDiskId: bootableDiskId,
                 });
-            await virtualMachineEntityResourceClient.updateEntityPosition({
-                id: response.data.id,
+            await entityResourceClient.updateEntityPosition({
+                id: response.data[0].id,
+                type: EntityType.VirtualMachine,
                 x,
                 y,
             });
-            return response.data;
+            return response.data[0];
         },
     }),
 );

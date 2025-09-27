@@ -1,6 +1,6 @@
 ﻿namespace Models.Requests
 {
-    public class CreateVirtualMachineRequest
+    public class CreateVirtualMachineEntityRequest
     {
         public required string Name { get; set; }
         public required uint Memory { get; set; }

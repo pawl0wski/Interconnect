@@ -1,9 +1,9 @@
 import BaseEntity from "../models/interfaces/BaseEntity.ts";
 import { create } from "zustand/react";
-import virtualNetworkResourceClient from "../api/resourceClient/VirtualNetworkResourceClient.ts";
 import BaseResponse from "../api/responses/BaseResponse.ts";
-import { virtualMachineEntityResourceClient } from "../api/resourceClient/VirtualMachineEntityResourceClient.ts";
 import UpdateEntityPositionRequest from "../api/requests/UpdateEntityPositionRequest.ts";
+import entityResourceClient from "../api/resourceClient/EntityResourceClient.ts";
+import { EntityType } from "../models/enums/EntityType.ts";
 
 export interface EntitiesStore<TEntity extends BaseEntity> {
     entities: TEntity[];
@@ -26,6 +26,7 @@ type updateEntityPositionFunc = (
 ) => Promise<any>;
 
 export const createEntitiesStore = <TEntity extends BaseEntity>(
+    type: EntityType,
     getEntities: getEntitiesFunc<TEntity>,
     updateEntityPosition: updateEntityPositionFunc,
 ) =>
@@ -65,7 +66,7 @@ export const createEntitiesStore = <TEntity extends BaseEntity>(
             });
 
             if (finalUpdate) {
-                await updateEntityPosition({ id, x, y });
+                await updateEntityPosition({ id, type, x, y });
             }
         },
         clearEntities: () => {
@@ -75,18 +76,21 @@ export const createEntitiesStore = <TEntity extends BaseEntity>(
             get().entities.find((e) => e.id === id) ?? null,
     }));
 
-export const useVirtualSwitchEntitiesStore = createEntitiesStore(
-    () => virtualNetworkResourceClient.getVirtualSwitchEntities(),
-    (req: UpdateEntityPositionRequest) =>
-        virtualNetworkResourceClient.updateVirtualSwitchEntityPosition(req),
-);
 export const useVirtualMachineEntitiesStore = createEntitiesStore(
-    () => virtualMachineEntityResourceClient.getListOfEntities(),
+    EntityType.VirtualMachine,
+    () => entityResourceClient.getAllVirtualMachineEntities(),
     (req: UpdateEntityPositionRequest) =>
-        virtualMachineEntityResourceClient.updateEntityPosition(req),
+        entityResourceClient.updateEntityPosition(req),
+);
+export const useVirtualSwitchEntitiesStore = createEntitiesStore(
+    EntityType.VirtualSwitch,
+    () => entityResourceClient.getAllVirtualSwitchEntities(),
+    (req: UpdateEntityPositionRequest) =>
+        entityResourceClient.updateEntityPosition(req),
 );
 export const useInternetEntitiesStore = createEntitiesStore(
-    () => virtualNetworkResourceClient.getInternetEntities(),
+    EntityType.Internet,
+    () => entityResourceClient.getAllInternetEntities(),
     (req: UpdateEntityPositionRequest) =>
-        virtualNetworkResourceClient.updateInternetEntityPosition(req),
+        entityResourceClient.updateEntityPosition(req),
 );

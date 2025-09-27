@@ -10,6 +10,7 @@ import virtualNetworkResourceClient from "../api/resourceClient/VirtualNetworkRe
 import useVirtualSwitchCreateStore from "./virtualSwitchCreateStore.ts";
 import useNetworkConnectionsStore from "./networkConnectionsStore.ts";
 import { useInternetEntitiesStore } from "./entitiesStore.ts";
+import entityResourceClient from "../api/resourceClient/EntityResourceClient.ts";
 
 interface EntityPlacementStore {
     currentEntityType: EntityType | null;
@@ -53,7 +54,7 @@ const useEntityPlacementStore = create<EntityPlacementStore>()((set, get) => ({
                 break;
             case EntityType.Internet:
                 const resp =
-                    await virtualNetworkResourceClient.createInternet();
+                    await entityResourceClient.createInternetEntity();
                 await internetEntitiesStore.fetchEntities();
                 await internetEntitiesStore.updateEntityPosition(
                     resp.data[0].id,

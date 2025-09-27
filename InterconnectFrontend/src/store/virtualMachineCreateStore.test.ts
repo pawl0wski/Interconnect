@@ -5,14 +5,9 @@ import { useVirtualMachineCreateStore } from "./virtualMachineCreateStore.ts";
 const mockCreateVirtualMachine = vi.hoisted(() => vi.fn());
 const mockUpdateEntityPosition = vi.hoisted(() => vi.fn());
 
-vi.mock("../api/resourceClient/VirtualMachineResourceClient.ts", () => ({
-    virtualMachineResourceClient: {
-        createVirtualMachine: mockCreateVirtualMachine,
-    },
-}));
-
-vi.mock("../api/resourceClient/VirtualMachineEntityResourceClient.ts", () => ({
-    virtualMachineEntityResourceClient: {
+vi.mock("../api/resourceClient/EntityResourceClient.ts", () => ({
+    default: {
+        createVirtualMachineEntity: mockCreateVirtualMachine,
         updateEntityPosition: mockUpdateEntityPosition,
     },
 }));
@@ -42,13 +37,15 @@ describe("virtualMachineCreateStore", () => {
 
     test("should create virtual machine when createVirtualMachine is invoked", async () => {
         mockCreateVirtualMachine.mockReturnValueOnce({
-            data: {
-                id: 1,
-                vmUuid: "d57ba30f-118d-4d22-8c82-a1cca2dc23a6",
-                name: "Test",
-                x: 25,
-                y: 25,
-            },
+            data: [
+                {
+                    id: 1,
+                    vmUuid: "d57ba30f-118d-4d22-8c82-a1cca2dc23a6",
+                    name: "Test",
+                    x: 25,
+                    y: 25,
+                },
+            ],
         });
         const { result } = renderHook(() => useVirtualMachineCreateStore());
 
@@ -72,6 +69,7 @@ describe("virtualMachineCreateStore", () => {
         });
         expect(mockUpdateEntityPosition).toHaveBeenCalledWith({
             id: 1,
+            type: 1,
             x: 43,
             y: 25,
         });

@@ -11,6 +11,7 @@ namespace ServicesTests
     {
         private Mock<IVirtualMachineEntityRepository> _repository;
         private Mock<IVirtualMachineManagerService> _managerService;
+        private Mock<IBootableDiskProviderService> _bootableDiskProviderService;
         private VirtualMachineEntityService _service;
 
 
@@ -19,13 +20,23 @@ namespace ServicesTests
         {
             _repository = new Mock<IVirtualMachineEntityRepository>();
             _managerService = new Mock<IVirtualMachineManagerService>();
-            _service = new VirtualMachineEntityService(_repository.Object, _managerService.Object);
+            _bootableDiskProviderService = new Mock<IBootableDiskProviderService>();
+            _service = new VirtualMachineEntityService(_repository.Object, _bootableDiskProviderService.Object, _managerService.Object);
         }
 
         [Test]
         public async Task CreateEntity_WhenInvoked_ShouldReturnEntity()
         {
-            var response = await _service.CreateEntity("Test", 12, 54);
+            _repository.Setup(r => r.GetById(It.IsAny<int>())).ReturnsAsync((int id) => new VirtualMachineEntityModel
+            {
+                Id = id,
+                Name = "Test",
+                X = 123,
+                Y = 321,
+            });
+            MockVirtualMachineManagerCreateVirtualMachine();
+            _bootableDiskProviderService.Setup(s => s.GetBootableDiskPathById(It.IsAny<int>())).ReturnsAsync("/tmp/test.iso");
+            var response = await _service.CreateEntity("Test", 1, 1024, 2, 12, 54);
 
             Assert.IsNotNull(response);
             Assert.That(response.Name, Is.EqualTo("Test"));
@@ -37,9 +48,17 @@ namespace ServicesTests
         [Test]
         public async Task CreateEntity_WhenInvoked_ShouldCreateEntityInRepository()
         {
-            _repository.Setup(r => r.Add(It.IsAny<VirtualMachineEntityModel>()));
+            _repository.Setup(r => r.GetById(It.IsAny<int>())).ReturnsAsync((int id) => new VirtualMachineEntityModel
+            {
+                Id = id,
+                Name = "Test1",
+                X = 123,
+                Y = 321,
+            });
+            MockVirtualMachineManagerCreateVirtualMachine();
+            _bootableDiskProviderService.Setup(s => s.GetBootableDiskPathById(It.IsAny<int>())).ReturnsAsync("/tmp/test.iso");
 
-            await _service.CreateEntity("Test1", 32, 12);
+            await _service.CreateEntity("Test1", 1, 1024, 2, 32, 12);
 
             _repository.Verify(r => r.Add(It.Is<VirtualMachineEntityModel>(vm =>
                 vm.Id == 0 &&
@@ -152,6 +171,20 @@ namespace ServicesTests
             await _service.UpdateEntityVmUUID(1, testGuid.ToString());
 
             _repository.Verify(r => r.Update(It.Is<VirtualMachineEntityModel>(v => v.VmUuid == testGuid)), Times.Once);
+        }
+
+        private void MockVirtualMachineManagerCreateVirtualMachine()
+        {
+            _managerService.Setup(m => m.CreateVirtualMachine(It.IsAny<VirtualMachineCreateDefinition>())).Returns((VirtualMachineCreateDefinition definition) =>
+            {
+                return new VirtualMachineInfo
+                {
+                    Name = definition.Name,
+                    State = 1,
+                    UsedMemory = definition.Memory,
+                    Uuid = Guid.NewGuid().ToString(),
+                };
+            });
         }
     }
 }
