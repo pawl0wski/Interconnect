@@ -36,6 +36,7 @@ const VirtualSwitchContextMenu = ({
                 }}
             >
                 <Menu.Label>{title}</Menu.Label>
+                <Menu.Divider />
                 <Menu.Label>{t("network")}</Menu.Label>
                 <Menu.Item
                     onClick={() => onStartPlacingVirtualNetwork()}

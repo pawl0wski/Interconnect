@@ -33,6 +33,7 @@ const InternetContextMenu = ({
                 }}
             >
                 <Menu.Label>{t("internet.internet")}</Menu.Label>
+                <Menu.Divider />
                 <Menu.Label>{t("network")}</Menu.Label>
                 <Menu.Item
                     onClick={() => onStartPlacingVirtualNetwork()}
