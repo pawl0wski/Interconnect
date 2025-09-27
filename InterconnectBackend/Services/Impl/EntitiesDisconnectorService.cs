@@ -38,7 +38,7 @@ namespace Services.Impl
 
             if (EntitiesUtils.AreTypes(connection.SourceEntityType, connection.DestinationEntityType, EntityType.VirtualMachine, EntityType.VirtualSwitch))
             {
-                var (sourceEntityId, destinationEntityId) = EntitiesUtils.ResolveEntityIdsOrder(connection.SourceEntityId, connection.SourceEntityType, connection.DestinationEntityId, connection.DestinationEntityType);
+                var (sourceEntityId, destinationEntityId) = EntitiesUtils.GetVirtualMachineEntityIdFirst(connection.SourceEntityId, connection.SourceEntityType, connection.DestinationEntityId, connection.DestinationEntityType);
 
                 await DisconnectVirtualMachineFromVirtualSwitch(connectionId, sourceEntityId, destinationEntityId);
                 return VirtualNetworkEntityConnectionMapper.MapToDTO(connection);
@@ -52,7 +52,14 @@ namespace Services.Impl
 
             if (EntitiesUtils.AreTypes(connection.SourceEntityType, connection.DestinationEntityType, EntityType.VirtualSwitch, EntityType.VirtualSwitch))
             {
-                await DisconnectVirtualSwitchFromVirtualSwitch(connectionId, connection.SourceEntityId, connection.DestinationEntityId);
+                await _virtualSwitchConnector.DisconnectTwoVirtualSwitches(connectionId, connection.SourceEntityId, connection.DestinationEntityId);
+                return VirtualNetworkEntityConnectionMapper.MapToDTO(connection);
+            }
+
+            if (EntitiesUtils.AreTypes(connection.SourceEntityType, connection.DestinationEntityType, EntityType.VirtualSwitch, EntityType.Internet))
+            {
+                var (internetEntityId, virtualSwitchEntityId) = EntitiesUtils.GetInternetEntityIdFirst(connection.SourceEntityId, connection.SourceEntityType, connection.DestinationEntityId, connection.DestinationEntityType);
+                await _virtualSwitchConnector.DisconnectVirtualSwitchFromInternet(connectionId, virtualSwitchEntityId);
                 return VirtualNetworkEntityConnectionMapper.MapToDTO(connection);
             }
 
@@ -105,16 +112,11 @@ namespace Services.Impl
             await _switchRepository.Remove(virtualSwitch.Id);
             await _networkRepository.Remove(virtualNetwork.Id);
             await _connectionRepository.Remove(connectionId);
-            
+
             sourceVirtualMachine.DeviceDefinition = null;
             destinationVirtualMachine.DeviceDefinition = null;
             await _vmEntityRepository.Update(sourceVirtualMachine);
             await _vmEntityRepository.Update(destinationVirtualMachine);
-        }
-
-        public async Task DisconnectVirtualSwitchFromVirtualSwitch(int connectionId, int sourceEntityId, int destinationEntityId)
-        {
-            await _virtualSwitchConnector.DisconnectTwoVirtualSwitches(connectionId, sourceEntityId, destinationEntityId);
         }
     }
 }

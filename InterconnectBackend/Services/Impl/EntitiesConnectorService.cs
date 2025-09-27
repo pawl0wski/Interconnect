@@ -43,21 +43,28 @@ namespace Services.Impl
 
             if (EntitiesUtils.AreTypes(sourceEntityType, destinationEntityType, EntityType.VirtualSwitch, EntityType.VirtualMachine))
             {
-                (sourceEntityId, destinationEntityId) = EntitiesUtils.ResolveEntityIdsOrder(sourceEntityId, sourceEntityType, destinationEntityId, destinationEntityType);
+                (sourceEntityId, destinationEntityId) = EntitiesUtils.GetVirtualMachineEntityIdFirst(sourceEntityId, sourceEntityType, destinationEntityId, destinationEntityType);
 
                 virtualNetworkConnection = await ConnectVirtualMachineToVirtualSwitch(sourceEntityId, destinationEntityId);
             }
 
             if (EntitiesUtils.AreTypes(sourceEntityType, destinationEntityType, EntityType.Internet, EntityType.VirtualMachine))
             {
-                (sourceEntityId, destinationEntityId) = EntitiesUtils.ResolveEntityIdsOrder(sourceEntityId, sourceEntityType, destinationEntityId, destinationEntityType);
+                (sourceEntityId, destinationEntityId) = EntitiesUtils.GetVirtualMachineEntityIdFirst(sourceEntityId, sourceEntityType, destinationEntityId, destinationEntityType);
 
                 virtualNetworkConnection = await ConnectVirtualMachineToInternet(sourceEntityId, destinationEntityId);
             }
 
             if (EntitiesUtils.AreTypes(sourceEntityType, destinationEntityType, EntityType.VirtualSwitch, EntityType.VirtualSwitch))
             {
-                virtualNetworkConnection = await ConnectTwoVirtualSwitches(sourceEntityId, destinationEntityId);
+                virtualNetworkConnection = await _virtualSwitchConnector.ConnectTwoVirtualSwitches(sourceEntityId, destinationEntityId);
+            }
+
+            if (EntitiesUtils.AreTypes(sourceEntityType, destinationEntityType, EntityType.VirtualSwitch, EntityType.Internet))
+            {
+                var (internetEntityId, virtualSwitchEntityId) = EntitiesUtils.GetInternetEntityIdFirst(sourceEntityId, sourceEntityType, destinationEntityId, destinationEntityType);
+
+                virtualNetworkConnection = await _virtualSwitchConnector.ConnectVirtualSwitchToInternet(virtualSwitchEntityId, internetEntityId);
             }
 
             if (virtualNetworkConnection is null)
@@ -126,11 +133,6 @@ namespace Services.Impl
             var connection = await _connectionRepository.Create(sourceVirtualMachine.Id, EntityType.VirtualMachine, destinationEntityId, EntityType.Internet);
 
             return VirtualNetworkEntityConnectionMapper.MapToDTO(connection);
-        }
-
-        public async Task<VirtualNetworkConnectionDTO> ConnectTwoVirtualSwitches(int sourceEntityId, int destinationEntityId)
-        {
-            return await _virtualSwitchConnector.ConnectTwoVirtualSwitches(sourceEntityId, destinationEntityId);
         }
     }
 }

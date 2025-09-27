@@ -9,6 +9,5 @@ namespace Services
         Task<VirtualNetworkConnectionDTO> ConnectTwoVirtualMachines(int sourceEntityId, int destinationEntityId);
         Task<VirtualNetworkConnectionDTO> ConnectVirtualMachineToVirtualSwitch(int sourceEntityId, int destinationEntityId);
         Task<VirtualNetworkConnectionDTO> ConnectVirtualMachineToInternet(int sourceEntityId, int destinationEntityId);
-        Task<VirtualNetworkConnectionDTO> ConnectTwoVirtualSwitches(int sourceEntityId, int destinationEntityId);
     }
 }

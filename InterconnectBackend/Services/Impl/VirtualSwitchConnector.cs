@@ -40,8 +40,8 @@ namespace Services.Impl
 
         public async Task<VirtualNetworkConnectionDTO> ConnectTwoVirtualSwitches(int sourceVirtualSwitch, int destinationVirtualSwitch)
         {
-            var sourceVirtualSwitchEntities = await GetAllConnectedEntitiesToSwitch(sourceVirtualSwitch);
-            var destinationVirtualSwitchEntities = await GetAllConnectedEntitiesToSwitch(destinationVirtualSwitch);
+            var sourceVirtualSwitchEntities = await GetAllConnectedEntitiesToSwitch(sourceVirtualSwitch, null);
+            var destinationVirtualSwitchEntities = await GetAllConnectedEntitiesToSwitch(destinationVirtualSwitch, null);
 
             var popularNetwork = await GetPopularNetwork([.. sourceVirtualSwitchEntities, .. destinationVirtualSwitchEntities]);
             await ConnectEntitiesToNetwork(sourceVirtualSwitchEntities, popularNetwork);
@@ -53,8 +53,8 @@ namespace Services.Impl
 
         public async Task DisconnectTwoVirtualSwitches(int connectionId, int firstVirtualSwitchId, int secondVirtualSwitch)
         {
-            var firstVirtualSwitchEntities = await GetAllConnectedEntitiesToSwitch(firstVirtualSwitchId);
-            var secondVirtualSwitchEntities = await GetAllConnectedEntitiesToSwitch(secondVirtualSwitch);
+            var firstVirtualSwitchEntities = await GetAllConnectedEntitiesToSwitch(firstVirtualSwitchId, connectionId);
+            var secondVirtualSwitchEntities = await GetAllConnectedEntitiesToSwitch(secondVirtualSwitch, connectionId);
 
             await ConnectDisconnectedEntities(firstVirtualSwitchEntities);
             await ConnectDisconnectedEntities(secondVirtualSwitchEntities);
@@ -62,7 +62,27 @@ namespace Services.Impl
             await _connectionRepository.Remove(connectionId);
         }
 
-        private async Task<List<EntityTypeWithId>> GetAllConnectedEntitiesToSwitch(int virtualSwitchId)
+        public async Task<VirtualNetworkConnectionDTO> ConnectVirtualSwitchToInternet(int virtualSwitchId, int internetId)
+        {
+            var virtualSwitchConnectedEntities = await GetAllConnectedEntitiesToSwitch(virtualSwitchId, null);
+
+            var internetNetwork = (await _internetEntityRepository.GetById(internetId)).VirtualNetwork;
+            await ConnectEntitiesToNetwork(virtualSwitchConnectedEntities, internetNetwork);
+
+            var connectionModel = await _connectionRepository.Create(virtualSwitchId, EntityType.VirtualSwitch, internetId, EntityType.Internet);
+            return VirtualNetworkEntityConnectionMapper.MapToDTO(connectionModel);
+        }
+
+        public async Task DisconnectVirtualSwitchFromInternet(int connectionId, int virtualSwitchId)
+        {
+            var virtualSwitchConnectedEntities = await GetAllConnectedEntitiesToSwitch(virtualSwitchId, connectionId);
+
+            await ConnectDisconnectedEntities(virtualSwitchConnectedEntities);
+
+            await _connectionRepository.Remove(connectionId);
+        }
+
+        private async Task<List<EntityTypeWithId>> GetAllConnectedEntitiesToSwitch(int virtualSwitchId, int? connectionIdToSkip)
         {
             var virtualSwitch = VirtualSwitchEntityMapper.MapToDTO(await _switchRepository.GetById(virtualSwitchId));
             Queue<VirtualNetworkEntityConnectionModel> connetionsToVisit = new();
@@ -74,6 +94,12 @@ namespace Services.Impl
             while (connetionsToVisit.Count > 0)
             {
                 var connection = connetionsToVisit.Dequeue();
+
+                if (connectionIdToSkip is not null && connection.Id == connectionIdToSkip)
+                {
+                    continue;
+                }
+
                 EntityTypeWithId target = visitiedEntities.Any(x => x.EqualsTo(connection.SourceEntityId, connection.SourceEntityType))
                     ? new EntityTypeWithId { Id = connection.DestinationEntityId, Type = connection.DestinationEntityType }
                     : new EntityTypeWithId { Id = connection.SourceEntityId, Type = connection.SourceEntityType };

@@ -6,6 +6,7 @@ import { KonvaEventObject } from "konva/lib/Node";
 
 interface InternetEntityProps {
     entity: InternetEntityModel;
+    onClick: (e: KonvaEventObject<MouseEvent>) => void;
     onDragMove: (e: KonvaEventObject<DragEvent>) => void;
     onDragEnd: (e: KonvaEventObject<DragEvent>) => void;
     onMouseOver: (e: KonvaEventObject<MouseEvent>) => void;
@@ -14,6 +15,7 @@ interface InternetEntityProps {
 
 const InternetEntity = ({
     entity,
+    onClick,
     onDragMove,
     onDragEnd,
     onMouseOver,
@@ -25,6 +27,7 @@ const InternetEntity = ({
         <Group
             x={entity.x}
             y={entity.y}
+            onClick={onClick}
             onDragMove={onDragMove}
             onDragEnd={onDragEnd}
             onMouseOver={onMouseOver}

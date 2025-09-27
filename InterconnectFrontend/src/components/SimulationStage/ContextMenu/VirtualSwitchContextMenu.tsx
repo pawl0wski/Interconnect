@@ -45,6 +45,7 @@ const VirtualSwitchContextMenu = ({
                 </Menu.Item>
                 {connections.map((connection) => (
                     <NetworkConnectionMenuItemContainer
+                        key={connection.id}
                         parentEntityId={entityId}
                         parentEntityType={EntityType.VirtualSwitch}
                         connection={connection}
