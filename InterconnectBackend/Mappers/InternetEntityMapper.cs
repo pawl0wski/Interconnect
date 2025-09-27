@@ -11,7 +11,8 @@ namespace Mappers
             {
                 Id = model.Id,
                 X = model.X,
-                Y = model.Y
+                Y = model.Y,
+                IpAddress = model.VirtualNetwork.IpAddress!
             };
         }
 

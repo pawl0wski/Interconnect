@@ -136,7 +136,7 @@ namespace Services.Impl
 
             _wrapper.CreateVirtualNetwork(networkDefinition);
 
-            return await _networkRepository.Create(definition.BridgeName, VirtualNetworkUtils.GetNetworkUuidFromName(definition.NetworkName));
+            return await _networkRepository.Create(definition.BridgeName, VirtualNetworkUtils.GetNetworkUuidFromName(definition.NetworkName), definition.IpAddress);
         }
     }
 }

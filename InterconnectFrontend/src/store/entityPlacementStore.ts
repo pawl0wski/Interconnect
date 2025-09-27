@@ -59,6 +59,7 @@ const useEntityPlacementStore = create<EntityPlacementStore>()((set, get) => ({
                     resp.data[0].id,
                     x,
                     y,
+                    true,
                 );
                 break;
         }

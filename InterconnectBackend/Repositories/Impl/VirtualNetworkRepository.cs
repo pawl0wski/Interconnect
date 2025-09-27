@@ -13,12 +13,13 @@ namespace Repositories.Impl
             _context = context;
         }
 
-        public async Task<VirtualNetworkModel> Create(string bridgeName, Guid uuid)
+        public async Task<VirtualNetworkModel> Create(string bridgeName, Guid uuid, string? ipAddress = null)
         {
             var virtualNetwork = new VirtualNetworkModel
             {
                 BridgeName = bridgeName,
-                Uuid = uuid
+                Uuid = uuid,
+                IpAddress = ipAddress
             };
 
             _context.VirtualNetworkModels.Add(virtualNetwork);
