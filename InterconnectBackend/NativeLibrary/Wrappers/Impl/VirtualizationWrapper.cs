@@ -11,13 +11,13 @@ namespace NativeLibrary.Wrappers.Impl
 
         public VirtualizationWrapper()
         {
-            _virtualizationFacade = InteropVirtualization.Create();
+            _virtualizationFacade = InteropVirtualization.CreateVirtualizationFacade();
         }
         public void InitializeConnection(string? connectionUrl)
         {
             NativeExecutionInfo executionInfo = new();
 
-            InteropVirtualization.InitializeConnection(out executionInfo, _virtualizationFacade, connectionUrl);
+            InteropVirtualization.Virtualization_InitializeConnection(out executionInfo, _virtualizationFacade, connectionUrl);
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
         }
@@ -26,7 +26,7 @@ namespace NativeLibrary.Wrappers.Impl
             NativeExecutionInfo executionInfo = new();
             NativeConnectionInfo info = new();
 
-            InteropVirtualization.GetConnectionInfo(out executionInfo, _virtualizationFacade, out info);
+            InteropVirtualization.Virtualization_GetConnectionInfo(out executionInfo, _virtualizationFacade, out info);
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
             return info;
@@ -36,7 +36,7 @@ namespace NativeLibrary.Wrappers.Impl
         {
             NativeExecutionInfo executionInfo = new();
 
-            InteropVirtualization.CreateVirtualMachine(out executionInfo, _virtualizationFacade, xmlDefinition);
+            InteropVirtualization.Virtualization_CreateVirtualMachine(out executionInfo, _virtualizationFacade, xmlDefinition);
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
         }
@@ -46,7 +46,7 @@ namespace NativeLibrary.Wrappers.Impl
             NativeExecutionInfo executionInfo = new();
             NativeVirtualMachineInfo info = new();
 
-            InteropVirtualization.GetInfoAboutVirtualMachine(out executionInfo, _virtualizationFacade, name, out info);
+            InteropVirtualization.Virtualization_GetInfoAboutVirtualMachine(out executionInfo, _virtualizationFacade, name, out info);
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
 
@@ -59,7 +59,7 @@ namespace NativeLibrary.Wrappers.Impl
             IntPtr listOfVirtualMachines;
             int numberOfVirtualMachines;
 
-            InteropVirtualization.GetListOfVirtualMachinesWithInfo(out executionInfo, _virtualizationFacade, out listOfVirtualMachines, out numberOfVirtualMachines);
+            InteropVirtualization.Virtualization_GetListOfVirtualMachinesWithInfo(out executionInfo, _virtualizationFacade, out listOfVirtualMachines, out numberOfVirtualMachines);
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
 
@@ -71,7 +71,7 @@ namespace NativeLibrary.Wrappers.Impl
             NativeExecutionInfo executionInfo = new();
             bool isConnectionAlive;
 
-            InteropVirtualization.IsConnectionAlive(out executionInfo, _virtualizationFacade, out isConnectionAlive);
+            InteropVirtualization.Virtualization_IsConnectionAlive(out executionInfo, _virtualizationFacade, out isConnectionAlive);
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
 
@@ -83,7 +83,7 @@ namespace NativeLibrary.Wrappers.Impl
             NativeExecutionInfo executionInfo = new();
             IntPtr stream;
 
-            InteropVirtualization.OpenVirtualMachineConsole(out executionInfo, _virtualizationFacade, out stream, uuid.ToString());
+            InteropVirtualization.Virtualization_OpenVirtualMachineConsole(out executionInfo, _virtualizationFacade, out stream, uuid.ToString());
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
 
@@ -94,7 +94,7 @@ namespace NativeLibrary.Wrappers.Impl
         {
             NativeExecutionInfo executionInfo = new();
 
-            InteropVirtualization.SendDataToConsole(out executionInfo, _virtualizationFacade, stream, data);
+            InteropVirtualization.Virtualization_SendDataToConsole(out executionInfo, _virtualizationFacade, stream, data);
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
         }
@@ -104,7 +104,7 @@ namespace NativeLibrary.Wrappers.Impl
             NativeExecutionInfo executionInfo = new();
             var streamData = new NativeStreamData();
 
-            InteropVirtualization.ReceiveDataFromConsole(out executionInfo, _virtualizationFacade, stream, out streamData);
+            InteropVirtualization.Virtualization_ReceiveDataFromConsole(out executionInfo, _virtualizationFacade, stream, out streamData);
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
 
@@ -115,7 +115,7 @@ namespace NativeLibrary.Wrappers.Impl
         {
             NativeExecutionInfo executionInfo = new();
 
-            InteropVirtualization.CloseStream(out executionInfo, _virtualizationFacade, stream);
+            InteropVirtualization.Virtualization_CloseStream(out executionInfo, _virtualizationFacade, stream);
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
         }
@@ -125,7 +125,7 @@ namespace NativeLibrary.Wrappers.Impl
             NativeExecutionInfo executionInfo = new();
             IntPtr network;
 
-            InteropVirtualization.CreateVirtualNetwork(out executionInfo, _virtualizationFacade, out network, networkDefinition);
+            InteropVirtualization.Virtualization_CreateVirtualNetwork(out executionInfo, _virtualizationFacade, out network, networkDefinition);
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
 
@@ -136,7 +136,7 @@ namespace NativeLibrary.Wrappers.Impl
         {
             NativeExecutionInfo executionInfo = new();
 
-            InteropVirtualization.AttachDeviceToVirtualMachine(out executionInfo, _virtualizationFacade, uuid.ToString(), deviceDefinition);
+            InteropVirtualization.Virtualization_AttachDeviceToVirtualMachine(out executionInfo, _virtualizationFacade, uuid.ToString(), deviceDefinition);
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
         }
@@ -145,7 +145,7 @@ namespace NativeLibrary.Wrappers.Impl
         {
             NativeExecutionInfo executionInfo = new();
 
-            InteropVirtualization.DetachDeviceFromVirtualMachine(out executionInfo, _virtualizationFacade, uuid.ToString(), deviceDefinition);
+            InteropVirtualization.Virtualization_DetachDeviceFromVirtualMachine(out executionInfo, _virtualizationFacade, uuid.ToString(), deviceDefinition);
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
         }
@@ -154,7 +154,7 @@ namespace NativeLibrary.Wrappers.Impl
         {
             NativeExecutionInfo executionInfo = new();
 
-            InteropVirtualization.UpdateVmDevice(out executionInfo, _virtualizationFacade, uuid.ToString(), deviceDefinition);
+            InteropVirtualization.Virtualization_UpdateVmDevice(out executionInfo, _virtualizationFacade, uuid.ToString(), deviceDefinition);
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
         }
@@ -163,7 +163,7 @@ namespace NativeLibrary.Wrappers.Impl
         {
             NativeExecutionInfo executionInfo = new();
 
-            InteropVirtualization.DestroyNetwork(out executionInfo, _virtualizationFacade, name);
+            InteropVirtualization.Virtualization_DestroyNetwork(out executionInfo, _virtualizationFacade, name);
 
             ExecutionInfoAnalyzer.ThrowIfErrorOccurred(executionInfo);
         }

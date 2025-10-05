@@ -3,7 +3,7 @@
 #include <optional>
 #include <string>
 
-#include "../../LibvirtWrapper.h"
+#include "../../wrappers/LibvirtWrapper.h"
 #include "../../models/ConnectionInfo.h"
 
 

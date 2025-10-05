@@ -28,19 +28,24 @@ namespace Repositories.Impl
             return virtualNetwork;
         }
 
-        public async Task<VirtualNetworkModel> GetById(int id)
+        public Task<List<VirtualNetworkModel>> GetAll()
         {
-            return await _context.VirtualNetworkModels.FirstAsync(x => x.Id == id);
+            return _context.VirtualNetworkModels.ToListAsync();
         }
 
-        public async Task<VirtualNetworkModel> GetByUuid(Guid uuid)
+        public Task<VirtualNetworkModel> GetById(int id)
         {
-            return await _context.VirtualNetworkModels.FirstAsync(x => x.Uuid == uuid);
+            return _context.VirtualNetworkModels.FirstAsync(x => x.Id == id);
         }
 
-        public async Task<VirtualNetworkModel> GetByUuidWithVirtualSwitches(Guid uuid)
+        public Task<VirtualNetworkModel> GetByUuid(Guid uuid)
         {
-            return await _context.VirtualNetworkModels.Include(x => x.VirtualSwitches).FirstAsync(x => x.Uuid == uuid);
+            return _context.VirtualNetworkModels.FirstAsync(x => x.Uuid == uuid);
+        }
+
+        public Task<VirtualNetworkModel> GetByUuidWithVirtualSwitches(Guid uuid)
+        {
+            return _context.VirtualNetworkModels.Include(x => x.VirtualSwitches).FirstAsync(x => x.Uuid == uuid);
         }
 
         public async Task Remove(int id)

@@ -1,46 +1,45 @@
 ﻿using NativeLibrary.Structs;
-using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 
 namespace NativeLibrary.Interop
 {
-    public class InteropVirtualization
+    internal static class InteropVirtualization
     {
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern IntPtr Create();
+        public static extern IntPtr CreateVirtualizationFacade();
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern void Destroy();
+        public static extern void DestroyVirtualizationFacade();
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern void InitializeConnection(out NativeExecutionInfo executionInfo, IntPtr facade, string? customConnectionUrl);
+        public static extern void Virtualization_InitializeConnection(out NativeExecutionInfo executionInfo, IntPtr facade, string? customConnectionUrl);
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern void GetConnectionInfo(out NativeExecutionInfo executionInfo, IntPtr facade, out NativeConnectionInfo info);
+        public static extern void Virtualization_GetConnectionInfo(out NativeExecutionInfo executionInfo, IntPtr facade, out NativeConnectionInfo info);
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern void CreateVirtualMachine(out NativeExecutionInfo executionInfom, IntPtr facade, string virtualMachineXml);
+        public static extern void Virtualization_CreateVirtualMachine(out NativeExecutionInfo executionInfom, IntPtr facade, string virtualMachineXml);
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern void GetInfoAboutVirtualMachine(out NativeExecutionInfo executionInfo, IntPtr facade, string name, out NativeVirtualMachineInfo info);
+        public static extern void Virtualization_GetInfoAboutVirtualMachine(out NativeExecutionInfo executionInfo, IntPtr facade, string name, out NativeVirtualMachineInfo info);
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern void GetNumberOfVirtualMachines(out NativeExecutionInfo executionInfo, IntPtr facade, out int numberOfVirtualMachines);
+        public static extern void Virtualization_GetNumberOfVirtualMachines(out NativeExecutionInfo executionInfo, IntPtr facade, out int numberOfVirtualMachines);
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern void GetListOfVirtualMachinesWithInfo(out NativeExecutionInfo executionInfo, IntPtr facade, out IntPtr arrayOfVirtualMachines, out int numberOfVirtualMachines);
+        public static extern void Virtualization_GetListOfVirtualMachinesWithInfo(out NativeExecutionInfo executionInfo, IntPtr facade, out IntPtr arrayOfVirtualMachines, out int numberOfVirtualMachines);
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern void IsConnectionAlive(out NativeExecutionInfo executionInfo, IntPtr facade, out bool isConnectionAlive);
+        public static extern void Virtualization_IsConnectionAlive(out NativeExecutionInfo executionInfo, IntPtr facade, out bool isConnectionAlive);
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern void OpenVirtualMachineConsole(out NativeExecutionInfo executionInfo, IntPtr facade, out IntPtr stream, string vmUuid);
+        public static extern void Virtualization_OpenVirtualMachineConsole(out NativeExecutionInfo executionInfo, IntPtr facade, out IntPtr stream, string vmUuid);
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern void ReceiveDataFromConsole(out NativeExecutionInfo executionInfo, IntPtr facade, IntPtr stream, out NativeStreamData streamData);
+        public static extern void Virtualization_ReceiveDataFromConsole(out NativeExecutionInfo executionInfo, IntPtr facade, IntPtr stream, out NativeStreamData streamData);
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern void SendDataToConsole(out NativeExecutionInfo executionInfo, IntPtr facade, IntPtr stream, string buffer);
+        public static extern void Virtualization_SendDataToConsole(out NativeExecutionInfo executionInfo, IntPtr facade, IntPtr stream, string buffer);
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern void CloseStream(out NativeExecutionInfo executionInfo, IntPtr facade, IntPtr stream);
+        public static extern void Virtualization_CloseStream(out NativeExecutionInfo executionInfo, IntPtr facade, IntPtr stream);
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern void CreateVirtualNetwork(out NativeExecutionInfo executionInfo, IntPtr facade, out IntPtr network, string networkDefinition);
+        public static extern void Virtualization_CreateVirtualNetwork(out NativeExecutionInfo executionInfo, IntPtr facade, out IntPtr network, string networkDefinition);
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern void AttachDeviceToVirtualMachine(out NativeExecutionInfo executionInfo, IntPtr facade, string uuid, string deviceDefinition);
+        public static extern void Virtualization_AttachDeviceToVirtualMachine(out NativeExecutionInfo executionInfo, IntPtr facade, string uuid, string deviceDefinition);
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern void DetachDeviceFromVirtualMachine(out NativeExecutionInfo executionInfo, IntPtr facade, string uuid, string deviceDefinition);
+        public static extern void Virtualization_DetachDeviceFromVirtualMachine(out NativeExecutionInfo executionInfo, IntPtr facade, string uuid, string deviceDefinition);
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern void UpdateVmDevice(out NativeExecutionInfo executionInfo, IntPtr facade, string uuid, string deviceDefinition);
+        public static extern void Virtualization_UpdateVmDevice(out NativeExecutionInfo executionInfo, IntPtr facade, string uuid, string deviceDefinition);
         [DllImport(Constants.LIBRARY_NAME)]
-        public static extern void DestroyNetwork(out NativeExecutionInfo executionInfo, IntPtr facade, string name);
+        public static extern void Virtualization_DestroyNetwork(out NativeExecutionInfo executionInfo, IntPtr facade, string name);
     }
 }

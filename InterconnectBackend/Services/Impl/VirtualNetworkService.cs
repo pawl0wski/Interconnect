@@ -15,19 +15,22 @@ namespace Services.Impl
         private readonly IVirtualNetworkConnectionRepository _connectionRepository;
         private readonly IVirtualSwitchEntityRepository _switchRepository;
         private readonly IVirtualNetworkRepository _networkRepository;
+        private readonly IPacketSnifferService _packetSnifferService;
 
         public VirtualNetworkService(
             IVirtualizationWrapper wrapper,
             IVirtualMachineEntityRepository vmEntityRepository,
             IVirtualNetworkConnectionRepository connectionRepository,
             IVirtualSwitchEntityRepository switchRepository,
-            IVirtualNetworkRepository networkRepository)
+            IVirtualNetworkRepository networkRepository,
+            IPacketSnifferService packetSnifferService)
         {
             _wrapper = wrapper;
             _vmEntityRepository = vmEntityRepository;
             _connectionRepository = connectionRepository;
             _switchRepository = switchRepository;
             _networkRepository = networkRepository;
+            _packetSnifferService = packetSnifferService;
         }
 
         public async Task<List<VirtualNetworkConnectionDTO>> GetVirtualNetworkConnections()
@@ -136,7 +139,14 @@ namespace Services.Impl
 
             _wrapper.CreateVirtualNetwork(networkDefinition);
 
+            _packetSnifferService.StartListeningForBridge(definition.BridgeName);
+
             return await _networkRepository.Create(definition.BridgeName, VirtualNetworkUtils.GetNetworkUuidFromName(definition.NetworkName), definition.IpAddress);
+        }
+
+        public Task<List<VirtualNetworkModel>> GetAllVirtualNetworks()
+        {
+            return _networkRepository.GetAll();
         }
     }
 }

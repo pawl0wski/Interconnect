@@ -8,6 +8,7 @@ namespace BackgroundServices
         public static void Initialize(IServiceCollection serviceCollection)
         {
             serviceCollection.AddHostedService<VirtualMachineConsoleBackgroundService>();
+            serviceCollection.AddHostedService<PacketSnifferBackgroundService>();
         }
     }
 }

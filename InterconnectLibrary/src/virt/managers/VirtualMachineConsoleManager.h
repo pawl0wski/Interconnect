@@ -1,7 +1,7 @@
 #ifndef VIRTUALMACHINECONSOLEMANAGER_H
 #define VIRTUALMACHINECONSOLEMANAGER_H
 #include "BaseManagerWithConnection.h"
-#include "../../LibvirtWrapper.h"
+#include "../../wrappers/LibvirtWrapper.h"
 #include "../../interfaces/ILibvirtWrapper.h"
 #include "../../models/StreamData.h"
 

@@ -9,5 +9,6 @@ namespace Repositories
         public Task<VirtualNetworkModel> GetByUuid(Guid uuid);
         public Task<VirtualNetworkModel> GetByUuidWithVirtualSwitches(Guid uuid);
         public Task Remove(int id);
+        public Task<List<VirtualNetworkModel>> GetAll();
     }
 }

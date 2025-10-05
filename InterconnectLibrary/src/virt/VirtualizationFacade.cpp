@@ -118,3 +118,8 @@ void VirtualizationFacade::destroyNetwork(const std::string& name) const
 {
     networkManager->destroyNetwork(name);
 }
+
+std::string VirtualizationFacade::getNetworkDefinition(const std::string& name) const
+{
+    return networkManager->getNetworkXmlDefinition(name);
+}

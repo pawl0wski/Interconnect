@@ -9,6 +9,7 @@ namespace Repositories
         {
             serviceCollection.AddSingleton<IVirtualMachineConsoleDataRepository, VirtualMachineConsoleDataRepository>();
             serviceCollection.AddSingleton<IVirtualMachineConsoleStreamRepository, VirtualMachineConsoleStreamRepository>();
+            serviceCollection.AddSingleton<IPacketSnifferRepository, PacketSnifferRepository>();
 
             serviceCollection.AddScoped<IBootableDiskRepository, BootableDiskRepository>();
             serviceCollection.AddScoped<IVirtualMachineEntityRepository, VirtualMachineEntityRepository>();

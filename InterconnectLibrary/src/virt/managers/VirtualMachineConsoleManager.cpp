@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "../../exceptions/VirtualMachineManagerException.h"
+#include "../../exceptions/VirtualizationException.h"
 
 virStreamPtr VirtualMachineConsoleManager::openVirtualMachineConsole(const std::string& vmUuid) const
 {
@@ -11,13 +11,13 @@ virStreamPtr VirtualMachineConsoleManager::openVirtualMachineConsole(const std::
     const auto domain = libvirt->domainLookupByUuid(conn, vmUuid);
     if (domain == nullptr)
     {
-        throw VirtualMachineManagerException("Can not find domain");
+        throw VirtualizationException("Can not find domain");
     }
 
     const auto stream = libvirt->createNewStream(conn);
     if (libvirt->openDomainConsole(domain, stream) == -1)
     {
-        throw VirtualMachineManagerException("Cannot open console");
+        throw VirtualizationException("Cannot open console");
     }
 
     return stream;

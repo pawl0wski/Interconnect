@@ -9,6 +9,7 @@ namespace NativeLibrary
         public static void Initialize(IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<IVirtualizationWrapper, VirtualizationWrapper>();
+            serviceCollection.AddSingleton<IPacketSnifferWrapper, PacketSnifferWrapper>();
         }
     }
 }

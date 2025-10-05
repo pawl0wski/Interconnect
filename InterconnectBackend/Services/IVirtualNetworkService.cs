@@ -14,5 +14,6 @@ namespace Services
         Task UpdateNetworkForVirtualMachineNetworkInterface(int id, string networkName);
         Task<VirtualNetworkModel> CreateInternetVirtualNetwork();
         Task<VirtualNetworkModel> CreateSwitchVirtualNetwork();
+        Task<List<VirtualNetworkModel>> GetAllVirtualNetworks();
     }
 }

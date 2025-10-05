@@ -1,6 +1,6 @@
 #include "ConnectionManager.h"
 
-#include "../../exceptions/VirtualMachineManagerException.h"
+#include "../../exceptions/VirtualizationException.h"
 #include "../../utils/StringUtils.h"
 #include "../../utils/VersionUtils.h"
 
@@ -11,7 +11,7 @@ void ConnectionManager::initializeConnection(const std::optional<std::string>& c
     conn = libvirt->connectOpen(connectionUri.c_str());
     if (conn == nullptr)
     {
-        throw VirtualMachineManagerException("An error occurred while connecting to " + connectionUri);
+        throw VirtualizationException("An error occurred while connecting to " + connectionUri);
     }
 }
 
@@ -19,7 +19,7 @@ ConnectionInfo ConnectionManager::getConnectionInfo() const
 {
     if (conn == nullptr)
     {
-        throw VirtualMachineManagerException("No connected to any hypervisor");
+        throw VirtualizationException("No connected to any hypervisor");
     }
 
     virNodeInfo info;
@@ -30,15 +30,15 @@ ConnectionInfo ConnectionManager::getConnectionInfo() const
     const auto connectionUrl = libvirt->getConnectUrl(conn);
     if (libvirt->getNodeInfo(conn, &info) != 0)
     {
-        throw VirtualMachineManagerException("An error occurred while getting node information ");
+        throw VirtualizationException("An error occurred while getting node information ");
     }
     if (libvirt->getLibVersion(conn, &libVersion) != 0)
     {
-        throw VirtualMachineManagerException("Failed to get lib version");
+        throw VirtualizationException("Failed to get lib version");
     }
     if (libvirt->getDriverVersion(conn, &driverVersion) != 0)
     {
-        throw VirtualMachineManagerException("Failed to get driver version");
+        throw VirtualizationException("Failed to get driver version");
     }
 
     auto connectionInfo = ConnectionInfo{
@@ -67,7 +67,7 @@ bool ConnectionManager::isConnectionAlive() const
 
     if (connectionStatus == -1)
     {
-        throw VirtualMachineManagerException("Error while retrieving connection status");
+        throw VirtualizationException("Error while retrieving connection status");
     }
 
     return connectionStatus;

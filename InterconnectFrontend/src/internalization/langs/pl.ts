@@ -7,6 +7,8 @@ const pl = {
     disconnectWith: "Rozłącz z {{entityName}}",
     connectWithAnotherEntity: "Połącz z innym urządzeniem",
     performingActions: "Wykonywanie akcji...",
+    actions: "Akcje",
+    type: "Typ",
     virtualSwitch: {
         virtualSwitch: "Switch",
         form: {
@@ -39,6 +41,12 @@ const pl = {
     },
     internet: {
         internet: "Internet",
+    },
+    packet: {
+        sourceMac: "Źródłowy MAC",
+        destinationMac: "Docelowy MAC",
+        sourceIp: "Źródłowy IP",
+        destinationIp: "Docelowy IP",
     },
 };
 

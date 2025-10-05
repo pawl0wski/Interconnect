@@ -158,3 +158,8 @@ int LibvirtWrapper::destroyNetwork(virNetworkPtr network)
 {
     return virNetworkDestroy(network);
 }
+
+std::string LibvirtWrapper::getNetworkDefinition(virNetworkPtr network)
+{
+    return virNetworkGetXMLDesc(network, 0);
+}

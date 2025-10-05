@@ -1,6 +1,6 @@
 #ifndef BASEMANAGERWITHCONNECTION_H
 #define BASEMANAGERWITHCONNECTION_H
-#include "../../LibvirtWrapper.h"
+#include "../../wrappers/LibvirtWrapper.h"
 #include "../../interfaces/ILibvirtWrapper.h"
 
 class BaseManagerWithConnection

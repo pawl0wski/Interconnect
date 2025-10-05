@@ -1,6 +1,6 @@
 #include "VirtualNetworkManager.h"
 
-#include "../../exceptions/VirtualMachineManagerException.h"
+#include "../../exceptions/VirtualizationException.h"
 
 virNetworkPtr VirtualNetworkManager::createNetworkFromXml(const std::string& networkDefinition) const
 {
@@ -10,7 +10,7 @@ virNetworkPtr VirtualNetworkManager::createNetworkFromXml(const std::string& net
 
     if (network == nullptr)
     {
-        throw VirtualMachineManagerException("Failed to create network from XML");
+        throw VirtualizationException("Failed to create network from XML");
     }
 
     return network;
@@ -24,6 +24,15 @@ void VirtualNetworkManager::destroyNetwork(const std::string& name) const
 
     if (libvirt->destroyNetwork(network) == -1)
     {
-        throw VirtualMachineManagerException("Failed to destroy network");
+        throw VirtualizationException("Failed to destroy network");
     }
+}
+
+std::string VirtualNetworkManager::getNetworkXmlDefinition(const std::string& name) const
+{
+    checkIfConnectionIsSet();
+
+    const auto network = libvirt->getNetworkByName(conn, name);
+
+    return libvirt->getNetworkDefinition(network);
 }

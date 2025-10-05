@@ -53,6 +53,8 @@ public:
     void updateVmDevice(const std::string& uuid, const std::string& deviceDefinition) const;
 
     void destroyNetwork(const std::string& name) const;
+
+    [[nodiscard]] std::string getNetworkDefinition(const std::string& name) const;
 };
 
 #endif //VIRTUALIZATIONFACADE_H

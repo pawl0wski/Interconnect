@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "../../exceptions/VirtualMachineManagerException.h"
+#include "../../exceptions/VirtualizationException.h"
 #include "../../utils/StringUtils.h"
 
 void VirtualMachineManager::createVirtualMachine(const std::string& virtualMachineXml) const
@@ -12,7 +12,7 @@ void VirtualMachineManager::createVirtualMachine(const std::string& virtualMachi
     const auto domain = libvirt->createVirtualMachineFromXml(conn, virtualMachineXml.c_str());
     if (domain == nullptr)
     {
-        throw VirtualMachineManagerException(libvirt->getLastError());
+        throw VirtualizationException(libvirt->getLastError());
     }
 }
 
@@ -27,12 +27,12 @@ VirtualMachineInfo VirtualMachineManager::getInfoAboutVirtualMachine(const std::
 
     if (libvirt->domainGetInfo(domainPtr, domainInfo) != 0)
     {
-        throw VirtualMachineManagerException("Virtual machine was found but error occurred while obtaining its info");
+        throw VirtualizationException("Virtual machine was found but error occurred while obtaining its info");
     }
 
     if (libvirt->getDomainUUID(domainPtr, virtualMachineUuid) != 0)
     {
-        throw VirtualMachineManagerException("Virtual machine was found but error occurred while obtaining its uuid");
+        throw VirtualizationException("Virtual machine was found but error occurred while obtaining its uuid");
     }
 
     auto vmInfo = VirtualMachineInfo{
@@ -54,7 +54,7 @@ std::vector<VirtualMachineInfo> VirtualMachineManager::getListOfVirtualMachinesW
     numDomains = libvirt->getListOfAllDomains(conn, &domains);
     if (numDomains == -1)
     {
-        throw VirtualMachineManagerException("Error retrieving the list of virtual machines.");
+        throw VirtualizationException("Error retrieving the list of virtual machines.");
     }
 
     std::vector<VirtualMachineInfo> virtualMachines;
@@ -78,7 +78,7 @@ void VirtualMachineManager::attachDeviceToVirtualMachine(const std::string& uuid
 
     if (libvirt->attachDeviceToVm(domainPtr, deviceDefinition) == -1)
     {
-        throw VirtualMachineManagerException("Can't attach device");
+        throw VirtualizationException("Can't attach device");
     }
 }
 
@@ -91,7 +91,7 @@ void VirtualMachineManager::detachDeviceFromVirtualMachine(const std::string& uu
 
     if (libvirt->detachDeviceFromVm(domainPtr, deviceDefinition) == -1)
     {
-        throw VirtualMachineManagerException("Can't detach device");
+        throw VirtualizationException("Can't detach device");
     }
 }
 
@@ -103,7 +103,7 @@ void VirtualMachineManager::updateVmDevice(const std::string& uuid, const std::s
 
     if (libvirt->updateVmDevice(domainPtr, deviceDefinition) == -1)
     {
-        throw VirtualMachineManagerException("Can't modify device");
+        throw VirtualizationException("Can't modify device");
     }
 }
 
@@ -112,7 +112,7 @@ virDomainPtr VirtualMachineManager::getVirtualMachineByName(const std::string& n
     const auto domainPtr = libvirt->domainLookupByName(conn, name);
     if (domainPtr == nullptr)
     {
-        throw VirtualMachineManagerException("Error while obtaining pointer to virtual machine");
+        throw VirtualizationException("Error while obtaining pointer to virtual machine");
     }
     return domainPtr;
 }
@@ -122,7 +122,7 @@ virDomainPtr VirtualMachineManager::getVirtualMachineByUuid(const std::string& u
     const auto domainPtr = libvirt->domainLookupByUuid(conn, uuid);
     if (domainPtr == nullptr)
     {
-        throw VirtualMachineManagerException("Error while obtaining pointer to virtual machine");
+        throw VirtualizationException("Error while obtaining pointer to virtual machine");
     }
     return domainPtr;
 }

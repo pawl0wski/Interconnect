@@ -1,6 +1,6 @@
 #include "BaseManagerWithConnection.h"
 
-#include "../../exceptions/VirtualMachineManagerException.h"
+#include "../../exceptions/VirtualizationException.h"
 
 void BaseManagerWithConnection::updateConnection(virConnectPtr conn)
 {
@@ -11,6 +11,6 @@ void BaseManagerWithConnection::checkIfConnectionIsSet() const
 {
     if (conn == nullptr)
     {
-        throw VirtualMachineManagerException("No active connection to the VM backend");
+        throw VirtualizationException("No active connection to the VM backend");
     }
 }

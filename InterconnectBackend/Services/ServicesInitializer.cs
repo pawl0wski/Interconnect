@@ -11,6 +11,7 @@ namespace Services
             serviceCollection.AddSingleton<IVirtualMachineConsoleService, VirtualMachineConsoleService>();
             serviceCollection.AddSingleton<IVirtualMachineManagerService, VirtualMachineManagerService>();
             serviceCollection.AddSingleton<IInfoService, InfoService>();
+            serviceCollection.AddSingleton<IPacketSnifferService, PacketSnifferService>();
 
             serviceCollection.AddScoped<IVirtualNetworkService, VirtualNetworkService>();
             serviceCollection.AddScoped<IVirtualMachineEntityService, VirtualMachineEntityService>();

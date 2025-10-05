@@ -18,6 +18,11 @@ namespace Interconnect
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.WebHost.ConfigureKestrel((context, options) =>
+            {
+                options.Configure(context.Configuration.GetSection("Kestrel"));
+            });
+            
             // Add services to the container.
             LibraryInitializer.Initialize(builder.Services);
             RepositoriesInitializer.Initialize(builder.Services);
@@ -63,6 +68,7 @@ namespace Interconnect
 
             app.MapHub<ConnectionStatusHub>("/ConnectionStatusHub");
             app.MapHub<VirtualMachineConsoleHub>("/VirtualMachineConsoleHub");
+            app.MapHub<PacketSnifferHub>("/PacketSnifferHub");
 
             app.UseExceptionMiddleware();
 

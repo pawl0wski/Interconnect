@@ -30,7 +30,7 @@ namespace Services.Impl
             _internetRepository = internetRepository;
             _networkService = networkService;
             _virtualSwitchConnector = virtualSwitchConnector;
-        }
+        } 
 
         public async Task<VirtualNetworkConnectionDTO> ConnectTwoEntities(int sourceEntityId, EntityType sourceEntityType, int destinationEntityId, EntityType destinationEntityType)
         {

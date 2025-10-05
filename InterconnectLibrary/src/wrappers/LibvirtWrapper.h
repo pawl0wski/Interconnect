@@ -1,6 +1,6 @@
 #ifndef LIBVIRTWRAPPER_H
 #define LIBVIRTWRAPPER_H
-#include "interfaces/ILibvirtWrapper.h"
+#include "../interfaces/ILibvirtWrapper.h"
 #include <libvirt/virterror.h>
 
 /**
@@ -85,6 +85,8 @@ public:
     virNetworkPtr getNetworkByName(virConnectPtr conn, const std::string& name) override;
 
     int destroyNetwork(virNetworkPtr network) override;
+
+    std::string getNetworkDefinition(virNetworkPtr network) override;
 };
 
 

@@ -1,6 +1,7 @@
 ﻿using Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Models;
 using Models.Responses;
 using Services;
@@ -10,9 +11,10 @@ namespace BackgroundServices.Impl
 {
     public class VirtualMachineConsoleBackgroundService : BackgroundService
     {
+        private readonly ILogger<VirtualMachineConsoleBackgroundService> _logger;
         private readonly IVirtualMachineConsoleService _vmConsoleService;
         private readonly IHubContext<VirtualMachineConsoleHub> _hubContext;
-        private readonly JsonSerializerOptions _jsonSerializerOptions = new()
+        private static readonly JsonSerializerOptions _jsonSerializerOptions = new()
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             WriteIndented = true
@@ -20,9 +22,11 @@ namespace BackgroundServices.Impl
         private Dictionary<Guid, Task> _dataRecievers = new();
 
         public VirtualMachineConsoleBackgroundService(
+            ILogger<VirtualMachineConsoleBackgroundService> logger,
             IVirtualMachineConsoleService vmConsoleService,
             IHubContext<VirtualMachineConsoleHub> hubContext)
         {
+            _logger = logger;
             _vmConsoleService = vmConsoleService;
             _hubContext = hubContext;
         }
@@ -31,6 +35,7 @@ namespace BackgroundServices.Impl
         {
             await Task.Run(async () =>
             {
+                _logger.LogInformation("Listening for console data");
                 while (!stoppingToken.IsCancellationRequested)
                 {
                     var streams = _vmConsoleService.GetStreams();
@@ -49,6 +54,7 @@ namespace BackgroundServices.Impl
             if (!_dataRecievers.ContainsKey(stream.Uuid))
             {
                 _dataRecievers[stream.Uuid] = LaunchConsoleDataReceiver(stream, stoppingToken);
+                _logger.LogInformation("Added new console stream to receivers {StreamUuid}", stream.Uuid);
             }
         }
 
@@ -60,6 +66,7 @@ namespace BackgroundServices.Impl
                 {
                     _vmConsoleService.CloseStream(stream);
                     _dataRecievers.Remove(stream.Uuid);
+                    _logger.LogWarning("Closed console receiver for stream {StreamUuid}", stream.Uuid);
                     break;
                 }
             }

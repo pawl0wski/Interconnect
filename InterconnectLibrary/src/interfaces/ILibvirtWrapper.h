@@ -71,6 +71,8 @@ public:
     virtual virNetworkPtr getNetworkByName(virConnectPtr conn, const std::string& name) = 0;
 
     virtual int destroyNetwork(virNetworkPtr network) = 0;
+
+    virtual std::string getNetworkDefinition(virNetworkPtr network) = 0;
 };
 
 

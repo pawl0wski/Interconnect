@@ -35,6 +35,7 @@ public:
     MOCK_METHOD(int, updateVmDevice, (virDomainPtr domain, const std::string& deviceDefinition), (override));
     MOCK_METHOD(virNetworkPtr, getNetworkByName, (virConnectPtr conn, const std::string& name), (override));
     MOCK_METHOD(int, destroyNetwork, (virNetworkPtr network), (override));
+    MOCK_METHOD(std::string, getNetworkDefinition, (virNetworkPtr network), (override));
 };
 
 

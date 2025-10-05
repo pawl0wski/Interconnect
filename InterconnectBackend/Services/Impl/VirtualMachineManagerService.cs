@@ -13,7 +13,10 @@ namespace Services.Impl
         private readonly IVirtualMachineConsoleService _vmConsoleService;
         private readonly InterconnectConfig _config;
 
-        public VirtualMachineManagerService(IVirtualizationWrapper vmManager, IOptions<InterconnectConfig> config, IVirtualMachineConsoleService vmConsoleService)
+        public VirtualMachineManagerService(
+            IVirtualizationWrapper vmManager,
+            IOptions<InterconnectConfig> config,
+            IVirtualMachineConsoleService vmConsoleService)
         {
             _vmManager = vmManager;
             _config = config.Value;
