@@ -68,7 +68,6 @@ namespace BackgroundServices.Impl
                 try
                 {
                     _packetSnifferService.StartListeningForBridge(network.BridgeName);
-
                 }
                 catch (Exception e)
                 {

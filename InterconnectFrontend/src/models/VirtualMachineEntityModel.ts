@@ -4,6 +4,7 @@ import BaseEntity from "./interfaces/BaseEntity.ts";
 interface VirtualMachineEntityModel extends BaseEntity {
     vmUuid: string | null;
     name: string;
+    macAddress: string;
     state: VirtualMachineState;
 }
 

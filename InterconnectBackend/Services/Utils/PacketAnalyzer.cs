@@ -8,7 +8,8 @@ namespace BackgroundServices.Impl
 {
     static internal class PacketAnalyzer
     {
-        public static Packet? AnalyzePacket(NativePacket packet)
+        private static int LastPacketNumber = 0;
+        public static Packet? AnalyzePacket(NativePacket packet, string bridgeName)
         {
             byte[] packetData = new byte[packet.ContentLength];
             Marshal.Copy(packet.Content, packetData, 0, packet.ContentLength);
@@ -30,6 +31,7 @@ namespace BackgroundServices.Impl
         {
             return new Packet
             {
+                Id = LastPacketNumber++,
                 DataLinkLayerPacketType = DataLinkLayerPacketType.Arp,
                 SourceMacAddress = GetSourceMacAddress(packet),
                 DestinationMacAddress = GetDestinationMacAddress(packet),
@@ -43,12 +45,13 @@ namespace BackgroundServices.Impl
 
             return new Packet
             {
+                Id = LastPacketNumber++,
                 DataLinkLayerPacketType = DataLinkLayerPacketType.Ipv4,
                 SourceMacAddress = GetSourceMacAddress(packet),
                 DestinationMacAddress = GetDestinationMacAddress(packet),
                 IpVersion = GetIpVersion(ipPacket),
                 SourceIpAddress = GetSourceIpAddress(ipPacket).ToString(),
-                DestinationIpAddress = GetDestinationIp(ipPacket).ToString()
+                DestinationIpAddress = GetDestinationIp(ipPacket).ToString(),
             };
         }
 

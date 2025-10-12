@@ -1,16 +1,19 @@
 import { useMemo } from "react";
 import useImage from "use-image";
 import { KonvaEventObject } from "konva/lib/Node";
-import { Circle, Group, Image, Text } from "react-konva";
+import { Group, Image, Text } from "react-konva";
 import virtualMachineImageDefault from "../../../static/virtualMachine.svg";
 import virtualMachineImageRunning from "../../../static/virtualMachineRunning.svg";
 import { VirtualMachineEntityModel } from "../../../models/VirtualMachineEntityModel.ts";
 import { VirtualMachineState } from "../../../models/enums/VirtualMachineState.ts";
+import CommunicationRoleEntityDescription from "../CommunicationRoleEntityDescription.tsx";
+import CommunicationRole from "../../../models/enums/CommunicationRole.ts";
 
 interface VirtualMachineEntityProps {
     entity: VirtualMachineEntityModel;
     shapeName: string;
     draggable: boolean;
+    communicationRole?: CommunicationRole;
     onDragMove: (e: KonvaEventObject<DragEvent>) => void;
     onDragEnd: (e: KonvaEventObject<DragEvent>) => void;
     onMouseOver: (e: KonvaEventObject<MouseEvent>) => void;
@@ -22,6 +25,7 @@ const VirtualMachineEntity = ({
     entity,
     shapeName,
     draggable,
+    communicationRole,
     onDragEnd,
     onDragMove,
     onMouseOver,
@@ -62,13 +66,16 @@ const VirtualMachineEntity = ({
             draggable={draggable}
         >
             <Image height={50} width={50} image={virtualMachineImage} />
-            <Circle />
             <Text
                 y={60}
                 fontStyle="bold"
                 align="center"
                 width={50}
                 text={name}
+            />
+            <CommunicationRoleEntityDescription
+                y={75}
+                role={communicationRole}
             />
         </Group>
     );

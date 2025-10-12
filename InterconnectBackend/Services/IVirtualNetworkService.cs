@@ -15,5 +15,6 @@ namespace Services
         Task<VirtualNetworkModel> CreateInternetVirtualNetwork();
         Task<VirtualNetworkModel> CreateSwitchVirtualNetwork();
         Task<List<VirtualNetworkModel>> GetAllVirtualNetworks();
+        Task<VirtualNetworkModel> GetVirtualNetworkUsingBridgeName(string bridgeName);
     }
 }

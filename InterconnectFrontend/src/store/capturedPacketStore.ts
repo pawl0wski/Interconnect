@@ -5,12 +5,15 @@ import { getConfiguration } from "../configuration.ts";
 
 interface CapturedPacketStore {
     capturedPackets: PacketModel[];
+    hoveredPacket: PacketModel | null;
     startCapturingPackets: () => Promise<void>;
     addNewPacket: (packet: PacketModel) => void;
+    setHoveredPacket: (hoveredPacket: PacketModel | null) => void;
 }
 
 const useCapturedPacketStore = create<CapturedPacketStore>()((set, get) => ({
     capturedPackets: [],
+    hoveredPacket: null,
     startCapturingPackets: async () => {
         await packetSnifferHubClient.joinDefaultGroup();
         packetSnifferHubClient.startListeningForPackets((resp) =>
@@ -21,11 +24,16 @@ const useCapturedPacketStore = create<CapturedPacketStore>()((set, get) => ({
         set((state) => {
             const maxPackets = getConfiguration().maxCapturedPacketsAtOnce;
             const packets = [...state.capturedPackets, packet];
-            packets.sort((x, y) => y.ticks - x.ticks);
+            packets.sort((x, y) => y.id - x.id);
 
             return {
                 capturedPackets: packets.slice(0, maxPackets),
             };
+        });
+    },
+    setHoveredPacket: (hoveredPacket: PacketModel | null) => {
+        set({
+            hoveredPacket: hoveredPacket,
         });
     },
 }));

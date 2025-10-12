@@ -148,5 +148,10 @@ namespace Services.Impl
         {
             return _networkRepository.GetAll();
         }
+
+        public Task<VirtualNetworkModel> GetVirtualNetworkUsingBridgeName(string bridgeName)
+        {
+            return _networkRepository.GetByBridgeName(bridgeName);
+        }
     }
 }

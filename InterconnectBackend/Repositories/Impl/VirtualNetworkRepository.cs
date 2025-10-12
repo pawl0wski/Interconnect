@@ -33,6 +33,11 @@ namespace Repositories.Impl
             return _context.VirtualNetworkModels.ToListAsync();
         }
 
+        public Task<VirtualNetworkModel> GetByBridgeName(string bridgeName)
+        {
+            return _context.VirtualNetworkModels.FirstAsync(net => net.BridgeName == bridgeName);
+        }
+
         public Task<VirtualNetworkModel> GetById(int id)
         {
             return _context.VirtualNetworkModels.FirstAsync(x => x.Id == id);

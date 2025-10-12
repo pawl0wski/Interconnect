@@ -1,0 +1,6 @@
+.captured-packet-row {
+  &.is-hovered {
+    background-color: var(--mantine-color-blue-outline-hover);
+    cursor: pointer;
+  }
+}

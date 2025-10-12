@@ -12,6 +12,8 @@ import { useVirtualMachineEntitiesStore } from "../../../store/entitiesStore.ts"
 import useNetworkPlacementStore from "../../../store/networkPlacementStore.ts";
 import useChangeCursor from "../../../hooks/useChangeCursor.ts";
 import useFullscreenLoader from "../../../hooks/useFullscreenLoader.ts";
+import useCapturedPacketStore from "../../../store/capturedPacketStore.ts";
+import CommunicationRole from "../../../models/enums/CommunicationRole.ts";
 
 interface VirtualMachineEntityContainerProps {
     entity: VirtualMachineEntityModel;
@@ -26,6 +28,7 @@ const VirtualMachineEntityContainer = ({
         useCurrentVirtualMachineModalStore();
     const entityPlacementStore = useEntityPlacementStore();
     const networkPlacementStore = useNetworkPlacementStore();
+    const capturedPacketsStore = useCapturedPacketStore();
     const { startLoading, stopLoading } = useFullscreenLoader();
 
     const draggable = useIsEntityDraggable();
@@ -99,11 +102,33 @@ const VirtualMachineEntityContainer = ({
         openVirtualMachineModal();
     };
 
+    const communicationRole = useMemo(() => {
+        if (!capturedPacketsStore.hoveredPacket) {
+            return undefined;
+        }
+        const { sourceMacAddress, destinationMacAddress } =
+            capturedPacketsStore.hoveredPacket;
+
+        if (
+            sourceMacAddress.toLowerCase() === entity.macAddress.toLowerCase()
+        ) {
+            return CommunicationRole.Sender;
+        }
+
+        if (
+            destinationMacAddress.toLowerCase() ===
+            entity.macAddress.toLowerCase()
+        ) {
+            return CommunicationRole.Recipient;
+        }
+    }, [capturedPacketsStore.hoveredPacket, entity.macAddress]);
+
     return (
         <VirtualMachineEntity
             entity={entity}
             shapeName={shapeName ?? ""}
             draggable={draggable}
+            communicationRole={communicationRole}
             onMouseOver={handleOnMouseOver}
             onMouseOut={handleOnMouseOut}
             onDragEnd={handleDragEnd}

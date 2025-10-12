@@ -1,4 +1,4 @@
-import { Table } from "@mantine/core";
+import { Center, Table } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 
 const CapturedPacketTableHead = () => {
@@ -12,7 +12,9 @@ const CapturedPacketTableHead = () => {
                 <Table.Th>{t("packet.destinationMac")}</Table.Th>
                 <Table.Th>{t("packet.sourceIp")}</Table.Th>
                 <Table.Th>{t("packet.destinationIp")}</Table.Th>
-                <Table.Th>{t("actions")}</Table.Th>
+                <Table.Th>
+                    <Center>{t("actions")}</Center>
+                </Table.Th>
             </Table.Tr>
         </Table.Thead>
     );

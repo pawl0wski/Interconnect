@@ -44,8 +44,9 @@ namespace Services.Impl
             {
                 return null;
             }
+            var nativePacket = _snifferWrapper.GetPacket();
 
-            return PacketAnalyzer.AnalyzePacket(_snifferWrapper.GetPacket());
+            return PacketAnalyzer.AnalyzePacket(nativePacket, nativePacket.InterfaceName);
         }
     }
 }
