@@ -49,12 +49,20 @@ const pl = {
         destinationIp: "Docelowy IP",
     },
     packetDetails: {
+        name: "Nazwa",
+        value: "Wartość",
         packetDetails: "Szczegóły pakietu",
+        sourceMac: "Źródłowy adres MAC",
+        destinationMac: "Docelowy adres MAC",
+        sourceIp: "Źródłowy adres IP",
+        destinationIp: "Docelowy adres IP",
+        packetType: "Typ pakietu",
+        ipVersion: "Wersja IP",
     },
     hexViewer: {
         decimal: "DEC: ",
         binary: "BIN: ",
-    }
+    },
 };
 
 export default pl;

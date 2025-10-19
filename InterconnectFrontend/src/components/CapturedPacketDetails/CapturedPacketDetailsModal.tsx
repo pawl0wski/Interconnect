@@ -2,6 +2,7 @@ import { Modal } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import PacketModel from "../../models/PacketModel.ts";
 import HexViewerContainer from "../HexViewer/HexViewerContainer.tsx";
+import CapturedPacketDetails from "./CapturedPacketDetails.tsx";
 
 interface CapturedPacketDetailsModalProps {
     bytes: Uint8Array;
@@ -13,7 +14,7 @@ interface CapturedPacketDetailsModalProps {
 const CapturedPacketDetailsModal = ({
     bytes,
     opened,
-    // packet,
+    packet,
     onClose,
 }: CapturedPacketDetailsModalProps) => {
     const { t } = useTranslation();
@@ -25,6 +26,8 @@ const CapturedPacketDetailsModal = ({
             title={t("packetDetails.packetDetails")}
             size="xl"
         >
+            <CapturedPacketDetails packet={packet} />
+            <br />
             <HexViewerContainer bytes={bytes} />
         </Modal>
     );
