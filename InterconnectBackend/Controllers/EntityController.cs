@@ -39,11 +39,11 @@ namespace Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<VirtualNetworkNodeesEntitiesResponse>> CreateVirtualNetworkNodeEntity(CreateVirtualNetworkNodeEntityRequest req)
+        public async Task<ActionResult<VirtualNetworkNodesEntitiesResponse>> CreateVirtualNetworkNodeEntity(CreateVirtualNetworkNodeEntityRequest req)
         {
             var virtualNetworkNode = await _virtualNetworkService.CreateVirtualNetworkNode(req.Name);
 
-            return VirtualNetworkNodeesEntitiesResponse.WithSuccess([virtualNetworkNode]);
+            return VirtualNetworkNodesEntitiesResponse.WithSuccess([virtualNetworkNode]);
         }
 
         [HttpPost]
@@ -84,11 +84,11 @@ namespace Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<VirtualNetworkNodeesEntitiesResponse>> GetAllVirtualNetworkNodeEntities()
+        public async Task<ActionResult<VirtualNetworkNodesEntitiesResponse>> GetAllVirtualNetworkNodeEntities()
         {
             var entities = await _virtualNetworkService.GetVisibleVirtualNetworkNodeEntities();
 
-            return Ok(VirtualNetworkNodeesEntitiesResponse.WithSuccess(entities));
+            return Ok(VirtualNetworkNodesEntitiesResponse.WithSuccess(entities));
         }
 
         [HttpGet]

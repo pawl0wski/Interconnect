@@ -2,7 +2,7 @@
 
 namespace Models.Responses
 {
-    public class VirtualNetworkNodeesEntitiesResponse : BaseResponse<List<VirtualNetworkNodeEntityDTO>, VirtualNetworkNodeesEntitiesResponse>
+    public class VirtualNetworkNodesEntitiesResponse : BaseResponse<List<VirtualNetworkNodeEntityDTO>, VirtualNetworkNodesEntitiesResponse>
     {
     }
 }
