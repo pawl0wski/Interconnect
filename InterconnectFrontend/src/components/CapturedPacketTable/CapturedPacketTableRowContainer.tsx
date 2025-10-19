@@ -1,9 +1,10 @@
 import { useCallback, useMemo } from "react";
-import PacketModel from "../../models/PacketModel.ts";
-import CapturedPacketTableRow from "./CapturedPacketTableRow.tsx";
-import useCapturedPacketStore from "../../store/capturedPacketStore.ts";
-import styles from "./CapturedPacketTableRow.module.scss";
 import classNames from "classnames";
+import CapturedPacketTableRow from "./CapturedPacketTableRow.tsx";
+import PacketModel from "../../models/PacketModel.ts";
+import styles from "./CapturedPacketTableRow.module.scss";
+import useCapturedPacketDetails from "../../hooks/useCapturedPacketDetails.ts";
+import useCapturedPacketStore from "../../store/capturedPacketStore.ts";
 
 interface CapturedPacketTableRowContainerProps {
     packet: PacketModel;
@@ -13,6 +14,7 @@ const CapturedPacketTableRowContainer = ({
     packet,
 }: CapturedPacketTableRowContainerProps) => {
     const capturedPacketStore = useCapturedPacketStore();
+    const { showCapturedPacketDetails } = useCapturedPacketDetails();
 
     const handlePacketOver = useCallback(() => {
         capturedPacketStore.setHoveredPacket(packet);
@@ -39,6 +41,7 @@ const CapturedPacketTableRowContainer = ({
             packet={packet}
             onPacketOver={handlePacketOver}
             onPacketOut={handlePacketOut}
+            onShowPacketDetails={() => showCapturedPacketDetails(packet)}
         />
     );
 };

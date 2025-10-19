@@ -18,3 +18,4 @@ export const useConnectionInfoModalStore = createModalStore();
 export const useCurrentVirtualMachineModalStore = createModalStore();
 export const useVirtualMachineCreateModalStore = createModalStore();
 export const useVirtualSwitchCreateModalStore = createModalStore();
+export const usePacketDetailsModalStore = createModalStore();

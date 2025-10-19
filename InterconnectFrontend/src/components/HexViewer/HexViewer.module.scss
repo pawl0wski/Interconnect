@@ -1,0 +1,72 @@
+$bytes-in-row: 9;
+$gap: 0.5em;
+
+@mixin content-section {
+  display: grid;
+  grid-template-columns: repeat($bytes-in-row, 1fr);
+  height: auto;
+  align-content: start;
+
+  span {
+    padding-left: calc($gap / 2);
+    padding-right: calc($gap / 2);
+  }
+}
+
+@mixin numeration {
+  font-weight: bold;
+  user-select: none;
+}
+
+.hex-viewer {
+  font-family: "JetBrains Mono", monospace;
+  max-height: 300px;
+  width: auto;
+  border: 1px solid black;
+  padding: 0.5em;
+  overflow-y: hidden;
+
+  &__header {
+    @include numeration;
+    display: flex;
+    margin-left: 3em;
+
+    span {
+      padding-left: calc($gap / 2);
+      padding-right: calc($gap / 2);
+    }
+  }
+
+  &__rows {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    overflow-y: scroll;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+    user-select: none;
+
+    &__rows-numeration {
+      @include numeration;
+      display: flex;
+      flex-direction: column;
+      width: 3em;
+    }
+
+    &__bytes {
+      @include content-section;
+    }
+
+    &__ascii {
+      @include content-section;
+    }
+  }
+}
+
+.selected {
+  background-color: #9dbfff;
+}

@@ -1,13 +1,14 @@
-import { Button, Table } from "@mantine/core";
+import { Table } from "@mantine/core";
 import PacketModel from "../../models/PacketModel.ts";
 import PacketUtils from "../../utils/packetUtils.ts";
-import { MdOpenInNew } from "react-icons/md";
+import ShowCapturedPacketDetailsButton from "./ShowCapturedPacketDetailsButton.tsx";
 
 interface CapturedPacketTableRowProps {
     className: string;
     packet: PacketModel;
     onPacketOver: (packet: PacketModel) => void;
     onPacketOut: () => void;
+    onShowPacketDetails: () => void;
 }
 
 const CapturedPacketTableRow = ({
@@ -15,6 +16,7 @@ const CapturedPacketTableRow = ({
     packet,
     onPacketOver,
     onPacketOut,
+    onShowPacketDetails,
 }: CapturedPacketTableRowProps) => (
     <Table.Tr
         className={className}
@@ -29,9 +31,7 @@ const CapturedPacketTableRow = ({
         <Table.Td>{packet.sourceIpAddress}</Table.Td>
         <Table.Td>{packet.destinationIpAddress}</Table.Td>
         <Table.Td>
-            <Button variant="transparent" size="md">
-                <MdOpenInNew />
-            </Button>
+            <ShowCapturedPacketDetailsButton onClick={onShowPacketDetails} />
         </Table.Td>
     </Table.Tr>
 );

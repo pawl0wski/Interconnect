@@ -5,6 +5,7 @@ interface PacketModel {
     dataLinkLayerPacketType: DataLinkLayerPacketType;
     sourceMacAddress: string;
     destinationMacAddress: string;
+    content: string;
     ipVersion: number;
     sourceIpAddress: string;
     destinationIpAddress: string;

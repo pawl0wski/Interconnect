@@ -48,6 +48,13 @@ const pl = {
         sourceIp: "Źródłowy IP",
         destinationIp: "Docelowy IP",
     },
+    packetDetails: {
+        packetDetails: "Szczegóły pakietu",
+    },
+    hexViewer: {
+        decimal: "DEC: ",
+        binary: "BIN: ",
+    }
 };
 
 export default pl;

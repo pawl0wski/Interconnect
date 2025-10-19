@@ -19,7 +19,7 @@ namespace BackgroundServices.Impl
             switch (dataLinkLayerType)
             {
                 case DataLinkLayerPacketType.Arp:
-                    return AnalyzeArpPacket(packetData);
+                    return AnalyzeArpPacket(packetData, packet.ContentLength);
                 case DataLinkLayerPacketType.Ipv4:
                     return AnalyzeIpv4Packet(packetData, packet.ContentLength);
                 default:
@@ -27,7 +27,7 @@ namespace BackgroundServices.Impl
             }
         }
 
-        private static Packet AnalyzeArpPacket(byte[] packet)
+        private static Packet AnalyzeArpPacket(byte[] packet, int packetLength)
         {
             return new Packet
             {
@@ -35,6 +35,7 @@ namespace BackgroundServices.Impl
                 DataLinkLayerPacketType = DataLinkLayerPacketType.Arp,
                 SourceMacAddress = GetSourceMacAddress(packet),
                 DestinationMacAddress = GetDestinationMacAddress(packet),
+                Content = ConvertPacketDataToBase64(packet, packetLength),
             };
         }
 
@@ -49,10 +50,19 @@ namespace BackgroundServices.Impl
                 DataLinkLayerPacketType = DataLinkLayerPacketType.Ipv4,
                 SourceMacAddress = GetSourceMacAddress(packet),
                 DestinationMacAddress = GetDestinationMacAddress(packet),
+                Content = ConvertPacketDataToBase64(packet, packetLength),
                 IpVersion = GetIpVersion(ipPacket),
                 SourceIpAddress = GetSourceIpAddress(ipPacket).ToString(),
                 DestinationIpAddress = GetDestinationIp(ipPacket).ToString(),
             };
+        }
+
+        private static string ConvertPacketDataToBase64(byte[] packet, int packetLength)
+        {
+            byte[] actualData = new byte[packetLength];
+            Array.Copy(packet, actualData, packetLength);
+
+            return Convert.ToBase64String(actualData);
         }
 
         private static DataLinkLayerPacketType GetDataLinkLayerPacketType(byte[] packet)

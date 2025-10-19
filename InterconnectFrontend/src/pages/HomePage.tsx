@@ -1,14 +1,9 @@
-import ConnectionInfoModalContainer from "../components/Modals/ConnectionInfoModalContainer.tsx";
-import TerminalModalContainer from "../components/Modals/TerminalModalContainer.tsx";
-import ErrorModalContainer from "../components/Modals/ErrorModalContainer.tsx";
 import Footer from "../components/Footer/Footer.tsx";
 import Tray from "../components/Tray/Tray.tsx";
-import VirtualMachineCreateModalContainer from "../components/Modals/VirtualMachineCreateModalContainer.tsx";
 import { AppShell, Flex } from "@mantine/core";
 import Header from "../components/Header/Header.tsx";
 import ConnectionOverlay from "../components/Connection/ConnectionOverlay.tsx";
 import SimulationStageContainer from "../components/SimulationStage/SimulationStageContainer.tsx";
-import VirtualSwitchCreateModalContainer from "../components/Modals/VirtualSwitchCreateModalContainer.tsx";
 import FullscreenLoader from "../components/FullscreenLoader.tsx";
 import CapturedPacketTableContainer from "../components/CapturedPacketTable/CapturedPacketTableContainer.tsx";
 
@@ -43,11 +38,6 @@ const HomePage = () => {
 
             <Tray />
             <Footer />
-            <VirtualMachineCreateModalContainer />
-            <VirtualSwitchCreateModalContainer />
-            <ConnectionInfoModalContainer />
-            <TerminalModalContainer />
-            <ErrorModalContainer />
             <FullscreenLoader />
         </AppShell>
     );
