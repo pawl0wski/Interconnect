@@ -1,6 +1,6 @@
 ﻿namespace Models.DTO
 {
-    public class VirtualSwitchEntityDTO : BaseEntity
+    public class VirtualNetworkNodeEntityDTO : BaseEntity
     {
         public string? Name { get; set; }
         public Guid Uuid { get; set; }

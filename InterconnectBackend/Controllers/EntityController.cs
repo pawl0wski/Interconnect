@@ -39,11 +39,11 @@ namespace Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<VirtualSwitchesEntitiesResponse>> CreateVirtualSwitchEntity(CreateVirtualSwitchEntityRequest req)
+        public async Task<ActionResult<VirtualNetworkNodesEntitiesResponse>> CreateVirtualNetworkNodeEntity(CreateVirtualNetworkNodeEntityRequest req)
         {
-            var virtualSwitch = await _virtualNetworkService.CreateVirtualSwitch(req.Name);
+            var virtualNetworkNode = await _virtualNetworkService.CreateVirtualNetworkNode(req.Name);
 
-            return VirtualSwitchesEntitiesResponse.WithSuccess([virtualSwitch]);
+            return VirtualNetworkNodesEntitiesResponse.WithSuccess([virtualNetworkNode]);
         }
 
         [HttpPost]
@@ -62,8 +62,8 @@ namespace Controllers
                 case EntityType.VirtualMachine:
                     await _vmEntityService.UpdateEntityPosition(req.Id, req.X, req.Y);
                     break;
-                case EntityType.VirtualSwitch:
-                    await _virtualNetworkService.UpdateVirtualSwitchEntityPosition(req.Id, req.X, req.Y);
+                case EntityType.VirtualNetworkNode:
+                    await _virtualNetworkService.UpdateVirtualNetworkNodeEntityPosition(req.Id, req.X, req.Y);
                     break;
                 case EntityType.Internet:
                     await _internetEntityService.UpdateInternetEntityPosition(req.Id, req.X, req.Y);
@@ -84,11 +84,11 @@ namespace Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<VirtualSwitchesEntitiesResponse>> GetAllVirtualSwitchEntities()
+        public async Task<ActionResult<VirtualNetworkNodesEntitiesResponse>> GetAllVirtualNetworkNodeEntities()
         {
-            var entities = await _virtualNetworkService.GetVisibleVirtualSwitchEntities();
+            var entities = await _virtualNetworkService.GetVisibleVirtualNetworkNodeEntities();
 
-            return Ok(VirtualSwitchesEntitiesResponse.WithSuccess(entities));
+            return Ok(VirtualNetworkNodesEntitiesResponse.WithSuccess(entities));
         }
 
         [HttpGet]

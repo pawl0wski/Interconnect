@@ -25,7 +25,7 @@ const SimulationStageEntitiesUtils = {
         switch (entityType) {
             case EntityType.VirtualMachine:
                 return `vm-${entity.id}`;
-            case EntityType.VirtualSwitch:
+            case EntityType.VirtualNetworkNode:
                 return `sw-${entity.id}`;
             case EntityType.Internet:
                 return `in-${entity.id}`;
@@ -39,7 +39,7 @@ const SimulationStageEntitiesUtils = {
                 entityType = EntityType.VirtualMachine;
                 break;
             case "sw":
-                entityType = EntityType.VirtualSwitch;
+                entityType = EntityType.VirtualNetworkNode;
                 break;
             case "in":
                 entityType = EntityType.Internet;

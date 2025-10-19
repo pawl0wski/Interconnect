@@ -4,7 +4,7 @@ import {
     EntitiesStore,
     useInternetEntitiesStore,
     useVirtualMachineEntitiesStore,
-    useVirtualSwitchEntitiesStore,
+    useVirtualNetworkNodeEntitiesStore,
 } from "../store/entitiesStore.ts";
 import BaseEntity from "../models/interfaces/BaseEntity.ts";
 
@@ -12,7 +12,7 @@ const useEntityPosition = (entityId: number, entityType: EntityType) => {
     const position: PositionModel = { x: 0, y: 0 };
     const entitiesStoresMap = {
         [EntityType.VirtualMachine]: useVirtualMachineEntitiesStore(),
-        [EntityType.VirtualSwitch]: useVirtualSwitchEntitiesStore(),
+        [EntityType.VirtualNetworkNode]: useVirtualNetworkNodeEntitiesStore(),
         [EntityType.Internet]: useInternetEntitiesStore(),
         [EntityType.Network]: undefined,
     };

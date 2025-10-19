@@ -1,11 +1,11 @@
 import { Circle, Group, Image, Text } from "react-konva";
 import useImage from "use-image";
 import { KonvaEventObject } from "konva/lib/Node";
-import virtualSwitchImage from "../../../static/switchActive.svg";
-import VirtualSwitchEntityModel from "../../../models/VirtualSwitchEntityModel.ts";
+import virtualNetworkNodeImage from "../../../static/nodeActive.svg";
+import VirtualNetworkNodeEntityModel from "../../../models/VirtualNetworkNodeEntityModel.ts";
 
-interface VirtualSwitchEntityProps {
-    entity: VirtualSwitchEntityModel;
+interface VirtualNetworkNodeEntityProps {
+    entity: VirtualNetworkNodeEntityModel;
     shapeName: string;
     onDragMove: (e: KonvaEventObject<DragEvent>) => void;
     onDragEnd: (e: KonvaEventObject<DragEvent>) => void;
@@ -14,7 +14,7 @@ interface VirtualSwitchEntityProps {
     onClick: (e: KonvaEventObject<MouseEvent>) => void;
 }
 
-const VirtualSwitchEntity = ({
+const VirtualNetworkNodeEntity = ({
     entity,
     shapeName,
     onDragMove,
@@ -22,8 +22,8 @@ const VirtualSwitchEntity = ({
     onMouseOut,
     onMouseOver,
     onClick,
-}: VirtualSwitchEntityProps) => {
-    const [virtualSwitchImageElement] = useImage(virtualSwitchImage);
+}: VirtualNetworkNodeEntityProps) => {
+    const [virtualNetworkNodeImageElement] = useImage(virtualNetworkNodeImage);
 
     return (
         <Group
@@ -37,7 +37,7 @@ const VirtualSwitchEntity = ({
             onMouseOut={onMouseOut}
             onClick={onClick}
         >
-            <Image height={50} width={50} image={virtualSwitchImageElement} />
+            <Image height={50} width={50} image={virtualNetworkNodeImageElement} />
             <Circle />
             <Text
                 y={60}
@@ -50,4 +50,4 @@ const VirtualSwitchEntity = ({
     );
 };
 
-export default VirtualSwitchEntity;
+export default VirtualNetworkNodeEntity;

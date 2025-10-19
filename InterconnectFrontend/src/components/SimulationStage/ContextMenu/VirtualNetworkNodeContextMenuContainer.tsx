@@ -1,18 +1,18 @@
 import { useCallback, useMemo } from "react";
 import { useSimulationStageContextMenuInfo } from "../../../hooks/useSimulationStageContextMenuInfo.ts";
 import { EntityType } from "../../../models/enums/EntityType.ts";
-import VirtualSwitchContextMenu from "./VirtualSwitchContextMenu.tsx";
+import VirtualNetworkNodeContextMenu from "./VirtualNetworkNodeContextMenu.tsx";
 import { useSimulationStageContextMenusStore } from "../../../store/simulationStageContextMenus.ts";
-import { useVirtualSwitchEntitiesStore } from "../../../store/entitiesStore.ts";
+import { useVirtualNetworkNodeEntitiesStore } from "../../../store/entitiesStore.ts";
 import { useEntityPlacementStore } from "../../../store/entityPlacementStore.ts";
 import useNetworkPlacementStore from "../../../store/networkPlacementStore.ts";
 import useSimulationStageContextMenuClose from "../../../hooks/useSimulationStageContextMenuClose.ts";
 import useNetworkConnectionsStore from "../../../store/networkConnectionsStore.ts";
 
-const VirtualSwitchContextMenuContainer = () => {
+const VirtualNetworkNodeContextMenuContainer = () => {
     const simulationStageContextMenusStore =
         useSimulationStageContextMenusStore();
-    const virtualSwitchEntitiesStore = useVirtualSwitchEntitiesStore();
+    const virtualNetworkNodeEntitiesStore = useVirtualNetworkNodeEntitiesStore();
     const entityPlacementStore = useEntityPlacementStore();
     const networkPlacementStore = useNetworkPlacementStore();
     const networkConnectionsStore = useNetworkConnectionsStore();
@@ -25,20 +25,20 @@ const VirtualSwitchContextMenuContainer = () => {
             return;
         }
 
-        return virtualSwitchEntitiesStore.getById(currentEntityId);
+        return virtualNetworkNodeEntitiesStore.getById(currentEntityId);
     }, [
         simulationStageContextMenusStore.currentEntityId,
-        virtualSwitchEntitiesStore,
+        virtualNetworkNodeEntitiesStore,
     ]);
     const { position, visible } = useSimulationStageContextMenuInfo(
-        EntityType.VirtualSwitch,
+        EntityType.VirtualNetworkNode,
     );
 
     const handleStartPlacingVirtualNetwork = useCallback(() => {
         entityPlacementStore.setCurrentEntityType(EntityType.Network);
         networkPlacementStore.setSourceEntity(
             currentEntity!,
-            EntityType.VirtualSwitch,
+            EntityType.VirtualNetworkNode,
         );
 
         closeContextMenu();
@@ -54,11 +54,11 @@ const VirtualSwitchContextMenuContainer = () => {
             ? []
             : networkConnectionsStore.getConnectionsForEntity(
                   currentEntity?.id ?? 0,
-                  EntityType.VirtualSwitch,
+                  EntityType.VirtualNetworkNode,
               );
 
     return (
-        <VirtualSwitchContextMenu
+        <VirtualNetworkNodeContextMenu
             entityId={currentEntity?.id ?? 0}
             title={currentEntity?.name ?? ""}
             position={position}
@@ -69,4 +69,4 @@ const VirtualSwitchContextMenuContainer = () => {
     );
 };
 
-export default VirtualSwitchContextMenuContainer;
+export default VirtualNetworkNodeContextMenuContainer;

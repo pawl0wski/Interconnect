@@ -1,27 +1,27 @@
 import { useEntityPlacementStore } from "../../../store/entityPlacementStore.ts";
 import { EntityType } from "../../../models/enums/EntityType.ts";
 import { useMemo } from "react";
-import VirtualSwitchCreateEntityTrayButton from "./VirtualSwitchCreateEntityTrayButton.tsx";
+import VirtualNetworkNodeCreateEntityTrayButton from "./VirtualNetworkNodeCreateEntityTrayButton.tsx";
 
-const VirtualSwitchCreateEntityTrayButtonContainer = () => {
+const VirtualNetworkNodeCreateEntityTrayButtonContainer = () => {
     const entityPlacementStore = useEntityPlacementStore();
 
     const handleCreateVirtualMachine = () => {
-        entityPlacementStore.setCurrentEntityType(EntityType.VirtualSwitch);
+        entityPlacementStore.setCurrentEntityType(EntityType.VirtualNetworkNode);
     };
 
     const isActive = useMemo(
         () =>
-            entityPlacementStore.currentEntityType == EntityType.VirtualSwitch,
+            entityPlacementStore.currentEntityType == EntityType.VirtualNetworkNode,
         [entityPlacementStore.currentEntityType],
     );
 
     return (
-        <VirtualSwitchCreateEntityTrayButton
+        <VirtualNetworkNodeCreateEntityTrayButton
             active={isActive}
             onClick={handleCreateVirtualMachine}
         />
     );
 };
 
-export default VirtualSwitchCreateEntityTrayButtonContainer;
+export default VirtualNetworkNodeCreateEntityTrayButtonContainer;

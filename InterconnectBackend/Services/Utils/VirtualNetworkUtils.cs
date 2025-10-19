@@ -3,9 +3,9 @@
     public static class VirtualNetworkUtils
     {
         public static string GetNetworkNameFromUuid(Guid uuid) =>
-            $"InterconnectSwitch-{uuid}";
+            $"InterconnectNode-{uuid}";
 
         public static Guid GetNetworkUuidFromName(string networkName) =>
-            Guid.Parse(networkName.Replace("InterconnectSwitch-", ""));
+            Guid.Parse(networkName.Replace("InterconnectNode-", ""));
     }
 }

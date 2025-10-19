@@ -2,7 +2,7 @@
 
 namespace Models.Database
 {
-    public class VirtualSwitchEntityModel
+    public class VirtualNetworkNodeEntityModel
     {
         public int Id { get; set; }
         [Column(TypeName = "varchar(255)")]

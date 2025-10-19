@@ -9,12 +9,12 @@ const pl = {
     performingActions: "Wykonywanie akcji...",
     actions: "Akcje",
     type: "Typ",
-    virtualSwitch: {
-        virtualSwitch: "Switch",
+    virtualNetworkNode: {
+        virtualNetworkNode: "Węzeł sieci",
         form: {
-            newVirtualSwitch: "Nowy switch wirtualny",
+            newVirtualNetworkNode: "Nowy węzeł sieci",
             name: "Nazwa",
-            createVirtualSwitch: "Stwórz wirtualny switch",
+            createVirtualNetworkNode: "Stwórz węzeł sieci",
         },
     },
     virtualMachine: {

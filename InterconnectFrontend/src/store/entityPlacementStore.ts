@@ -2,12 +2,12 @@ import { create } from "zustand/react";
 import { EntityType } from "../models/enums/EntityType.ts";
 import {
     useVirtualMachineCreateModalStore,
-    useVirtualSwitchCreateModalStore,
+    useVirtualNetworkNodeCreateModalStore,
 } from "./modals/modalStores.ts";
 import { useVirtualMachineCreateStore } from "./virtualMachineCreateStore.ts";
 import useNetworkPlacementStore from "./networkPlacementStore.ts";
 import virtualNetworkResourceClient from "../api/resourceClient/VirtualNetworkResourceClient.ts";
-import useVirtualSwitchCreateStore from "./virtualSwitchCreateStore.ts";
+import useVirtualNetworkNodeCreateStore from "./virtualNetworkNodeCreateStore.ts";
 import useNetworkConnectionsStore from "./networkConnectionsStore.ts";
 import { useInternetEntitiesStore } from "./entitiesStore.ts";
 import entityResourceClient from "../api/resourceClient/EntityResourceClient.ts";
@@ -30,9 +30,9 @@ const useEntityPlacementStore = create<EntityPlacementStore>()((set, get) => ({
             useVirtualMachineCreateStore.getState();
         const virtualMachineCreateModalStore =
             useVirtualMachineCreateModalStore.getState();
-        const virtualSwitchCreateModalStore =
-            useVirtualSwitchCreateModalStore.getState();
-        const virtualSwitchCreateStore = useVirtualSwitchCreateStore.getState();
+        const virtualNetworkNodeCreateModalStore =
+            useVirtualNetworkNodeCreateModalStore.getState();
+        const virtualNetworkNodeCreateStore = useVirtualNetworkNodeCreateStore.getState();
         const networkPlacementStore = useNetworkPlacementStore.getState();
         const networkConnectionsStore = useNetworkConnectionsStore.getState();
         const internetEntitiesStore = useInternetEntitiesStore.getState();
@@ -48,9 +48,9 @@ const useEntityPlacementStore = create<EntityPlacementStore>()((set, get) => ({
                 networkPlacementStore.clear();
                 await networkConnectionsStore.fetch();
                 break;
-            case EntityType.VirtualSwitch:
-                virtualSwitchCreateStore.updatePosition({ x, y });
-                virtualSwitchCreateModalStore.open();
+            case EntityType.VirtualNetworkNode:
+                virtualNetworkNodeCreateStore.updatePosition({ x, y });
+                virtualNetworkNodeCreateModalStore.open();
                 break;
             case EntityType.Internet:
                 const resp =

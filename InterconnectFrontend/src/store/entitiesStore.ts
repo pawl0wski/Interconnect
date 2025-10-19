@@ -82,9 +82,9 @@ export const useVirtualMachineEntitiesStore = createEntitiesStore(
     (req: UpdateEntityPositionRequest) =>
         entityResourceClient.updateEntityPosition(req),
 );
-export const useVirtualSwitchEntitiesStore = createEntitiesStore(
-    EntityType.VirtualSwitch,
-    () => entityResourceClient.getAllVirtualSwitchEntities(),
+export const useVirtualNetworkNodeEntitiesStore = createEntitiesStore(
+    EntityType.VirtualNetworkNode,
+    () => entityResourceClient.getAllVirtualNetworkNodeEntities(),
     (req: UpdateEntityPositionRequest) =>
         entityResourceClient.updateEntityPosition(req),
 );

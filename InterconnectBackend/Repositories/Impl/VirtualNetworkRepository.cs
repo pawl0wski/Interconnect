@@ -48,9 +48,9 @@ namespace Repositories.Impl
             return _context.VirtualNetworkModels.FirstAsync(x => x.Uuid == uuid);
         }
 
-        public Task<VirtualNetworkModel> GetByUuidWithVirtualSwitches(Guid uuid)
+        public Task<VirtualNetworkModel> GetByUuidWithVirtualNetworkNodes(Guid uuid)
         {
-            return _context.VirtualNetworkModels.Include(x => x.VirtualSwitches).FirstAsync(x => x.Uuid == uuid);
+            return _context.VirtualNetworkModels.Include(x => x.VirtualNetworkNodes).FirstAsync(x => x.Uuid == uuid);
         }
 
         public async Task Remove(int id)

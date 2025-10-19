@@ -1,8 +1,8 @@
 import BaseBackendResourceClient from "./BaseBackendResourceClient.ts";
 import CreateVirtualMachineRequest from "../requests/CreateVirtualMachineRequest.ts";
 import VirtualMachinesEntitiesResponse from "../responses/VirtualMachinesEntitiesResponse.ts";
-import CreateVirtualSwitchRequest from "../requests/CreateVirtualSwitchRequest.ts";
-import VirtualSwitchesResponse from "../responses/VirtualSwitchesResponse.ts";
+import CreateVirtualNetworkNodeRequest from "../requests/CreateVirtualNetworkNodeRequest.ts";
+import VirtualNetworkNodesResponse from "../responses/VirtualNetworkNodesResponse.ts";
 import StringResponse from "../responses/StringResponse.ts";
 import UpdateEntityPositionRequest from "../requests/UpdateEntityPositionRequest.ts";
 import InternetEntitiesResponse from "../responses/InternetEntitiesResponse.ts";
@@ -18,17 +18,17 @@ class EntityResourceClient extends BaseBackendResourceClient {
         );
     }
 
-    public createVirtualSwitchEntity(
-        req: CreateVirtualSwitchRequest,
-    ): Promise<VirtualSwitchesResponse> {
+    public createVirtualNetworkNodeEntity(
+        req: CreateVirtualNetworkNodeRequest,
+    ): Promise<VirtualNetworkNodesResponse> {
         return this.sendBackendRequest(
-            "CreateVirtualSwitchEntity",
+            "CreateVirtualNetworkNodeEntity",
             "POST",
             req,
         );
     }
 
-    public createInternetEntity(): Promise<VirtualSwitchesResponse> {
+    public createInternetEntity(): Promise<VirtualNetworkNodesResponse> {
         return this.sendBackendRequest("CreateInternetEntity", "POST", {});
     }
 
@@ -46,9 +46,9 @@ class EntityResourceClient extends BaseBackendResourceClient {
         );
     }
 
-    public getAllVirtualSwitchEntities(): Promise<VirtualSwitchesResponse> {
+    public getAllVirtualNetworkNodeEntities(): Promise<VirtualNetworkNodesResponse> {
         return this.sendBackendRequest(
-            "GetAllVirtualSwitchEntities",
+            "GetAllVirtualNetworkNodeEntities",
             "GET",
             {},
         );
