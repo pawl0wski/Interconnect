@@ -128,7 +128,7 @@ namespace Database.Migrations
                     b.ToTable("VirtualNetworkEntityConnectionModels");
                 });
 
-            modelBuilder.Entity("Models.Database.VirtualSwitchEntityModel", b =>
+            modelBuilder.Entity("Models.Database.VirtualNetworkNodeEntityModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -157,7 +157,7 @@ namespace Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("VirtualSwitchEntityModels");
+                    b.ToTable("VirtualNetworkNodeEntityModels");
                 });
 #pragma warning restore 612, 618
         }

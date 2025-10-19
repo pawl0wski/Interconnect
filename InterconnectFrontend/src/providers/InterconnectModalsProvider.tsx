@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import VirtualMachineCreateModalContainer from "../components/Modals/VirtualMachineCreateModalContainer.tsx";
-import VirtualSwitchCreateModalContainer from "../components/Modals/VirtualSwitchCreateModalContainer.tsx";
+import VirtualNetworkNodeCreateModalContainer from "../components/Modals/VirtualNetworkNodeCreateModalContainer.tsx";
 import ConnectionInfoModalContainer from "../components/Modals/ConnectionInfoModalContainer.tsx";
 import TerminalModalContainer from "../components/Modals/TerminalModalContainer.tsx";
 import ErrorModalContainer from "../components/Modals/ErrorModalContainer.tsx";
@@ -15,7 +15,7 @@ const InterconnectModalsProvider = ({
 }: InterconnectModalsProviderProps) => (
     <>
         <VirtualMachineCreateModalContainer />
-        <VirtualSwitchCreateModalContainer />
+        <VirtualNetworkNodeCreateModalContainer />
         <ConnectionInfoModalContainer />
         <TerminalModalContainer />
         <ErrorModalContainer />

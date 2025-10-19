@@ -15,8 +15,8 @@ namespace Database.Migrations
                 table: "InternetEntityModels");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_VirtualSwitchEntityModels_VirtualNetworkModel_NetworkId",
-                table: "VirtualSwitchEntityModels");
+                name: "FK_VirtualNetworkNodeEntityModels_VirtualNetworkModel_NetworkId",
+                table: "VirtualNetworkNodeEntityModels");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_VirtualNetworkModel",
@@ -28,13 +28,13 @@ namespace Database.Migrations
 
             migrationBuilder.RenameColumn(
                 name: "NetworkId",
-                table: "VirtualSwitchEntityModels",
+                table: "VirtualNetworkNodeEntityModels",
                 newName: "VirtualNetworkId");
 
             migrationBuilder.RenameIndex(
-                name: "IX_VirtualSwitchEntityModels_NetworkId",
-                table: "VirtualSwitchEntityModels",
-                newName: "IX_VirtualSwitchEntityModels_VirtualNetworkId");
+                name: "IX_VirtualNetworkNodeEntityModels_NetworkId",
+                table: "VirtualNetworkNodeEntityModels",
+                newName: "IX_VirtualNetworkNodeEntityModels_VirtualNetworkId");
 
             migrationBuilder.AddColumn<string>(
                 name: "DeviceDefinition",
@@ -56,8 +56,8 @@ namespace Database.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_VirtualSwitchEntityModels_VirtualNetworkModels_VirtualNetwo~",
-                table: "VirtualSwitchEntityModels",
+                name: "FK_VirtualNetworkNodeEntityModels_VirtualNetworkModels_VirtualNetwo~",
+                table: "VirtualNetworkNodeEntityModels",
                 column: "VirtualNetworkId",
                 principalTable: "VirtualNetworkModels",
                 principalColumn: "Id",
@@ -72,8 +72,8 @@ namespace Database.Migrations
                 table: "InternetEntityModels");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_VirtualSwitchEntityModels_VirtualNetworkModels_VirtualNetwo~",
-                table: "VirtualSwitchEntityModels");
+                name: "FK_VirtualNetworkNodeEntityModels_VirtualNetworkModels_VirtualNetwo~",
+                table: "VirtualNetworkNodeEntityModels");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_VirtualNetworkModels",
@@ -89,13 +89,13 @@ namespace Database.Migrations
 
             migrationBuilder.RenameColumn(
                 name: "VirtualNetworkId",
-                table: "VirtualSwitchEntityModels",
+                table: "VirtualNetworkNodeEntityModels",
                 newName: "NetworkId");
 
             migrationBuilder.RenameIndex(
-                name: "IX_VirtualSwitchEntityModels_VirtualNetworkId",
-                table: "VirtualSwitchEntityModels",
-                newName: "IX_VirtualSwitchEntityModels_NetworkId");
+                name: "IX_VirtualNetworkNodeEntityModels_VirtualNetworkId",
+                table: "VirtualNetworkNodeEntityModels",
+                newName: "IX_VirtualNetworkNodeEntityModels_NetworkId");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_VirtualNetworkModel",
@@ -111,8 +111,8 @@ namespace Database.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_VirtualSwitchEntityModels_VirtualNetworkModel_NetworkId",
-                table: "VirtualSwitchEntityModels",
+                name: "FK_VirtualNetworkNodeEntityModels_VirtualNetworkModel_NetworkId",
+                table: "VirtualNetworkNodeEntityModels",
                 column: "NetworkId",
                 principalTable: "VirtualNetworkModel",
                 principalColumn: "Id",

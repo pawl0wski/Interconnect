@@ -13,7 +13,7 @@ namespace Database.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "VirtualSwitchEntityModels",
+                name: "VirtualNetworkNodeEntityModels",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -26,7 +26,7 @@ namespace Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_VirtualSwitchEntityModels", x => x.Id);
+                    table.PrimaryKey("PK_VirtualNetworkNodeEntityModels", x => x.Id);
                 });
         }
 
@@ -34,7 +34,7 @@ namespace Database.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "VirtualSwitchEntityModels");
+                name: "VirtualNetworkNodeEntityModels");
         }
     }
 }

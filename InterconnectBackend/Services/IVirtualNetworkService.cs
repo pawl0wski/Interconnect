@@ -7,9 +7,9 @@ namespace Services
     public interface IVirtualNetworkService
     {
         Task<List<VirtualNetworkConnectionDTO>> GetVirtualNetworkConnections();
-        Task<VirtualSwitchEntityDTO> CreateVirtualSwitch(string? name);
-        Task<List<VirtualSwitchEntityDTO>> GetVisibleVirtualSwitchEntities();
-        Task<VirtualSwitchEntityDTO> UpdateVirtualSwitchEntityPosition(int entityId, int x, int y);
+        Task<VirtualNetworkNodeEntityDTO> CreateVirtualNetworkNode(string? name);
+        Task<List<VirtualNetworkNodeEntityDTO>> GetVisibleVirtualNetworkNodeEntities();
+        Task<VirtualNetworkNodeEntityDTO> UpdateVirtualNetworkNodeEntityPosition(int entityId, int x, int y);
         Task AttachNetworkInterfaceToVirtualMachine(int id, VirtualNetworkInterfaceCreateDefinition interfaceDefinition);
         Task UpdateNetworkForVirtualMachineNetworkInterface(int id, string networkName);
         Task<VirtualNetworkModel> CreateInternetVirtualNetwork();

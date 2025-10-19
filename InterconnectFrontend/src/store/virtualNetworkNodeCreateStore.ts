@@ -1,18 +1,18 @@
 import { create } from "zustand/react";
 import { PositionModel } from "../models/PositionModel.ts";
-import VirtualSwitchEntityModel from "../models/VirtualSwitchEntityModel.ts";
+import VirtualNetworkNodeEntityModel from "../models/VirtualNetworkNodeEntityModel.ts";
 import entityResourceClient from "../api/resourceClient/EntityResourceClient.ts";
 import { EntityType } from "../models/enums/EntityType.ts";
 
-interface VirtualSwitchCreateStoreProps {
+interface VirtualNetworkNodeCreateStoreProps {
     name: string | null;
     position: PositionModel | null;
     updateName: (name: string) => void;
     updatePosition: (position: PositionModel) => void;
-    create: () => Promise<VirtualSwitchEntityModel>;
+    create: () => Promise<VirtualNetworkNodeEntityModel>;
 }
 
-const useVirtualSwitchCreateStore = create<VirtualSwitchCreateStoreProps>()(
+const useVirtualNetworkNodeCreateStore = create<VirtualNetworkNodeCreateStoreProps>()(
     (set, get) => ({
         name: null,
         position: null,
@@ -28,13 +28,13 @@ const useVirtualSwitchCreateStore = create<VirtualSwitchCreateStoreProps>()(
                 throw new Error("Name or position is not set");
             }
 
-            const resp = await entityResourceClient.createVirtualSwitchEntity({
+            const resp = await entityResourceClient.createVirtualNetworkNodeEntity({
                 name,
             });
             const entity = resp.data[0];
             await entityResourceClient.updateEntityPosition({
                 id: entity.id,
-                type: EntityType.VirtualSwitch,
+                type: EntityType.VirtualNetworkNode,
                 x: position.x,
                 y: position.y,
             });
@@ -44,4 +44,4 @@ const useVirtualSwitchCreateStore = create<VirtualSwitchCreateStoreProps>()(
     }),
 );
 
-export default useVirtualSwitchCreateStore;
+export default useVirtualNetworkNodeCreateStore;

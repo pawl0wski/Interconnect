@@ -13,7 +13,7 @@ namespace Services.Impl
         private readonly IVirtualizationWrapper _wrapper;
         private readonly IVirtualMachineEntityRepository _vmEntityRepository;
         private readonly IVirtualNetworkConnectionRepository _connectionRepository;
-        private readonly IVirtualSwitchEntityRepository _switchRepository;
+        private readonly IVirtualNetworkNodeEntityRepository _switchRepository;
         private readonly IVirtualNetworkRepository _networkRepository;
         private readonly IPacketSnifferService _packetSnifferService;
 
@@ -21,7 +21,7 @@ namespace Services.Impl
             IVirtualizationWrapper wrapper,
             IVirtualMachineEntityRepository vmEntityRepository,
             IVirtualNetworkConnectionRepository connectionRepository,
-            IVirtualSwitchEntityRepository switchRepository,
+            IVirtualNetworkNodeEntityRepository switchRepository,
             IVirtualNetworkRepository networkRepository,
             IPacketSnifferService packetSnifferService)
         {
@@ -39,35 +39,35 @@ namespace Services.Impl
             return [.. connections.Select(VirtualNetworkEntityConnectionMapper.MapToDTO)];
         }
 
-        public async Task<VirtualSwitchEntityDTO> CreateVirtualSwitch(string? name)
+        public async Task<VirtualNetworkNodeEntityDTO> CreateVirtualNetworkNode(string? name)
         {
             var virtualNetwork = await CreateSwitchVirtualNetwork();
 
-            VirtualSwitchEntityModel virtualSwitchEntity;
+            VirtualNetworkNodeEntityModel virtualNetworkNodeEntity;
             if (name is null)
             {
-                virtualSwitchEntity = await _switchRepository.CreateInvisible(virtualNetwork);
+                virtualNetworkNodeEntity = await _switchRepository.CreateInvisible(virtualNetwork);
             }
             else
             {
-                virtualSwitchEntity = await _switchRepository.Create(name, virtualNetwork);
+                virtualNetworkNodeEntity = await _switchRepository.Create(name, virtualNetwork);
             }
-            virtualSwitchEntity.VirtualNetwork = virtualNetwork;
+            virtualNetworkNodeEntity.VirtualNetwork = virtualNetwork;
 
-            return VirtualSwitchEntityMapper.MapToDTO(virtualSwitchEntity);
+            return VirtualNetworkNodeEntityMapper.MapToDTO(virtualNetworkNodeEntity);
         }
 
-        public async Task<List<VirtualSwitchEntityDTO>> GetVisibleVirtualSwitchEntities()
+        public async Task<List<VirtualNetworkNodeEntityDTO>> GetVisibleVirtualNetworkNodeEntities()
         {
-            var virtualSwitches = await _switchRepository.GetVisible();
-            return [.. virtualSwitches.Select(VirtualSwitchEntityMapper.MapToDTO)];
+            var virtualNetworkNodees = await _switchRepository.GetVisible();
+            return [.. virtualNetworkNodees.Select(VirtualNetworkNodeEntityMapper.MapToDTO)];
         }
 
-        public async Task<VirtualSwitchEntityDTO> UpdateVirtualSwitchEntityPosition(int entityId, int x, int y)
+        public async Task<VirtualNetworkNodeEntityDTO> UpdateVirtualNetworkNodeEntityPosition(int entityId, int x, int y)
         {
             var model = await _switchRepository.UpdateEntityPosition(entityId, x, y);
 
-            return VirtualSwitchEntityMapper.MapToDTO(model);
+            return VirtualNetworkNodeEntityMapper.MapToDTO(model);
         }
 
         public async Task AttachNetworkInterfaceToVirtualMachine(int id, VirtualNetworkInterfaceCreateDefinition interfaceDefinition)

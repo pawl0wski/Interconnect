@@ -3,15 +3,15 @@ import TrayButton from "./TrayButton.tsx";
 import switchButton from "../../../static/switchButton.svg";
 import switchButtonActive from "../../../static/switchButtonActive.svg";
 
-interface VirtualSwitchCreateEntityTrayButtonProps {
+interface VirtualNetworkNodeCreateEntityTrayButtonProps {
     active: boolean;
     onClick: () => void;
 }
 
-const VirtualSwitchCreateEntityTrayButton = ({
+const VirtualNetworkNodeCreateEntityTrayButton = ({
     active,
     onClick,
-}: VirtualSwitchCreateEntityTrayButtonProps) => {
+}: VirtualNetworkNodeCreateEntityTrayButtonProps) => {
     const { t } = useTranslation();
 
     return (
@@ -22,13 +22,13 @@ const VirtualSwitchCreateEntityTrayButton = ({
                     width={30}
                     height={30}
                     src={active ? switchButtonActive : switchButton}
-                    alt={t("virtualSwitch.virtualSwitch")}
+                    alt={t("virtualNetworkNode.virtualNetworkNode")}
                 />
             }
-            text={t("virtualSwitch.virtualSwitch")}
+            text={t("virtualNetworkNode.virtualNetworkNode")}
             onClick={onClick}
         />
     );
 };
 
-export default VirtualSwitchCreateEntityTrayButton;
+export default VirtualNetworkNodeCreateEntityTrayButton;

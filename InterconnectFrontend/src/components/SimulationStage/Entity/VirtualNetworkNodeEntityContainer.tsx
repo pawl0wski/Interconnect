@@ -1,7 +1,7 @@
-import VirtualSwitchEntityModel from "../../../models/VirtualSwitchEntityModel.ts";
-import VirtualSwitchEntity from "./VirtualSwitchEntity.tsx";
+import VirtualNetworkNodeEntityModel from "../../../models/VirtualNetworkNodeEntityModel.ts";
+import VirtualNetworkNodeEntity from "./VirtualNetworkNodeEntity.tsx";
 import { KonvaEventObject } from "konva/lib/Node";
-import { useVirtualSwitchEntitiesStore } from "../../../store/entitiesStore.ts";
+import { useVirtualNetworkNodeEntitiesStore } from "../../../store/entitiesStore.ts";
 import useChangeCursor from "../../../hooks/useChangeCursor.ts";
 import { useEntityPlacementStore } from "../../../store/entityPlacementStore.ts";
 import useNetworkPlacementStore from "../../../store/networkPlacementStore.ts";
@@ -10,14 +10,14 @@ import { useMemo } from "react";
 import simulationStageEntitiesUtils from "../../../utils/simulationStageEntitiesUtils.ts";
 import useFullscreenLoader from "../../../hooks/useFullscreenLoader.ts";
 
-interface VirtualSwitchEntityContainerProps {
-    entity: VirtualSwitchEntityModel;
+interface VirtualNetworkNodeEntityContainerProps {
+    entity: VirtualNetworkNodeEntityModel;
 }
 
-const VirtualSwitchEntityContainer = ({
+const VirtualNetworkNodeEntityContainer = ({
     entity,
-}: VirtualSwitchEntityContainerProps) => {
-    const virtualSwitchEntitiesStore = useVirtualSwitchEntitiesStore();
+}: VirtualNetworkNodeEntityContainerProps) => {
+    const virtualNetworkNodeEntitiesStore = useVirtualNetworkNodeEntitiesStore();
     const entityPlacementStore = useEntityPlacementStore();
     const networkPlacementStore = useNetworkPlacementStore();
     const { startLoading, stopLoading } = useFullscreenLoader();
@@ -25,7 +25,7 @@ const VirtualSwitchEntityContainer = ({
     const shapeName = useMemo(() => {
         return simulationStageEntitiesUtils.createShapeName(
             { id: entity.id! },
-            EntityType.VirtualSwitch,
+            EntityType.VirtualNetworkNode,
         );
     }, [entity.id]);
 
@@ -40,7 +40,7 @@ const VirtualSwitchEntityContainer = ({
     };
 
     const handleDragEnd = (e: KonvaEventObject<DragEvent>) => {
-        virtualSwitchEntitiesStore.updateEntityPosition(
+        virtualNetworkNodeEntitiesStore.updateEntityPosition(
             entity.id,
             e.target.x(),
             e.target.y(),
@@ -50,7 +50,7 @@ const VirtualSwitchEntityContainer = ({
     };
 
     const handleDragMove = (e: KonvaEventObject<DragEvent>) => {
-        virtualSwitchEntitiesStore.updateEntityPosition(
+        virtualNetworkNodeEntitiesStore.updateEntityPosition(
             entity.id,
             e.target.x(),
             e.target.y(),
@@ -73,7 +73,7 @@ const VirtualSwitchEntityContainer = ({
         try {
             networkPlacementStore.setDestinationEntity(
                 entity,
-                EntityType.VirtualSwitch,
+                EntityType.VirtualNetworkNode,
             );
             await entityPlacementStore.placeCurrentEntity(0, 0);
         } finally {
@@ -83,7 +83,7 @@ const VirtualSwitchEntityContainer = ({
     };
 
     return (
-        <VirtualSwitchEntity
+        <VirtualNetworkNodeEntity
             entity={entity}
             shapeName={shapeName ?? ""}
             onDragEnd={handleDragEnd}
@@ -95,4 +95,4 @@ const VirtualSwitchEntityContainer = ({
     );
 };
 
-export default VirtualSwitchEntityContainer;
+export default VirtualNetworkNodeEntityContainer;

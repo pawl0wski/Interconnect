@@ -6,7 +6,7 @@ import { KonvaEventObject } from "konva/lib/Node";
 import { useMemo } from "react";
 import SimulationContextMenuProvider from "./ContextMenu/SimulationContextMenuProvider.tsx";
 import VirtualNetworkRenderer from "./Renderers/VirtualNetworkRenderer.tsx";
-import VirtualSwitchRenderer from "./Renderers/VirtualSwitchRenderer.tsx";
+import VirtualNetworkNodeRenderer from "./Renderers/VirtualNetworkNodeRenderer.tsx";
 import InternetEntityRenderer from "./Renderers/InternetEntityRenderer.tsx";
 
 interface SimulationStageProps {
@@ -44,7 +44,7 @@ const SimulationStage = ({
                 <Layer>
                     <VirtualNetworkRenderer />
                     <VirtualMachineEntityRenderer />
-                    <VirtualSwitchRenderer />
+                    <VirtualNetworkNodeRenderer />
                     <InternetEntityRenderer />
                 </Layer>
             </Stage>

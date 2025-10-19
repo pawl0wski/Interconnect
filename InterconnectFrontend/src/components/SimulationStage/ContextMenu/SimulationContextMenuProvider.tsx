@@ -1,11 +1,11 @@
 import VirtualMachineContextMenuContainer from "./VirtualMachineContextMenuContainer.tsx";
-import VirtualSwitchContextMenuContainer from "./VirtualSwitchContextMenuContainer.tsx";
+import VirtualNetworkNodeContextMenuContainer from "./VirtualNetworkNodeContextMenuContainer.tsx";
 import InternetContextMenuContainer from "./InternetContextMenuContainer.tsx";
 
 const SimulationContextMenuProvider = () => (
     <>
         <VirtualMachineContextMenuContainer />
-        <VirtualSwitchContextMenuContainer />
+        <VirtualNetworkNodeContextMenuContainer />
         <InternetContextMenuContainer />
     </>
 );

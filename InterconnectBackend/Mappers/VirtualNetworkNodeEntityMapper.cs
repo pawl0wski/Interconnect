@@ -3,11 +3,11 @@ using Models.DTO;
 
 namespace Mappers
 {
-    public static class VirtualSwitchEntityMapper
+    public static class VirtualNetworkNodeEntityMapper
     {
-        public static VirtualSwitchEntityDTO MapToDTO(VirtualSwitchEntityModel model)
+        public static VirtualNetworkNodeEntityDTO MapToDTO(VirtualNetworkNodeEntityModel model)
         {
-            return new VirtualSwitchEntityDTO
+            return new VirtualNetworkNodeEntityDTO
             {
                 Id = model.Id,
                 Name = model.Name,

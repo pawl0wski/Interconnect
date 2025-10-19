@@ -10,7 +10,7 @@ namespace Models.Database
         public required Guid Uuid { get; set; }
         [Column(TypeName = "varchar(15)")]
         public string? IpAddress { get; set; }
-        public List<VirtualSwitchEntityModel> VirtualSwitches { get; set; } = [];
+        public List<VirtualNetworkNodeEntityModel> VirtualNetworkNodes { get; set; } = [];
         public List<InternetEntityModel> Internets { get; set; } = [];
     }
 }

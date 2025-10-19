@@ -14,11 +14,11 @@ namespace Database.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "BridgeName",
-                table: "VirtualSwitchEntityModels");
+                table: "VirtualNetworkNodeEntityModels");
 
             migrationBuilder.DropColumn(
                 name: "Uuid",
-                table: "VirtualSwitchEntityModels");
+                table: "VirtualNetworkNodeEntityModels");
 
             migrationBuilder.DropColumn(
                 name: "BridgeName",
@@ -30,7 +30,7 @@ namespace Database.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Visible",
-                table: "VirtualSwitchEntityModels",
+                table: "VirtualNetworkNodeEntityModels",
                 type: "varchar(128)",
                 nullable: false,
                 oldClrType: typeof(bool),
@@ -38,7 +38,7 @@ namespace Database.Migrations
 
             migrationBuilder.AddColumn<int>(
                 name: "NetworkId",
-                table: "VirtualSwitchEntityModels",
+                table: "VirtualNetworkNodeEntityModels",
                 type: "integer",
                 nullable: false,
                 defaultValue: 0);
@@ -65,8 +65,8 @@ namespace Database.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_VirtualSwitchEntityModels_NetworkId",
-                table: "VirtualSwitchEntityModels",
+                name: "IX_VirtualNetworkNodeEntityModels_NetworkId",
+                table: "VirtualNetworkNodeEntityModels",
                 column: "NetworkId");
 
             migrationBuilder.CreateIndex(
@@ -83,8 +83,8 @@ namespace Database.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_VirtualSwitchEntityModels_VirtualNetworkModel_NetworkId",
-                table: "VirtualSwitchEntityModels",
+                name: "FK_VirtualNetworkNodeEntityModels_VirtualNetworkModel_NetworkId",
+                table: "VirtualNetworkNodeEntityModels",
                 column: "NetworkId",
                 principalTable: "VirtualNetworkModel",
                 principalColumn: "Id",
@@ -99,15 +99,15 @@ namespace Database.Migrations
                 table: "InternetEntityModels");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_VirtualSwitchEntityModels_VirtualNetworkModel_NetworkId",
-                table: "VirtualSwitchEntityModels");
+                name: "FK_VirtualNetworkNodeEntityModels_VirtualNetworkModel_NetworkId",
+                table: "VirtualNetworkNodeEntityModels");
 
             migrationBuilder.DropTable(
                 name: "VirtualNetworkModel");
 
             migrationBuilder.DropIndex(
-                name: "IX_VirtualSwitchEntityModels_NetworkId",
-                table: "VirtualSwitchEntityModels");
+                name: "IX_VirtualNetworkNodeEntityModels_NetworkId",
+                table: "VirtualNetworkNodeEntityModels");
 
             migrationBuilder.DropIndex(
                 name: "IX_InternetEntityModels_VirtualNetworkId",
@@ -115,7 +115,7 @@ namespace Database.Migrations
 
             migrationBuilder.DropColumn(
                 name: "NetworkId",
-                table: "VirtualSwitchEntityModels");
+                table: "VirtualNetworkNodeEntityModels");
 
             migrationBuilder.DropColumn(
                 name: "VirtualNetworkId",
@@ -123,7 +123,7 @@ namespace Database.Migrations
 
             migrationBuilder.AlterColumn<bool>(
                 name: "Visible",
-                table: "VirtualSwitchEntityModels",
+                table: "VirtualNetworkNodeEntityModels",
                 type: "boolean",
                 nullable: false,
                 oldClrType: typeof(string),
@@ -131,14 +131,14 @@ namespace Database.Migrations
 
             migrationBuilder.AddColumn<string>(
                 name: "BridgeName",
-                table: "VirtualSwitchEntityModels",
+                table: "VirtualNetworkNodeEntityModels",
                 type: "varchar(128)",
                 nullable: false,
                 defaultValue: "");
 
             migrationBuilder.AddColumn<Guid>(
                 name: "Uuid",
-                table: "VirtualSwitchEntityModels",
+                table: "VirtualNetworkNodeEntityModels",
                 type: "uuid",
                 nullable: false,
                 defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));

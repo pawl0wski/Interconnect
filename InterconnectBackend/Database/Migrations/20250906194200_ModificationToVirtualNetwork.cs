@@ -16,7 +16,7 @@ namespace Database.Migrations
 
             migrationBuilder.AddColumn<bool>(
                 name: "Visible",
-                table: "VirtualSwitchEntityModels",
+                table: "VirtualNetworkNodeEntityModels",
                 type: "boolean",
                 nullable: false,
                 defaultValue: false);
@@ -27,7 +27,7 @@ namespace Database.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "Visible",
-                table: "VirtualSwitchEntityModels");
+                table: "VirtualNetworkNodeEntityModels");
 
             migrationBuilder.AddColumn<string>(
                 name: "BridgeName",

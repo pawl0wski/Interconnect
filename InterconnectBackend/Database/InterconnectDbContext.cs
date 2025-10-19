@@ -20,7 +20,7 @@ namespace Database
         public DbSet<VirtualMachineEntityModel> VirtualMachineEntityModels { get; set; }
         public DbSet<BootableDiskModel> BootableDiskModels { get; set; }
         public DbSet<VirtualNetworkEntityConnectionModel> VirtualNetworkEntityConnectionModels { get; set; }
-        public DbSet<VirtualSwitchEntityModel> VirtualSwitchEntityModels { get; set; }
+        public DbSet<VirtualNetworkNodeEntityModel> VirtualNetworkNodeEntityModels { get; set; }
         public DbSet<InternetEntityModel> InternetEntityModels { get; set; }
         public DbSet<VirtualNetworkModel> VirtualNetworkModels { get; set; }
 

@@ -152,7 +152,7 @@ namespace Database.Migrations
                     b.ToTable("VirtualNetworkModels");
                 });
 
-            modelBuilder.Entity("Models.Database.VirtualSwitchEntityModel", b =>
+            modelBuilder.Entity("Models.Database.VirtualNetworkNodeEntityModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -180,7 +180,7 @@ namespace Database.Migrations
 
                     b.HasIndex("VirtualNetworkId");
 
-                    b.ToTable("VirtualSwitchEntityModels");
+                    b.ToTable("VirtualNetworkNodeEntityModels");
                 });
 
             modelBuilder.Entity("Models.Database.InternetEntityModel", b =>
@@ -194,10 +194,10 @@ namespace Database.Migrations
                     b.Navigation("VirtualNetwork");
                 });
 
-            modelBuilder.Entity("Models.Database.VirtualSwitchEntityModel", b =>
+            modelBuilder.Entity("Models.Database.VirtualNetworkNodeEntityModel", b =>
                 {
                     b.HasOne("Models.Database.VirtualNetworkModel", "VirtualNetwork")
-                        .WithMany("VirtualSwitches")
+                        .WithMany("VirtualNetworkNodes")
                         .HasForeignKey("VirtualNetworkId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -209,7 +209,7 @@ namespace Database.Migrations
                 {
                     b.Navigation("Internets");
 
-                    b.Navigation("VirtualSwitches");
+                    b.Navigation("VirtualNetworkNodes");
                 });
 #pragma warning restore 612, 618
         }

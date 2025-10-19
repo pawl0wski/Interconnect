@@ -6,7 +6,7 @@ import VirtualNetworkConnectionModel from "../../../models/VirtualNetworkConnect
 import NetworkConnectionMenuItemContainer from "./MenuItems/NetworkConnectionMenuItemContainer.tsx";
 import { EntityType } from "../../../models/enums/EntityType.ts";
 
-interface VirtualSwitchContextMenuProps {
+interface VirtualNetworkNodeContextMenuProps {
     entityId: number;
     title: string;
     position: PositionModel;
@@ -16,14 +16,14 @@ interface VirtualSwitchContextMenuProps {
     onStartPlacingVirtualNetwork: () => void;
 }
 
-const VirtualSwitchContextMenu = ({
+const VirtualNetworkNodeContextMenu = ({
     entityId,
     title,
     position,
     isVisible,
     connections,
     onStartPlacingVirtualNetwork,
-}: VirtualSwitchContextMenuProps) => {
+}: VirtualNetworkNodeContextMenuProps) => {
     const { t } = useTranslation();
 
     return (
@@ -48,7 +48,7 @@ const VirtualSwitchContextMenu = ({
                     <NetworkConnectionMenuItemContainer
                         key={connection.id}
                         parentEntityId={entityId}
-                        parentEntityType={EntityType.VirtualSwitch}
+                        parentEntityType={EntityType.VirtualNetworkNode}
                         connection={connection}
                     />
                 ))}
@@ -57,4 +57,4 @@ const VirtualSwitchContextMenu = ({
     );
 };
 
-export default VirtualSwitchContextMenu;
+export default VirtualNetworkNodeContextMenu;
