@@ -1,5 +1,6 @@
 import { Modal } from "@mantine/core";
 import VirtualNetworkNodeCreateFormContainer from "../Forms/VirtualNetworkNodeCreateFormContainer.tsx";
+import { useTranslation } from "react-i18next";
 
 interface VirtualNetworkNodeCreateModalProps {
     opened: boolean;
@@ -10,9 +11,11 @@ const VirtualNetworkNodeCreateModal = ({
     opened,
     onClose,
 }: VirtualNetworkNodeCreateModalProps) => {
+    const { t } = useTranslation();
+
     return (
         <Modal
-            title="Nowy switch wirtualny"
+            title={t("virtualNetworkNode.form.newVirtualNetworkNode")}
             centered
             opened={opened}
             onClose={onClose}
