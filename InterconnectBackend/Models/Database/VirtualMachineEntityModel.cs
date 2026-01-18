@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Models.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models.Database
 {
@@ -9,6 +10,7 @@ namespace Models.Database
         public Guid? VmUuid { get; set; }
         [Column(TypeName = "varchar(255)")]
         public required string Name { get; set; }
+        public VirtualMachineEntityType Type { get; set; } = VirtualMachineEntityType.Host;
         public string? DeviceDefinition { get; set; }
         public required int X { get; set; }
         public required int Y { get; set; }

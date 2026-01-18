@@ -1,5 +1,6 @@
 ﻿using Models;
 using Models.Database;
+using Models.Enums;
 using Moq;
 using Repositories;
 using Services;
@@ -36,7 +37,7 @@ namespace ServicesTests
             });
             MockVirtualMachineManagerCreateVirtualMachine();
             _bootableDiskProviderService.Setup(s => s.GetBootableDiskPathById(It.IsAny<int>())).ReturnsAsync("/tmp/test.iso");
-            var response = await _service.CreateEntity("Test", 1, 1024, 2, 12, 54);
+            var response = await _service.CreateEntity("Test", 1, 1024, 2, VirtualMachineEntityType.Host, 12, 54);
 
             Assert.IsNotNull(response);
             Assert.That(response.Name, Is.EqualTo("Test"));
@@ -58,7 +59,7 @@ namespace ServicesTests
             MockVirtualMachineManagerCreateVirtualMachine();
             _bootableDiskProviderService.Setup(s => s.GetBootableDiskPathById(It.IsAny<int>())).ReturnsAsync("/tmp/test.iso");
 
-            await _service.CreateEntity("Test1", 1, 1024, 2, 32, 12);
+            await _service.CreateEntity("Test1", 1, 1024, 2, VirtualMachineEntityType.Host, 32, 12);
 
             _repository.Verify(r => r.Add(It.Is<VirtualMachineEntityModel>(vm =>
                 vm.Id == 0 &&

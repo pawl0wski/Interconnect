@@ -7,6 +7,8 @@ import MemoryInputContainer from "./FormControls/MemoryInputContainer.tsx";
 import ObjectUtils from "../../utils/objectUtils.ts";
 import { useTranslation } from "react-i18next";
 import VirtualMachineNameInput from "./FormControls/VirtualMachineNameInput.tsx";
+import VirtualMachineEntityTypeSelectContainer from "./FormControls/VirtualMachineEntityTypeSelectContainer.tsx";
+import VirtualMachineEntityType from "../../models/enums/VirtualMachineEntityType.ts";
 
 interface VirtualMachineCreateFormProps {
     form: UseFormReturnType<VirtualMachineCreateFormValues>;
@@ -22,7 +24,25 @@ const VirtualMachineCreateForm = ({
     return (
         <form onSubmit={form.onSubmit(onFormSubmit)}>
             <Fieldset legend={t("virtualMachine.form.informationSection")}>
-                <VirtualMachineNameInput form={form} />
+                <Flex gap="md" direction="column">
+                    <VirtualMachineNameInput form={form} />
+                    <VirtualMachineEntityTypeSelectContainer
+                        selectedType={form.values.type.toString()}
+                        error={ObjectUtils.getValueOrNull<string>(
+                            form.errors,
+                            "type",
+                        )}
+                        onChange={(v) =>
+                            form.setFieldValue(
+                                "type",
+                                parseInt(
+                                    v ??
+                                        VirtualMachineEntityType.Host.toString(),
+                                ) as VirtualMachineEntityType,
+                            )
+                        }
+                    />
+                </Flex>
             </Fieldset>
             <Fieldset legend={t("virtualMachine.form.resourcesSection")}>
                 <Flex gap="md" direction="column">

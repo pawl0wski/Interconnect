@@ -2,12 +2,17 @@ import { useMemo } from "react";
 import useImage from "use-image";
 import { KonvaEventObject } from "konva/lib/Node";
 import { Group, Image, Text } from "react-konva";
-import virtualMachineImageDefault from "../../../static/virtualMachine.svg";
-import virtualMachineImageRunning from "../../../static/virtualMachineRunning.svg";
+import hostImageDefault from "../../../static/host.svg";
+import hostImageRunning from "../../../static/hostRunning.svg";
+import routerImageDefault from "../../../static/router.svg";
+import routerImageRunning from "../../../static/routerRunning.svg";
+import serverImageDefault from "../../../static/server.svg";
+import serverImageRunning from "../../../static/serverRunning.svg";
 import { VirtualMachineEntityModel } from "../../../models/VirtualMachineEntityModel.ts";
 import { VirtualMachineState } from "../../../models/enums/VirtualMachineState.ts";
 import CommunicationRoleEntityDescription from "../CommunicationRoleEntityDescription.tsx";
 import CommunicationRole from "../../../models/enums/CommunicationRole.ts";
+import VirtualMachineEntityType from "../../../models/enums/VirtualMachineEntityType.ts";
 
 interface VirtualMachineEntityProps {
     entity: VirtualMachineEntityModel;
@@ -33,24 +38,37 @@ const VirtualMachineEntity = ({
     onClick,
 }: VirtualMachineEntityProps) => {
     const { name, x, y } = entity;
-    const [virtualMachineDefaultImageElement] = useImage(
-        virtualMachineImageDefault,
-    );
-    const [virtualMachineRunningImageElement] = useImage(
-        virtualMachineImageRunning,
-    );
+    const [hostDefaultImageElement] = useImage(hostImageDefault);
+    const [hostRunningImageElement] = useImage(hostImageRunning);
+    const [routerDefaultImageElement] = useImage(routerImageDefault);
+    const [routerRunningImageElement] = useImage(routerImageRunning);
+    const [serverDefaultImageElement] = useImage(serverImageDefault);
+    const [serverRunningImageElement] = useImage(serverImageRunning);
 
     const virtualMachineImage = useMemo(() => {
-        switch (entity.state) {
-            case VirtualMachineState.Booted:
-                return virtualMachineRunningImageElement;
-            default:
-                return virtualMachineDefaultImageElement;
+        switch (entity.type) {
+            case VirtualMachineEntityType.Host:
+                return entity.state == VirtualMachineState.Booted
+                    ? hostRunningImageElement
+                    : hostDefaultImageElement;
+            case VirtualMachineEntityType.Router:
+                return entity.state == VirtualMachineState.Booted
+                    ? routerRunningImageElement
+                    : routerDefaultImageElement;
+            case VirtualMachineEntityType.Server:
+                return entity.state == VirtualMachineState.Booted
+                    ? serverRunningImageElement
+                    : serverDefaultImageElement;
         }
     }, [
         entity.state,
-        virtualMachineDefaultImageElement,
-        virtualMachineRunningImageElement,
+        entity.type,
+        hostDefaultImageElement,
+        hostRunningImageElement,
+        routerDefaultImageElement,
+        routerRunningImageElement,
+        serverDefaultImageElement,
+        serverRunningImageElement,
     ]);
 
     return (

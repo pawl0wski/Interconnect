@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useVirtualMachineCreateStore } from "../../store/virtualMachineCreateStore.ts";
 import { useVirtualMachineEntitiesStore } from "../../store/entitiesStore.ts";
 import { useErrorStore } from "../../store/errorStore.ts";
+import VirtualMachineEntityType from "../../models/enums/VirtualMachineEntityType.ts";
 
 interface VirtualMachineCreateFormContainerProps {
     onFormSubmitted: () => void;
@@ -13,6 +14,7 @@ interface VirtualMachineCreateFormContainerProps {
 
 export interface VirtualMachineCreateFormValues {
     name: string;
+    type: VirtualMachineEntityType;
     memory: number;
     virtualCPUs: number;
     bootableDiskId: string | null;
@@ -31,6 +33,7 @@ const VirtualMachineCreateFormContainer = ({
         mode: "uncontrolled",
         initialValues: {
             name: "",
+            type: VirtualMachineEntityType.Host,
             memory: 0,
             virtualCPUs: 0,
             bootableDiskId: null,

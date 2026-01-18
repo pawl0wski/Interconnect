@@ -1,6 +1,7 @@
 import { beforeEach, vi } from "vitest";
 import { act, renderHook } from "@testing-library/react";
 import { useVirtualMachineCreateStore } from "./virtualMachineCreateStore.ts";
+import VirtualMachineEntityType from "../models/enums/VirtualMachineEntityType.ts";
 
 const mockCreateVirtualMachine = vi.hoisted(() => vi.fn());
 const mockUpdateEntityPosition = vi.hoisted(() => vi.fn());
@@ -63,6 +64,7 @@ describe("virtualMachineCreateStore", () => {
 
         expect(mockCreateVirtualMachine).toHaveBeenCalledWith({
             name: "Test",
+            type: VirtualMachineEntityType.Host,
             memory: 1024,
             virtualCpus: 4,
             bootableDiskId: 1,

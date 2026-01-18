@@ -18,6 +18,7 @@ namespace Mappers
                 Id = model.Id,
                 Name = model.Name,
                 VmUuid = model.VmUuid,
+                Type = model.Type,
                 X = model.X,
                 Y = model.Y,
                 MacAddress = macAddress,
@@ -31,6 +32,7 @@ namespace Mappers
                 Id = dto.Id,
                 Name = dto.Name,
                 VmUuid = dto.VmUuid,
+                Type = dto.Type,
                 X = dto.X,
                 Y = dto.Y,
             };

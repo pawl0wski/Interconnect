@@ -19,6 +19,7 @@ const pl = {
     },
     virtualMachine: {
         virtualMachine: "Maszyna wirtualna",
+        type: "Sposób prezentacji",
         configuration: "Konfiguracja maszyny wirtualnej",
         name: "Nazwa",
         cpu: "CPU",
@@ -62,6 +63,11 @@ const pl = {
     hexViewer: {
         decimal: "DEC: ",
         binary: "BIN: ",
+    },
+    virtualMachineEntityType: {
+        host: "Host",
+        server: "Serwer",
+        router: "Router",
     },
 };
 

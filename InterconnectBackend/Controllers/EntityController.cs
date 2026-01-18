@@ -33,7 +33,7 @@ namespace Controllers
         [HttpPost]
         public async Task<ActionResult<VirtualMachineEntitiesResponse>> CreateVirtualMachineEntity(CreateVirtualMachineEntityRequest req)
         {
-            var entity = await _vmEntityService.CreateEntity(req.Name, req.BootableDiskId, req.Memory, req.VirtualCPUs, 25, 25);
+            var entity = await _vmEntityService.CreateEntity(req.Name, req.BootableDiskId, req.Memory, req.VirtualCPUs, req.Type, 25, 25);
 
             return Ok(VirtualMachineEntitiesResponse.WithSuccess([entity]));
         }

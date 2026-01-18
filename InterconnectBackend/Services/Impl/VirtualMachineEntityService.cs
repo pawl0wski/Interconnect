@@ -2,6 +2,7 @@
 using Models;
 using Models.Database;
 using Models.DTO;
+using Models.Enums;
 using Repositories;
 
 namespace Services.Impl
@@ -23,7 +24,7 @@ namespace Services.Impl
             _vmManagerService = vmManagerService;
         }
 
-        public async Task<VirtualMachineEntityDTO> CreateEntity(string name, int bootableDiskId, uint memory, uint virtualCpus, int x, int y)
+        public async Task<VirtualMachineEntityDTO> CreateEntity(string name, int bootableDiskId, uint memory, uint virtualCpus, VirtualMachineEntityType type, int x, int y)
         {
             var bootableDiskPath = await _bootableDiskProviderService.GetBootableDiskPathById(bootableDiskId);
             if (bootableDiskPath == null)
@@ -44,6 +45,7 @@ namespace Services.Impl
             var entity = new VirtualMachineEntityModel
             {
                 Name = name,
+                Type = type,
                 X = x,
                 Y = y
             };
