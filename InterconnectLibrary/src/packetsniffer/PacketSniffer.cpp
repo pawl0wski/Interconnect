@@ -65,6 +65,7 @@ void PacketSniffer::handlePackets(u_char* args, const pcap_pkthdr* header, const
 
     pkt.contentLength = static_cast<int>(header->caplen);
     pkt.content = new unsigned char[pkt.contentLength];
+    pkt.timestampMicroseconds = header->ts.tv_usec;
     std::memcpy(pkt.content, packet, pkt.contentLength);
 
     callbackArgs->sniffer->packetsQueue.push(pkt);

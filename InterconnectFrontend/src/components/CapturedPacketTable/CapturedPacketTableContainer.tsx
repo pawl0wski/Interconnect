@@ -12,7 +12,7 @@ const CapturedPacketTableContainer = () => {
     }, []);
 
     const capturedPackets = capturedPacketStore.capturedPackets.sort(
-        (x, y) => y.id - x.id,
+        (x, y) => y.timestampMicroseconds - x.timestampMicroseconds,
     );
 
     return <CapturedPacketTable packets={capturedPackets} />;

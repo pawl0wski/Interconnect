@@ -9,6 +9,7 @@ interface PacketModel {
     ipVersion: number;
     sourceIpAddress: string;
     destinationIpAddress: string;
+    timestampMicroseconds: number;
 }
 
 export default PacketModel;

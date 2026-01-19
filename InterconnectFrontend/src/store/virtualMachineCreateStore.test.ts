@@ -38,15 +38,13 @@ describe("virtualMachineCreateStore", () => {
 
     test("should create virtual machine when createVirtualMachine is invoked", async () => {
         mockCreateVirtualMachine.mockReturnValueOnce({
-            data: [
-                {
-                    id: 1,
-                    vmUuid: "d57ba30f-118d-4d22-8c82-a1cca2dc23a6",
-                    name: "Test",
-                    x: 25,
-                    y: 25,
-                },
-            ],
+            data: {
+                id: 1,
+                vmUuid: "d57ba30f-118d-4d22-8c82-a1cca2dc23a6",
+                name: "Test",
+                x: 25,
+                y: 25,
+            },
         });
         const { result } = renderHook(() => useVirtualMachineCreateStore());
 

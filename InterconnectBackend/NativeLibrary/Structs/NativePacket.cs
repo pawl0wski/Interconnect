@@ -8,5 +8,6 @@ namespace NativeLibrary.Structs
         public string InterfaceName;
         public IntPtr Content;
         public int ContentLength;
+        public uint TimestampMicroseconds;
     }
 }

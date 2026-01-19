@@ -19,15 +19,15 @@ namespace BackgroundServices.Impl
             switch (dataLinkLayerType)
             {
                 case DataLinkLayerPacketType.Arp:
-                    return AnalyzeArpPacket(packetData, packet.ContentLength);
+                    return AnalyzeArpPacket(packetData, packet.ContentLength, packet.TimestampMicroseconds);
                 case DataLinkLayerPacketType.Ipv4:
-                    return AnalyzeIpv4Packet(packetData, packet.ContentLength);
+                    return AnalyzeIpv4Packet(packetData, packet.ContentLength, packet.TimestampMicroseconds);
                 default:
                     return null;
             }
         }
 
-        private static Packet AnalyzeArpPacket(byte[] packet, int packetLength)
+        private static Packet AnalyzeArpPacket(byte[] packet, int packetLength, ulong timestampMicroseconds)
         {
             return new Packet
             {
@@ -36,10 +36,11 @@ namespace BackgroundServices.Impl
                 SourceMacAddress = GetSourceMacAddress(packet),
                 DestinationMacAddress = GetDestinationMacAddress(packet),
                 Content = ConvertPacketDataToBase64(packet, packetLength),
+                TimestampMicroseconds = timestampMicroseconds
             };
         }
 
-        private static Packet AnalyzeIpv4Packet(byte[] packet, int packetLength)
+        private static Packet AnalyzeIpv4Packet(byte[] packet, int packetLength, ulong timestampMicroseconds)
         {
             byte[] ipPacket = new byte[packetLength - 14];
             Array.Copy(packet, 14, ipPacket, 0, packetLength - 14);
@@ -54,6 +55,7 @@ namespace BackgroundServices.Impl
                 IpVersion = GetIpVersion(ipPacket),
                 SourceIpAddress = GetSourceIpAddress(ipPacket).ToString(),
                 DestinationIpAddress = GetDestinationIp(ipPacket).ToString(),
+                TimestampMicroseconds = timestampMicroseconds
             };
         }
 
