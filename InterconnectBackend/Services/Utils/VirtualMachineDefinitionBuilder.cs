@@ -57,6 +57,7 @@ namespace Services.Utils
                     CreateFeaturesBlock(w);
                     CreateDevicesBlock(w, w =>
                     {
+                        CreatePciControllers(w, 10);
                         CreateIsoDiskBlock(w, _bootableDiskPath);
                         //CreateInterfaceBlock(w);
                         CreateConsoleBlock(w);
@@ -220,6 +221,81 @@ namespace Services.Utils
             writer.WriteEndElement();
 
             writer.WriteEndElement();
+        }
+
+        static private void CreatePciControllers(XmlWriter writer, int totalControllers = 10)
+        {
+            writer.WriteStartElement("controller");
+            writer.WriteAttributeString("type", "pci");
+            writer.WriteAttributeString("index", "0");
+            writer.WriteAttributeString("model", "pcie-root");
+
+            writer.WriteStartElement("alias");
+            writer.WriteAttributeString("name", "pcie.0");
+            writer.WriteEndElement();
+
+            writer.WriteEndElement();
+
+            int index = 1;
+            int chassis = 1;
+            int port = 8;
+
+            for (; index < totalControllers; index++)
+            {
+                writer.WriteStartElement("controller");
+                writer.WriteAttributeString("type", "pci");
+
+                if (index == totalControllers - 1)
+                {
+                    writer.WriteAttributeString("model", "pcie-to-pci-bridge");
+                }
+                else
+                {
+                    writer.WriteAttributeString("model", "pcie-root-port");
+                }
+
+                writer.WriteStartElement("model");
+                if (index == totalControllers - 1)
+                    writer.WriteAttributeString("name", "pcie-pci-bridge");
+                else
+                    writer.WriteAttributeString("name", "pcie-root-port");
+                writer.WriteEndElement();
+
+                writer.WriteStartElement("alias");
+                writer.WriteAttributeString("name", $"pci.{index}");
+                writer.WriteEndElement();
+
+                if (index != totalControllers - 1)
+                {
+                    writer.WriteStartElement("target");
+                    writer.WriteAttributeString("chassis", chassis.ToString());
+                    writer.WriteAttributeString("port", $"0x{port:x}");
+                    writer.WriteEndElement();
+
+                    writer.WriteStartElement("address");
+                    writer.WriteAttributeString("type", "pci");
+                    writer.WriteAttributeString("domain", "0x0000");
+                    writer.WriteAttributeString("bus", "0x00");
+                    writer.WriteAttributeString("slot", "0x01");
+                    writer.WriteAttributeString("function", $"0x{(index - 1):x}");
+                    writer.WriteEndElement();
+
+                    chassis++;
+                    port++;
+                }
+                else
+                {
+                    writer.WriteStartElement("address");
+                    writer.WriteAttributeString("type", "pci");
+                    writer.WriteAttributeString("domain", "0x0000");
+                    writer.WriteAttributeString("bus", "0x01");
+                    writer.WriteAttributeString("slot", "0x00");
+                    writer.WriteAttributeString("function", "0x0");
+                    writer.WriteEndElement();
+                }
+
+                writer.WriteEndElement();
+            }
         }
     }
 }

@@ -15,6 +15,7 @@ namespace Services.Impl
         private readonly IVirtualNetworkNodeEntityRepository _virtualNetworkNodeRepository;
         private readonly IVirtualNetworkRepository _networkRepository;
         private readonly IVirtualNetworkNodeConnector _virtualNetworkNodeConnector;
+        private readonly IVirtualMachineEntityNetworkInterfaceRepository _networkInterfaceRepository;
 
         public EntitiesDisconnectorService(
             IVirtualizationWrapper wrapper,
@@ -22,7 +23,9 @@ namespace Services.Impl
             IVirtualNetworkConnectionRepository connectionRepository,
             IVirtualNetworkNodeEntityRepository virtualNetworkNodeRepository,
             IVirtualNetworkRepository networkRepository,
-            IVirtualNetworkNodeConnector virtualNetworkNodeConnector)
+            IVirtualNetworkNodeConnector virtualNetworkNodeConnector,
+            IVirtualMachineEntityNetworkInterfaceRepository networkInterfaceRepository
+            )
         {
             _wrapper = wrapper;
             _vmEntityRepository = vmEntityRepository;
@@ -30,6 +33,7 @@ namespace Services.Impl
             _virtualNetworkNodeRepository = virtualNetworkNodeRepository;
             _networkRepository = networkRepository;
             _virtualNetworkNodeConnector = virtualNetworkNodeConnector;
+            _networkInterfaceRepository = networkInterfaceRepository;
         }
 
         public async Task<VirtualNetworkConnectionDTO> DisconnectEntities(int connectionId)
@@ -76,31 +80,35 @@ namespace Services.Impl
         public async Task DisconnectVirtualMachineFromVirtualNetworkNode(int connectionId, int sourceEntityId, int destinationEntityId)
         {
             var virtualMachine = await _vmEntityRepository.GetById(sourceEntityId);
+            var networkInterface = await _networkInterfaceRepository.GetByIds(sourceEntityId, connectionId);
 
-            if (virtualMachine.DeviceDefinition is null)
+            if (networkInterface is null)
             {
                 throw new NullReferenceException("VirtualMachine is not connected to anything");
             }
 
-            _wrapper.DetachDeviceFromVirtualMachine(virtualMachine.VmUuid!.Value, virtualMachine.DeviceDefinition);
-
+            _wrapper.DetachDeviceFromVirtualMachine(virtualMachine.VmUuid!.Value, networkInterface.Definition);
+                
             await _connectionRepository.Remove(connectionId);
-            virtualMachine.DeviceDefinition = null;
-            await _vmEntityRepository.Update(virtualMachine);
         }
 
         public async Task DisconnectVirtualMachineFromVirtualMachine(int connectionId, int sourceEntityId, int destinationEntityId)
         {
             var sourceVirtualMachine = await _vmEntityRepository.GetById(sourceEntityId);
+            var sourceVirtualMachineNetworkInterface = await _networkInterfaceRepository.GetByIds(sourceEntityId, connectionId);
+
             var destinationVirtualMachine = await _vmEntityRepository.GetById(destinationEntityId);
+            var destinationVirtualMachineNetworkInterface = await _networkInterfaceRepository.GetByIds(destinationEntityId, connectionId);
+
             var connection = await _connectionRepository.GetById(connectionId);
 
-            if (sourceVirtualMachine.DeviceDefinition is null || destinationVirtualMachine.DeviceDefinition is null)
+            if (sourceVirtualMachineNetworkInterface is null
+                || destinationVirtualMachineNetworkInterface is null)
             {
                 throw new NullReferenceException("VirtualMachine is not connected to anything");
             }
 
-            var networkName = VirtualNetworkDefinitionUtils.GetNetworkNameFromDefinition(sourceVirtualMachine.DeviceDefinition);
+            var networkName = VirtualNetworkDefinitionUtils.GetNetworkNameFromDefinition(sourceVirtualMachineNetworkInterface.Definition);
 
             if (networkName is null)
             {
@@ -111,35 +119,28 @@ namespace Services.Impl
             var virtualNetwork = await _networkRepository.GetByUuidWithVirtualNetworkNodes(virtualNetworkUuid);
             var virtualNetworkNode = virtualNetwork.VirtualNetworkNodes.First();
 
-            _wrapper.DetachDeviceFromVirtualMachine(sourceVirtualMachine.VmUuid!.Value, sourceVirtualMachine.DeviceDefinition);
-            _wrapper.DetachDeviceFromVirtualMachine(destinationVirtualMachine.VmUuid!.Value, destinationVirtualMachine.DeviceDefinition);
-
+            _wrapper.DetachDeviceFromVirtualMachine(sourceVirtualMachine.VmUuid!.Value, sourceVirtualMachineNetworkInterface.Definition);
+            _wrapper.DetachDeviceFromVirtualMachine(destinationVirtualMachine.VmUuid!.Value, destinationVirtualMachineNetworkInterface.Definition);
             _wrapper.DestroyNetwork(VirtualNetworkUtils.GetNetworkNameFromUuid(virtualNetworkNode.VirtualNetwork.Uuid));
 
             await _virtualNetworkNodeRepository.Remove(virtualNetworkNode.Id);
             await _networkRepository.Remove(virtualNetwork.Id);
             await _connectionRepository.Remove(connectionId);
-
-            sourceVirtualMachine.DeviceDefinition = null;
-            destinationVirtualMachine.DeviceDefinition = null;
-            await _vmEntityRepository.Update(sourceVirtualMachine);
-            await _vmEntityRepository.Update(destinationVirtualMachine);
         }
 
         public async Task DisconnectVirtualMachineFromInternet(int connectionId, int virtualMachineEntityId, int internetEntityId)
         {
             var virtualMachine = await _vmEntityRepository.GetById(virtualMachineEntityId);
+            var networkInterface = await _networkInterfaceRepository.GetByIds(virtualMachineEntityId, connectionId);
 
-            if (virtualMachine.DeviceDefinition is null)
+            if (networkInterface is null)
             {
-                throw new NullReferenceException("VirtualMachine is not connected to anything");
+                throw new NullReferenceException("VirtualMachine is not connected to provided entity");
             }
 
-            _wrapper.DetachDeviceFromVirtualMachine(virtualMachine.VmUuid!.Value, virtualMachine.DeviceDefinition);
+            _wrapper.DetachDeviceFromVirtualMachine(virtualMachine.VmUuid!.Value, networkInterface.Definition);
 
-            virtualMachine.DeviceDefinition = null;
-            await _vmEntityRepository.Update(virtualMachine);
-
+            await _networkInterfaceRepository.Remove(networkInterface);
             await _connectionRepository.Remove(connectionId);
         }
     }

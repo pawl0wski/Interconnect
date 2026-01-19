@@ -110,18 +110,21 @@ const VirtualMachineEntityContainer = ({
             capturedPacketsStore.hoveredPacket;
 
         if (
-            sourceMacAddress.toLowerCase() === entity.macAddress.toLowerCase()
+            entity.macAddresses
+                .map((x) => x.toLowerCase())
+                .includes(sourceMacAddress.toLowerCase())
         ) {
             return CommunicationRole.Sender;
         }
 
         if (
-            destinationMacAddress.toLowerCase() ===
-            entity.macAddress.toLowerCase()
+            entity.macAddresses
+                .map((x) => x.toLowerCase())
+                .includes(destinationMacAddress.toLowerCase())
         ) {
             return CommunicationRole.Recipient;
         }
-    }, [capturedPacketsStore.hoveredPacket, entity.macAddress]);
+    }, [capturedPacketsStore.hoveredPacket, entity.macAddresses]);
 
     return (
         <VirtualMachineEntity

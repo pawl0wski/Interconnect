@@ -4,6 +4,7 @@ import BaseResponse from "../api/responses/BaseResponse.ts";
 import UpdateEntityPositionRequest from "../api/requests/UpdateEntityPositionRequest.ts";
 import entityResourceClient from "../api/resourceClient/EntityResourceClient.ts";
 import { EntityType } from "../models/enums/EntityType.ts";
+import { VirtualMachineEntityModel } from "../models/VirtualMachineEntityModel.ts";
 
 export interface EntitiesStore<TEntity extends BaseEntity> {
     entities: TEntity[];
@@ -76,12 +77,35 @@ export const createEntitiesStore = <TEntity extends BaseEntity>(
             get().entities.find((e) => e.id === id) ?? null,
     }));
 
-export const useVirtualMachineEntitiesStore = createEntitiesStore(
-    EntityType.VirtualMachine,
-    () => entityResourceClient.getAllVirtualMachineEntities(),
-    (req: UpdateEntityPositionRequest) =>
-        entityResourceClient.updateEntityPosition(req),
-);
+export const useVirtualMachineEntitiesStore =
+    createEntitiesStore<VirtualMachineEntityModel>(
+        EntityType.VirtualMachine,
+        async () => {
+            const resp =
+                await entityResourceClient.getAllVirtualMachineEntities();
+
+            const vms = resp.data.virtualMachineEntities;
+            const macs = resp.data.macAddressEntities;
+
+            const entities: VirtualMachineEntityModel[] = vms.map((vm) => {
+                const macEntry = macs.find(
+                    (m) => m.virtualMachineEntityId === vm.id,
+                );
+
+                return {
+                    ...vm,
+                    macAddresses: macEntry?.macAddresses ?? [],
+                };
+            });
+
+            return {
+                ...resp,
+                data: entities,
+            };
+        },
+        (req: UpdateEntityPositionRequest) =>
+            entityResourceClient.updateEntityPosition(req),
+    );
 export const useVirtualNetworkNodeEntitiesStore = createEntitiesStore(
     EntityType.VirtualNetworkNode,
     () => entityResourceClient.getAllVirtualNetworkNodeEntities(),

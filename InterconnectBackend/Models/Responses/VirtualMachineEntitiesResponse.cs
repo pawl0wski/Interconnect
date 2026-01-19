@@ -2,7 +2,7 @@
 
 namespace Models.Responses
 {
-    public class VirtualMachineEntitiesResponse : BaseResponse<List<VirtualMachineEntityDTO>, VirtualMachineEntitiesResponse>
+    public class VirtualMachineEntitiesResponse : BaseResponse<VirtualMachineEntitiesWithMacAddressesDTO, VirtualMachineEntitiesResponse>
     {
     }
 }

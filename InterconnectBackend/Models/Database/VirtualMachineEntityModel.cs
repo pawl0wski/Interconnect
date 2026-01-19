@@ -11,7 +11,6 @@ namespace Models.Database
         [Column(TypeName = "varchar(255)")]
         public required string Name { get; set; }
         public VirtualMachineEntityType Type { get; set; } = VirtualMachineEntityType.Host;
-        public string? DeviceDefinition { get; set; }
         public required int X { get; set; }
         public required int Y { get; set; }
     }

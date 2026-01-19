@@ -13,6 +13,7 @@ namespace ServicesTests
         private Mock<IVirtualMachineEntityRepository> _repository;
         private Mock<IVirtualMachineManagerService> _managerService;
         private Mock<IBootableDiskProviderService> _bootableDiskProviderService;
+        private Mock<IVirtualMachineEntityNetworkInterfaceRepository> _networkInterfaceRepository;
         private VirtualMachineEntityService _service;
 
 
@@ -22,7 +23,13 @@ namespace ServicesTests
             _repository = new Mock<IVirtualMachineEntityRepository>();
             _managerService = new Mock<IVirtualMachineManagerService>();
             _bootableDiskProviderService = new Mock<IBootableDiskProviderService>();
-            _service = new VirtualMachineEntityService(_repository.Object, _bootableDiskProviderService.Object, _managerService.Object);
+            _networkInterfaceRepository = new Mock<IVirtualMachineEntityNetworkInterfaceRepository>();
+            _service = new VirtualMachineEntityService(
+                _repository.Object,
+                _bootableDiskProviderService.Object,
+                _managerService.Object,
+                _networkInterfaceRepository.Object
+                );
         }
 
         [Test]

@@ -30,7 +30,7 @@ namespace Services.Impl
             _internetRepository = internetRepository;
             _networkService = networkService;
             _virtualNetworkNodeConnector = virtualNetworkNodeConnector;
-        } 
+        }
 
         public async Task<VirtualNetworkConnectionDTO> ConnectTwoEntities(int sourceEntityId, EntityType sourceEntityType, int destinationEntityId, EntityType destinationEntityType)
         {
@@ -83,18 +83,20 @@ namespace Services.Impl
             var virtualNetworkNode = await _networkService.CreateVirtualNetworkNode(null);
             var networkName = VirtualNetworkUtils.GetNetworkNameFromUuid(virtualNetworkNode.Uuid);
 
-            await _networkService.AttachNetworkInterfaceToVirtualMachine(sourceEntity.Id, new VirtualNetworkInterfaceCreateDefinition
-            {
-                NetworkName = networkName,
-                MacAddress = MacAddressGenerator.Generate()
-            });
-            await _networkService.AttachNetworkInterfaceToVirtualMachine(destinationEntity.Id, new VirtualNetworkInterfaceCreateDefinition
-            {
-                NetworkName = networkName,
-                MacAddress = MacAddressGenerator.Generate()
-            });
-
             var connectionModel = await _connectionRepository.Create(sourceEntity.Id, EntityType.VirtualMachine, destinationEntity.Id, EntityType.VirtualMachine);
+
+            await _networkService.AttachNetworkInterfaceToVirtualMachine(sourceEntity.Id, connectionModel.Id,
+                new VirtualNetworkInterfaceCreateDefinition
+                {
+                    NetworkName = networkName,
+                    MacAddress = MacAddressGenerator.Generate()
+                });
+            await _networkService.AttachNetworkInterfaceToVirtualMachine(destinationEntity.Id, connectionModel.Id,
+                new VirtualNetworkInterfaceCreateDefinition
+                {
+                    NetworkName = networkName,
+                    MacAddress = MacAddressGenerator.Generate()
+                });
 
             return VirtualNetworkEntityConnectionMapper.MapToDTO(connectionModel);
         }
@@ -106,13 +108,14 @@ namespace Services.Impl
 
             var networkName = VirtualNetworkUtils.GetNetworkNameFromUuid(destinationVirtualNetworkNode.VirtualNetwork.Uuid);
 
-            await _networkService.AttachNetworkInterfaceToVirtualMachine(sourceVirtualMachine.Id, new VirtualNetworkInterfaceCreateDefinition
-            {
-                NetworkName = networkName,
-                MacAddress = MacAddressGenerator.Generate()
-            });
-
             var connection = await _connectionRepository.Create(sourceVirtualMachine.Id, EntityType.VirtualMachine, destinationVirtualNetworkNode.Id, EntityType.VirtualNetworkNode);
+
+            await _networkService.AttachNetworkInterfaceToVirtualMachine(sourceVirtualMachine.Id, connection.Id,
+                new VirtualNetworkInterfaceCreateDefinition
+                {
+                    NetworkName = networkName,
+                    MacAddress = MacAddressGenerator.Generate()
+                });
 
             return VirtualNetworkEntityConnectionMapper.MapToDTO(connection);
         }
@@ -124,13 +127,14 @@ namespace Services.Impl
 
             var networkName = VirtualNetworkUtils.GetNetworkNameFromUuid(destinationInternet.VirtualNetwork.Uuid);
 
-            await _networkService.AttachNetworkInterfaceToVirtualMachine(sourceVirtualMachine.Id, new VirtualNetworkInterfaceCreateDefinition
-            {
-                NetworkName = networkName,
-                MacAddress = MacAddressGenerator.Generate()
-            });
-
             var connection = await _connectionRepository.Create(sourceVirtualMachine.Id, EntityType.VirtualMachine, destinationEntityId, EntityType.Internet);
+
+            await _networkService.AttachNetworkInterfaceToVirtualMachine(sourceVirtualMachine.Id, connection.Id,
+                new VirtualNetworkInterfaceCreateDefinition
+                {
+                    NetworkName = networkName,
+                    MacAddress = MacAddressGenerator.Generate()
+                });
 
             return VirtualNetworkEntityConnectionMapper.MapToDTO(connection);
         }

@@ -23,19 +23,22 @@ namespace Services.Impl
         private readonly IVirtualNetworkRepository _networkRepository;
         private readonly IInternetEntityRepository _internetEntityRepository;
         private readonly IVirtualNetworkService _virtualNetworkService;
+        private readonly IVirtualMachineEntityNetworkInterfaceRepository _networkInterfaceRepository;
 
         public VirtualNetworkNodeConnector(
             IVirtualNetworkNodeEntityRepository virtualNetworkNodeRepository,
             IVirtualNetworkConnectionRepository connectionRepository,
             IVirtualNetworkRepository networkRepository,
             IInternetEntityRepository internetEntityRepository,
-            IVirtualNetworkService virtualNetworkService)
+            IVirtualNetworkService virtualNetworkService,
+            IVirtualMachineEntityNetworkInterfaceRepository networkInterfaceRepository)
         {
             _virtualNetworkNodeRepository = virtualNetworkNodeRepository;
             _connectionRepository = connectionRepository;
             _networkRepository = networkRepository;
             _internetEntityRepository = internetEntityRepository;
             _virtualNetworkService = virtualNetworkService;
+            _networkInterfaceRepository = networkInterfaceRepository;
         }
 
         public async Task<VirtualNetworkConnectionDTO> ConnectTwoVirtualNetworkNodes(int sourceVirtualNetworkNode, int destinationVirtualNetworkNode)
@@ -145,7 +148,13 @@ namespace Services.Impl
                 switch (entity.Type)
                 {
                     case EntityType.VirtualMachine:
-                        await _virtualNetworkService.UpdateNetworkForVirtualMachineNetworkInterface(entity.Id, VirtualNetworkUtils.GetNetworkNameFromUuid(virtualNetwork.Uuid));
+                        var networkName = VirtualNetworkUtils.GetNetworkNameFromUuid(virtualNetwork.Uuid);
+                        var networkInterfaces = await _networkInterfaceRepository.GetByNetworkName(entity.Id, networkName);
+                        foreach (var networkInterface in networkInterfaces)
+                        {
+                            await _virtualNetworkService
+                                .UpdateNetworkForVirtualMachineNetworkInterface(entity.Id, networkInterface.VirtualNetworkEntityConnectionId, networkName);
+                        }
                         break;
                     case EntityType.VirtualNetworkNode:
                         await _virtualNetworkNodeRepository.UpdateNetwork(entity.Id, virtualNetwork);

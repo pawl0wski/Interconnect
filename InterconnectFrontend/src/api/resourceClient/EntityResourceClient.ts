@@ -6,11 +6,12 @@ import VirtualNetworkNodesResponse from "../responses/VirtualNetworkNodesRespons
 import StringResponse from "../responses/StringResponse.ts";
 import UpdateEntityPositionRequest from "../requests/UpdateEntityPositionRequest.ts";
 import InternetEntitiesResponse from "../responses/InternetEntitiesResponse.ts";
+import VirtualMachineEntityResponse from "../responses/VirtualMachineEntityResponse.ts";
 
 class EntityResourceClient extends BaseBackendResourceClient {
     public createVirtualMachineEntity(
         req: CreateVirtualMachineRequest,
-    ): Promise<VirtualMachinesEntitiesResponse> {
+    ): Promise<VirtualMachineEntityResponse> {
         return this.sendBackendRequest(
             "CreateVirtualMachineEntity",
             "POST",

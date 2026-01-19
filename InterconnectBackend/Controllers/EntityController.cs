@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Models.DTO;
 using Models.Enums;
 using Models.Requests;
 using Models.Responses;
@@ -11,31 +12,25 @@ namespace Controllers
     public sealed class EntityController : ControllerBase
     {
         private readonly IVirtualMachineEntityService _vmEntityService;
-        private readonly IVirtualMachineManagerService _vmManagerService;
-        private readonly IBootableDiskProviderService _bootableDiskProviderService;
         private readonly IVirtualNetworkService _virtualNetworkService;
         private readonly IInternetEntityService _internetEntityService;
 
         public EntityController(
             IVirtualMachineEntityService vmEntityService,
-            IVirtualMachineManagerService vmManagerService,
-            IBootableDiskProviderService bootableDiskProviderService,
             IVirtualNetworkService virtualNetworkService,
             IInternetEntityService internetEntityService)
         {
             _vmEntityService = vmEntityService;
-            _vmManagerService = vmManagerService;
-            _bootableDiskProviderService = bootableDiskProviderService;
             _virtualNetworkService = virtualNetworkService;
             _internetEntityService = internetEntityService;
         }
 
         [HttpPost]
-        public async Task<ActionResult<VirtualMachineEntitiesResponse>> CreateVirtualMachineEntity(CreateVirtualMachineEntityRequest req)
+        public async Task<ActionResult<VirtualMachineEntityResponse>> CreateVirtualMachineEntity(CreateVirtualMachineEntityRequest req)
         {
             var entity = await _vmEntityService.CreateEntity(req.Name, req.BootableDiskId, req.Memory, req.VirtualCPUs, req.Type, 25, 25);
 
-            return Ok(VirtualMachineEntitiesResponse.WithSuccess([entity]));
+            return Ok(VirtualMachineEntityResponse.WithSuccess(entity));
         }
 
         [HttpPost]
@@ -79,8 +74,15 @@ namespace Controllers
         public async Task<ActionResult<VirtualMachineEntitiesResponse>> GetAllVirtualMachineEntities()
         {
             var entities = await _vmEntityService.GetEntities();
+            var macAddresses = await _vmEntityService.GetMacAddresses();
 
-            return Ok(VirtualMachineEntitiesResponse.WithSuccess(entities));
+            return Ok(VirtualMachineEntitiesResponse.WithSuccess(
+                new VirtualMachineEntitiesWithMacAddressesDTO
+                {
+                    VirtualMachineEntities = entities,
+                    MacAddressEntities = macAddresses
+                }
+                ));
         }
 
         [HttpGet]

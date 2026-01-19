@@ -4,6 +4,7 @@ using Models.Database;
 using Models.DTO;
 using Models.Enums;
 using Repositories;
+using System.Xml.Linq;
 
 namespace Services.Impl
 {
@@ -12,16 +13,18 @@ namespace Services.Impl
         private readonly IVirtualMachineEntityRepository _repository;
         private readonly IBootableDiskProviderService _bootableDiskProviderService;
         private readonly IVirtualMachineManagerService _vmManagerService;
+        private readonly IVirtualMachineEntityNetworkInterfaceRepository _networkInterfaceRepository;
 
         public VirtualMachineEntityService(
             IVirtualMachineEntityRepository repository,
             IBootableDiskProviderService bootableDiskProviderService,
-            IVirtualMachineManagerService vmManagerService
-            )
+            IVirtualMachineManagerService vmManagerService,
+            IVirtualMachineEntityNetworkInterfaceRepository networkInterfaceRepository)
         {
             _repository = repository;
             _bootableDiskProviderService = bootableDiskProviderService;
             _vmManagerService = vmManagerService;
+            _networkInterfaceRepository = networkInterfaceRepository;
         }
 
         public async Task<VirtualMachineEntityDTO> CreateEntity(string name, int bootableDiskId, uint memory, uint virtualCpus, VirtualMachineEntityType type, int x, int y)
@@ -70,11 +73,43 @@ namespace Services.Impl
                     return e;
                 }
 
-                e.State = (Models.Enums.VirtualMachineState)vm.State;
+                e.State = (VirtualMachineState)vm.State;
                 return e;
             })];
 
             return entitiesDto;
+        }
+
+        public async Task<List<VirtualMachineEntityMacAddressDTO>> GetMacAddresses()
+        {
+            var entities = await _repository.GetAll();
+            var result = new List<VirtualMachineEntityMacAddressDTO>();
+
+            foreach (var vm in entities)
+            {
+                var interfaces = await _networkInterfaceRepository.GetByVirtualMachineId(vm.Id);
+
+                var macAddresses = interfaces
+                    .Select(ni =>
+                    {
+                        var mac = XElement.Parse(ni.Definition)
+                            .Elements("mac")
+                            .Select(e => e.Attribute("address")?.Value)
+                            .FirstOrDefault();
+                        return mac;
+                    })
+                    .Where(mac => !string.IsNullOrWhiteSpace(mac))
+                    .Distinct()
+                    .ToList();
+
+                result.Add(new VirtualMachineEntityMacAddressDTO
+                {
+                    VirtualMachineEntityId = vm.Id,
+                    MacAddresses = macAddresses
+                });
+            }
+
+            return result;
         }
 
         public async Task<VirtualMachineEntityDTO> GetById(int id)

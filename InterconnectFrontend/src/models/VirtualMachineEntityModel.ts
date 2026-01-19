@@ -5,7 +5,7 @@ import VirtualMachineEntityType from "./enums/VirtualMachineEntityType.ts";
 interface VirtualMachineEntityModel extends BaseEntity {
     vmUuid: string | null;
     name: string;
-    macAddress: string;
+    macAddresses: string[];
     type: VirtualMachineEntityType;
     state: VirtualMachineState;
 }

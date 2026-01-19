@@ -16,6 +16,7 @@ namespace Services.Impl
         private readonly IVirtualNetworkNodeEntityRepository _virtualNetworkNodeRepository;
         private readonly IVirtualNetworkRepository _networkRepository;
         private readonly IPacketSnifferService _packetSnifferService;
+        private readonly IVirtualMachineEntityNetworkInterfaceRepository _networkInterfaceRepository;
 
         public VirtualNetworkService(
             IVirtualizationWrapper wrapper,
@@ -23,7 +24,8 @@ namespace Services.Impl
             IVirtualNetworkConnectionRepository connectionRepository,
             IVirtualNetworkNodeEntityRepository virtualNetworkNodeRepository,
             IVirtualNetworkRepository networkRepository,
-            IPacketSnifferService packetSnifferService)
+            IPacketSnifferService packetSnifferService,
+            IVirtualMachineEntityNetworkInterfaceRepository networkInterfaceRepository)
         {
             _wrapper = wrapper;
             _vmEntityRepository = vmEntityRepository;
@@ -31,6 +33,7 @@ namespace Services.Impl
             _virtualNetworkNodeRepository = virtualNetworkNodeRepository;
             _networkRepository = networkRepository;
             _packetSnifferService = packetSnifferService;
+            _networkInterfaceRepository = networkInterfaceRepository;
         }
 
         public async Task<List<VirtualNetworkConnectionDTO>> GetVirtualNetworkConnections()
@@ -70,31 +73,47 @@ namespace Services.Impl
             return VirtualNetworkNodeEntityMapper.MapToDTO(model);
         }
 
-        public async Task AttachNetworkInterfaceToVirtualMachine(int id, VirtualNetworkInterfaceCreateDefinition interfaceDefinition)
+        public async Task AttachNetworkInterfaceToVirtualMachine(int vmId, int connectionId, VirtualNetworkInterfaceCreateDefinition interfaceDefinition)
         {
-            var virtualMachine = await _vmEntityRepository.GetById(id);
+            var virtualMachine = await _vmEntityRepository.GetById(vmId);
             var interfaceBuilder = new VirtualNetworkInterfaceCreateDefinitionBuilder();
             interfaceBuilder.SetFromCreateDefinition(interfaceDefinition);
             var xmlDefinition = interfaceBuilder.Build();
 
             _wrapper.AttachDeviceToVirtualMachine(virtualMachine.VmUuid!.Value, xmlDefinition);
 
-            virtualMachine.DeviceDefinition = xmlDefinition;
-            await _vmEntityRepository.Update(virtualMachine);
+            var networkInterfaceModel = new VirtualMachineEntityNetworkInterfaceModel
+            {
+                Definition = xmlDefinition,
+                VirtualMachineEntityId = virtualMachine.Id,
+                VirtualNetworkEntityConnectionId = connectionId
+            };
+            await _networkInterfaceRepository.Create(networkInterfaceModel);
         }
 
-        public async Task UpdateNetworkForVirtualMachineNetworkInterface(int id, string networkName)
+        public async Task UpdateNetworkForVirtualMachineNetworkInterface(int vmId, int connectionId, string networkName)
         {
-            var vmEntity = await _vmEntityRepository.GetById(id);
+            var vmInterface = await _networkInterfaceRepository.GetByIds(vmId, connectionId);
+            var vmEntity = await _vmEntityRepository.GetById(vmId);
+
+            if (vmInterface is null)
+            {
+                throw new NullReferenceException("Virtual machine network interface not found");
+            }
+
+            if (vmEntity.VmUuid is null)
+            {
+                throw new NullReferenceException("Virtual machine UUID is null");
+            }
 
             var builder = new VirtualNetworkInterfaceCreateDefinitionBuilder();
-            builder.SetFromXml(vmEntity.DeviceDefinition!).SetNetworkName(networkName);
+            builder.SetFromXml(vmInterface.Definition).SetNetworkName(networkName);
             var deviceDefinition = builder.Build();
 
             _wrapper.UpdateVmDevice(vmEntity.VmUuid!.Value, deviceDefinition);
 
-            vmEntity.DeviceDefinition = deviceDefinition;
-            await _vmEntityRepository.Update(vmEntity);
+            vmInterface.Definition = deviceDefinition;
+            await _networkInterfaceRepository.Update(vmInterface);
         }
 
         public async Task<VirtualNetworkModel> CreateNodeVirtualNetwork()

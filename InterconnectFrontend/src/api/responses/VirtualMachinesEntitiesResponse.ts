@@ -1,8 +1,8 @@
-import { VirtualMachineEntityModel } from "../../models/VirtualMachineEntityModel.ts";
 import BaseResponse from "./BaseResponse.ts";
+import VirtualMachineEntitiesWithMacAddresses from "../../models/VirtualMachineEntitiesWithMacAddresses.ts";
 
 type VirtualMachinesEntitiesResponse = BaseResponse<
-    VirtualMachineEntityModel[]
+    VirtualMachineEntitiesWithMacAddresses
 >;
 
 export default VirtualMachinesEntitiesResponse;

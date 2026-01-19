@@ -41,12 +41,12 @@ const useVirtualMachineCreateStore = create<VirtualMachineCreateStore>()(
                     bootableDiskId: bootableDiskId,
                 });
             await entityResourceClient.updateEntityPosition({
-                id: response.data[0].id,
+                id: response.data.id,
                 type: EntityType.VirtualMachine,
                 x,
                 y,
             });
-            return response.data[0];
+            return response.data;
         },
     }),
 );

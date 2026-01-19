@@ -1,6 +1,5 @@
 ﻿using Models.Database;
 using Models.DTO;
-using System.Xml.Linq;
 
 namespace Mappers
 {
@@ -8,11 +7,6 @@ namespace Mappers
     {
         public static VirtualMachineEntityDTO MapToDTO(VirtualMachineEntityModel model)
         {
-            var macAddress = model.DeviceDefinition is null ? null : XElement.Parse(model.DeviceDefinition)
-            .Elements("mac")
-            .Select(e => e.Attribute("address")?.Value)
-            .FirstOrDefault();
-
             return new VirtualMachineEntityDTO
             {
                 Id = model.Id,
@@ -21,7 +15,6 @@ namespace Mappers
                 Type = model.Type,
                 X = model.X,
                 Y = model.Y,
-                MacAddress = macAddress,
             };
         }
 
