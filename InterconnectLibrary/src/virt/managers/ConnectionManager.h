@@ -6,7 +6,12 @@
 #include "../../wrappers/LibvirtWrapper.h"
 #include "../../models/ConnectionInfo.h"
 
-
+/**
+ * @brief Manages connections to libvirt hypervisors.
+ *
+ * This class handles the lifecycle of connections to libvirt, including
+ * initialization, status checking, and retrieving connection information.
+ */
 class ConnectionManager
 {
     ILibvirtWrapper* libvirt;
@@ -16,13 +21,18 @@ public:
     virtual ~ConnectionManager() = default;
 
     /**
-     * @param libvirt Reference to an ILibvirtWrapper implementation.
+     * @brief Constructs a ConnectionManager with a specific libvirt wrapper.
+     *
+     * @param libvirt Pointer to an ILibvirtWrapper implementation.
      */
     explicit ConnectionManager(ILibvirtWrapper* libvirt)
         : libvirt(libvirt)
     {
     }
 
+    /**
+     * @brief Constructs a ConnectionManager with default libvirt wrapper.
+     */
     explicit ConnectionManager()
     {
         libvirt = new LibvirtWrapper();
@@ -36,10 +46,25 @@ public:
      */
     void initializeConnection(const std::optional<std::string>& customConnectionUrl = std::nullopt);
 
+    /**
+     * @brief Retrieves detailed information about the current connection.
+     *
+     * @return ConnectionInfo Structure containing connection and host information.
+     */
     ConnectionInfo getConnectionInfo() const;
 
+    /**
+     * @brief Checks if the connection is alive and active.
+     *
+     * @return bool True if connection is alive, false otherwise.
+     */
     bool isConnectionAlive() const;
 
+    /**
+     * @brief Gets the raw libvirt connection pointer.
+     *
+     * @return virConnectPtr Pointer to the libvirt connection.
+     */
     virConnectPtr getConnection() const;
 };
 
