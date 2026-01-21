@@ -9,12 +9,25 @@ import VirtualNetworkRenderer from "./Renderers/VirtualNetworkRenderer.tsx";
 import VirtualNetworkNodeRenderer from "./Renderers/VirtualNetworkNodeRenderer.tsx";
 import InternetEntityRenderer from "./Renderers/InternetEntityRenderer.tsx";
 
+/**
+ * Props for the `SimulationStage` component.
+ */
 interface SimulationStageProps {
     showPlacementCursor: boolean;
     onClick: (e: KonvaEventObject<MouseEvent>) => void;
     onContextMenu: (e: KonvaEventObject<PointerEvent>) => void;
 }
 
+/**
+ * Main canvas for rendering the simulation: networks, machines, nodes, and the internet entity.
+ * Applies a special cursor during placement mode and forwards stage events to handlers.
+ *
+ * @param props Component props
+ * @param props.showPlacementCursor Whether to show special cursor when placing entities
+ * @param props.onClick Click handler used for placements and selections
+ * @param props.onContextMenu Context menu handler for per-entity actions
+ * @returns A Konva stage with layered entity renderers
+ */
 const SimulationStage = ({
     showPlacementCursor,
     onClick,

@@ -2,12 +2,25 @@ import { EntityType } from "../models/enums/EntityType.ts";
 import { ObjectWithName } from "../models/interfaces/ObjectWithName.ts";
 import { ObjectWithId } from "../models/interfaces/ObjectWithId.ts";
 
+/**
+ * Represents an entity with its type and ID information.
+ */
 interface EntityTypeWithId {
     id: number;
     type: EntityType;
 }
 
+/**
+ * Utility class for managing and parsing simulation stage entity representations.
+ * Handles entity naming conventions and shape hierarchy navigation.
+ */
 const SimulationStageEntitiesUtils = {
+    /**
+     * Retrieves the name from a shape object by traversing its parent hierarchy if needed.
+     * Useful for extracting entity names from nested shape structures.
+     * @param {ObjectWithName} shape The shape object to extract the name from
+     * @returns {string | null} The entity name, or null if no name is found in the hierarchy
+     */
     getTargetOrParentEntityInfo(shape: ObjectWithName): string | null {
         let currentShape: ObjectWithName | null = shape;
 
@@ -21,6 +34,13 @@ const SimulationStageEntitiesUtils = {
 
         return null;
     },
+    /**
+     * Creates a shape name for an entity based on its type and ID.
+     * Naming convention: {type-abbreviation}-{id} (e.g., "vm-5", "sw-3")
+     * @param {ObjectWithId} entity The entity object with an ID
+     * @param {EntityType} entityType The type of entity
+     * @returns {string} The generated shape name
+     */
     createShapeName(entity: ObjectWithId, entityType: EntityType) {
         switch (entityType) {
             case EntityType.VirtualMachine:
@@ -31,6 +51,12 @@ const SimulationStageEntitiesUtils = {
                 return `in-${entity.id}`;
         }
     },
+    /**
+     * Parses a shape name to extract the entity type and ID.
+     * Reverses the format created by createShapeName().
+     * @param {string} name The shape name to parse (e.g., "vm-5")
+     * @returns {EntityTypeWithId | null} The parsed entity type and ID, or null if parsing fails
+     */
     parseShapeName(name: string): EntityTypeWithId | null {
         const [typeName, id] = name.split("-");
         let entityType: EntityType | null = null;

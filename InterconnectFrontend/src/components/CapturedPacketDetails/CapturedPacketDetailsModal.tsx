@@ -4,6 +4,9 @@ import PacketModel from "../../models/PacketModel.ts";
 import HexViewerContainer from "../HexViewer/HexViewerContainer.tsx";
 import CapturedPacketDetails from "./CapturedPacketDetails.tsx";
 
+/**
+ * Props for the `CapturedPacketDetailsModal` component.
+ */
 interface CapturedPacketDetailsModalProps {
     bytes: Uint8Array;
     opened: boolean;
@@ -11,6 +14,15 @@ interface CapturedPacketDetailsModalProps {
     onClose: () => void;
 }
 
+/**
+ * Modal displaying captured packet metadata and a hex viewer of its payload.
+ * @param props Component props
+ * @param props.bytes Raw packet bytes rendered in the hex viewer
+ * @param props.opened Whether the modal is visible
+ * @param props.packet Packet for metadata table
+ * @param props.onClose Handler invoked to close the modal
+ * @returns An XL modal combining packet details and a hex viewer
+ */
 const CapturedPacketDetailsModal = ({
     bytes,
     opened,

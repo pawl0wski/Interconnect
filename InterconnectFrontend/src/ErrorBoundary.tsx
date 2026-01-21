@@ -5,6 +5,13 @@ interface ErrorBoundaryProps {
     children: ReactNode;
 }
 
+/**
+ * Error boundary component that catches unhandled errors and promise rejections
+ * from the application and stores them in the error store for display.
+ * @param {ErrorBoundaryProps} props - Component props
+ * @param {ReactNode} props.children - Child components to wrap
+ * @returns {JSX.Element} The children wrapped in error handling
+ */
 const ErrorBoundary = ({ children }: ErrorBoundaryProps) => {
     const errorStore = useErrorStore();
 

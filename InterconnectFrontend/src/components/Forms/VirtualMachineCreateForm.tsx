@@ -10,11 +10,26 @@ import VirtualMachineNameInput from "./FormControls/VirtualMachineNameInput.tsx"
 import VirtualMachineEntityTypeSelectContainer from "./FormControls/VirtualMachineEntityTypeSelectContainer.tsx";
 import VirtualMachineEntityType from "../../models/enums/VirtualMachineEntityType.ts";
 
+/**
+ * Props for the `VirtualMachineCreateForm` component.
+ */
 interface VirtualMachineCreateFormProps {
     form: UseFormReturnType<VirtualMachineCreateFormValues>;
     onFormSubmit: (values: VirtualMachineCreateFormValues) => void;
 }
 
+/**
+ * Virtual machine creation form that collects VM name, type, CPU and memory resources,
+ * and a bootable disk selection. Submits values using Mantine form handler.
+ *
+ * - Uses translated section legends and labels.
+ * - Delegates individual inputs to specialized form control components.
+ *
+ * @param props Component props
+ * @param props.form Mantine form instance with VM create values
+ * @param props.onFormSubmit Callback invoked on valid form submission
+ * @returns JSX form for creating a virtual machine
+ */
 const VirtualMachineCreateForm = ({
     form,
     onFormSubmit,

@@ -7,6 +7,11 @@ import { useSimulationStageContextMenusStore } from "../../store/simulationStage
 import { ObjectWithName } from "../../models/interfaces/ObjectWithName.ts";
 import { EntityType } from "../../models/enums/EntityType.ts";
 
+/**
+ * Container that wires the `SimulationStage` to placement and context-menu stores.
+ * Handles click and context-menu events, routing to appropriate store actions.
+ * @returns The bound simulation stage component
+ */
 const SimulationStageContainer = () => {
     const entityPlacementStore = useEntityPlacementStore();
     const simulationStageContextMenuStore =

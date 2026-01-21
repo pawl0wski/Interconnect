@@ -12,13 +12,25 @@ import useNetworkConnectionsStore from "./networkConnectionsStore.ts";
 import { useInternetEntitiesStore } from "./entitiesStore.ts";
 import entityResourceClient from "../api/resourceClient/EntityResourceClient.ts";
 
+/**
+ * State store for managing entity placement mode on the simulation stage.
+ * Tracks which entity type is being placed and handles the placement workflow.
+ */
 interface EntityPlacementStore {
+    /** The entity type currently being placed, or null if not in placement mode */
     currentEntityType: EntityType | null;
+    /** Enters placement mode for the specified entity type */
     setCurrentEntityType: (entity: EntityType) => void;
+    /** Places the current entity at the specified coordinates and handles post-placement logic */
     placeCurrentEntity: (x: number, y: number) => Promise<void>;
+    /** Cancels entity placement and exits placement mode */
     discardPlacingEntity: () => void;
 }
 
+/**
+ * Zustand store hook for managing entity placement workflow on simulation stage.
+ * Handles different entity placement logic (VMs open modal, networks create connections, etc).
+ */
 const useEntityPlacementStore = create<EntityPlacementStore>()((set, get) => ({
     currentEntityType: null,
     setCurrentEntityType: (type: EntityType) =>

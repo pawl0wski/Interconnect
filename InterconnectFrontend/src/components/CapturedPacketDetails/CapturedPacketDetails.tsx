@@ -3,10 +3,19 @@ import PacketModel from "../../models/PacketModel.ts";
 import packetUtils from "../../utils/packetUtils.ts";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Props for the `CapturedPacketDetails` component.
+ */
 interface CapturedPacketDetailsProps {
     packet: PacketModel;
 }
 
+/**
+ * Displays decoded metadata of a captured network packet as a table.
+ * @param props Component props
+ * @param props.packet Packet to display
+ * @returns A table with key network packet attributes
+ */
 const CapturedPacketDetails = ({ packet }: CapturedPacketDetailsProps) => {
     const {t} = useTranslation();
 

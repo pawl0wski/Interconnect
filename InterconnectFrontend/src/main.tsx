@@ -5,6 +5,10 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import ErrorBoundary from "./ErrorBoundary.tsx";
 
+/**
+ * Application entry point. Initializes internationalization, imports terminal styles,
+ * and renders the root App component within an ErrorBoundary for error handling.
+ */
 createRoot(document.getElementById("root")!).render(
     <ErrorBoundary>
         <App />

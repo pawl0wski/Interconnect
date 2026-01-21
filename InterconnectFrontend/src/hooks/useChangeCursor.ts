@@ -1,6 +1,11 @@
 import { KonvaEventObject } from "konva/lib/Node";
 import { useEntityPlacementStore } from "../store/entityPlacementStore.ts";
 
+/**
+ * Custom hook that provides a handler for changing the cursor style on Konva canvas elements.
+ * Only changes cursor if no entity is currently being placed.
+ * @returns {Function} A handler function that accepts Konva event and cursor style
+ */
 const useChangeCursor = () => {
     const entityPlacementStore = useEntityPlacementStore();
 

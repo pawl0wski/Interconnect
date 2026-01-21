@@ -10,6 +10,13 @@ interface InterconnectModalsProviderProps {
     children: ReactNode;
 }
 
+/**
+ * Provider component that renders all application modals and dialogs.
+ * Includes modals for entity creation, connection info, terminal access, error messages, and packet details.
+ * @param {InterconnectModalsProviderProps} props - Component props
+ * @param {ReactNode} props.children - Child components to render before the modals
+ * @returns {JSX.Element} All modal containers with children
+ */
 const InterconnectModalsProvider = ({
     children,
 }: InterconnectModalsProviderProps) => (

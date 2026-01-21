@@ -5,6 +5,13 @@ interface ConnectionStatusProviderProps {
     children: ReactNode;
 }
 
+/**
+ * Provider component that monitors the connection status to the backend periodically.
+ * Pings the backend every 5 seconds to verify the connection is still active.
+ * @param {ConnectionStatusProviderProps} props - Component props
+ * @param {ReactNode} props.children - Child components to wrap
+ * @returns {JSX.Element} Children with active connection monitoring
+ */
 const ConnectionStatusProvider = ({
     children,
 }: ConnectionStatusProviderProps) => {

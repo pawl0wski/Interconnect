@@ -4,10 +4,22 @@ import { virtualMachineConsoleHubClient } from "../api/hubClient/VirtualMachineC
 import TerminalDataResponse from "../api/responses/TerminalDataResponse.ts";
 import { Base64 } from "js-base64";
 
+/**
+ * Props for the `VirtualMachineTerminalView` component.
+ */
 interface TerminalProps {
     uuid: string;
 }
 
+/**
+ * Terminal view for a virtual machine console session using xterm.js.
+ * Connects to the backend hub, fetches initial data, subscribes for updates,
+ * and forwards keyboard input back to the VM console.
+ *
+ * @param props Component props
+ * @param props.uuid UUID of the virtual machine console session
+ * @returns A resizable terminal container element
+ */
 const VirtualMachineTerminalView = ({ uuid }: TerminalProps) => {
     const terminalRef = useRef<HTMLDivElement>(null);
     const terminal = useRef<Terminal>(null);

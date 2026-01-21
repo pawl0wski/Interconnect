@@ -4,6 +4,11 @@ import useCapturedPacketDetails from "../../hooks/useCapturedPacketDetails.ts";
 import useCapturedPacketDetailsStore from "../../store/capturedPacketDetailsStore.ts";
 import { Base64 } from "js-base64";
 
+/**
+ * Container that binds the captured packet details modal to stores and derived data.
+ * Converts the selected packet content to bytes and passes modal visibility.
+ * @returns The packet details modal when a packet is selected, otherwise null
+ */
 const CapturedPacketDetailsModalContainer = () => {
     const capturedPacketDetailsModalStore = usePacketDetailsModalStore();
     const capturedPacketDetailsStore = useCapturedPacketDetailsStore();

@@ -5,6 +5,13 @@ import {
 } from "../store/entitiesStore.ts";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Custom hook that retrieves the name of an entity by its ID and type.
+ * Handles translation for special entities like Internet.
+ * @param {number} id The ID of the entity
+ * @param {EntityType} type The type of the entity
+ * @returns {string | undefined} The entity name, or undefined if not found
+ */
 const useEntityName = (id: number, type: EntityType) => {
     const virtualMachineEntitiesStore = useVirtualMachineEntitiesStore();
     const virtualNetworkNodeEntitiesStore = useVirtualNetworkNodeEntitiesStore();

@@ -5,14 +5,28 @@ import { LoadingOverlay } from "@mantine/core";
 import useVirtualNetworkNodeCreateStore from "../../store/virtualNetworkNodeCreateStore.ts";
 import { useVirtualNetworkNodeEntitiesStore } from "../../store/entitiesStore.ts";
 
+/**
+ * Props for the `VirtualNetworkNodeCreateFormContainer` component.
+ */
 interface VirtualNetworkNodeCreateFormContainerProps {
     onFormSubmitted: () => void;
 }
 
+/**
+ * Form values used when creating a virtual network node.
+ */
 export interface VirtualNetworkNodeCreateFormValues {
     name: string;
 }
 
+/**
+ * Container that manages the virtual network node create form lifecycle.
+ * Handles validation, store updates, entity refresh, and loading state.
+ *
+ * @param props Component props
+ * @param props.onFormSubmitted Callback invoked after successful node creation
+ * @returns Loading overlay and the network node creation form
+ */
 const VirtualNetworkNodeCreateFormContainer = ({
     onFormSubmitted,
 }: VirtualNetworkNodeCreateFormContainerProps) => {
