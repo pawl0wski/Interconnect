@@ -4,6 +4,9 @@ using Models.Responses;
 
 namespace Controllers
 {
+    /// <summary>
+    /// Controller providing system information.
+    /// </summary>
     [ApiController]
     [Route("[controller]/[action]")]
     public sealed class InfoController : ControllerBase
@@ -15,6 +18,10 @@ namespace Controllers
             _infoService = infoService;
         }
 
+        /// <summary>
+        /// Retrieves operating system information.
+        /// </summary>
+        /// <returns>System information.</returns>
         [HttpGet]
         public ActionResult<SystemInfoResponse> GetSystemInfo()
         {

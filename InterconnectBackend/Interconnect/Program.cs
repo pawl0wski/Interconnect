@@ -12,8 +12,15 @@ using Services.Impl;
 
 namespace Interconnect
 {
+    /// <summary>
+    /// Main class of the Interconnect application.
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// Application entry point.
+        /// </summary>
+        /// <param name="args">Command line arguments.</param>
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);

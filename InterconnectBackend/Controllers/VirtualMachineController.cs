@@ -4,6 +4,9 @@ using Services;
 
 namespace Controllers
 {
+    /// <summary>
+    /// Controller managing virtual machines.
+    /// </summary>
     [ApiController]
     [Route("[controller]/[action]")]
     public sealed class VirtualMachineController : ControllerBase
@@ -15,6 +18,10 @@ namespace Controllers
             _bootableDiskProviderService = bootableDiskProviderService;
         }
 
+        /// <summary>
+        /// Retrieves a list of available bootable disks.
+        /// </summary>
+        /// <returns>List of bootable disks.</returns>
         [HttpGet]
         public async Task<ActionResult<BootableDisksResponse>> GetAvailableBootableDisks()
         {

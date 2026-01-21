@@ -2,6 +2,9 @@
 
 namespace Interconnect.Middlewares
 {
+    /// <summary>
+    /// Middleware for global exception handling in the application.
+    /// </summary>
     public class ExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
@@ -11,6 +14,10 @@ namespace Interconnect.Middlewares
             _next = next;
         }
 
+        /// <summary>
+        /// Processes HTTP request and catches exceptions.
+        /// </summary>
+        /// <param name="context">HTTP context.</param>
         public async Task InvokeAsync(HttpContext context)
         {
             try
@@ -34,8 +41,16 @@ namespace Interconnect.Middlewares
         }
     }
 
+    /// <summary>
+    /// Extensions for registering exception handling middleware.
+    /// </summary>
     public static class ExceptionHandlerMiddlewareExtensions
     {
+        /// <summary>
+        /// Adds exception handling middleware to the application pipeline.
+        /// </summary>
+        /// <param name="builder">Application builder.</param>
+        /// <returns>Application builder with added middleware.</returns>
         public static IApplicationBuilder UseExceptionMiddleware(this IApplicationBuilder builder)
         {
             return builder.UseMiddleware<ExceptionHandlerMiddleware>();

@@ -9,6 +9,9 @@ using System.Text.Json;
 
 namespace BackgroundServices.Impl
 {
+    /// <summary>
+    /// Background service for managing network packet sniffing and broadcasting.
+    /// </summary>
     public class PacketSnifferBackgroundService : BackgroundService
     {
         private List<PacketSniffer> _packetSniffers = [];
@@ -22,6 +25,13 @@ namespace BackgroundServices.Impl
             WriteIndented = true
         };
 
+        /// <summary>
+        /// Initializes a new instance of the PacketSnifferBackgroundService.
+        /// </summary>
+        /// <param name="logger">Logger instance.</param>
+        /// <param name="hubContext">SignalR hub context for packet transmission.</param>
+        /// <param name="packetSnifferService">Packet sniffer service.</param>
+        /// <param name="virtualNetworkService">Virtual network service.</param>
         public PacketSnifferBackgroundService(
             ILogger<PacketSnifferBackgroundService> logger,
             IHubContext<PacketSnifferHub> hubContext,
@@ -34,6 +44,10 @@ namespace BackgroundServices.Impl
             _virtualNetworkService = virtualNetworkService;
         }
 
+        /// <summary>
+        /// Executes the background service to listen for and broadcast captured packets.
+        /// </summary>
+        /// <param name="stoppingToken">Cancellation token for stopping the service.</param>
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("Listening for new packets");
@@ -59,6 +73,10 @@ namespace BackgroundServices.Impl
             }
         }
 
+        /// <summary>
+        /// Starts packet sniffers for all virtual networks.
+        /// </summary>
+        /// <returns>Task representing the operation.</returns>
         private async Task StartSniffersForAllNetworks()
         {
             var networks = await _virtualNetworkService.GetAllVirtualNetworks();
@@ -76,6 +94,10 @@ namespace BackgroundServices.Impl
             }
         }
 
+        /// <summary>
+        /// Starts listening for packets on a sniffer if not already listening.
+        /// </summary>
+        /// <param name="sniffer">Packet sniffer instance.</param>
         private void StartListeningForSnifferIfCurrentlyNotListening(PacketSniffer sniffer)
         {
             if (_packetSniffers.FirstOrDefault(s => s.BridgeName == sniffer.BridgeName) is not null)
@@ -89,6 +111,10 @@ namespace BackgroundServices.Impl
             _logger.LogInformation("Started listening for interface {BridgeName}", sniffer.BridgeName);
         }
 
+        /// <summary>
+        /// Continuously listens for packets on a specific sniffer.
+        /// </summary>
+        /// <param name="sniffer">Packet sniffer instance.</param>
         private void ListenForPackets(PacketSniffer sniffer)
         {
             while (true)
@@ -101,6 +127,9 @@ namespace BackgroundServices.Impl
             }
         }
 
+        /// <summary>
+        /// Parses and processes all captured packets from the sniffer.
+        /// </summary>
         private void ParseCapturedPackets()
         {
             while (true)
@@ -111,6 +140,10 @@ namespace BackgroundServices.Impl
             }
         }
 
+        /// <summary>
+        /// Sends a captured packet to all connected clients in the default hub group.
+        /// </summary>
+        /// <param name="packet">Captured packet data.</param>
         private void SendCapturedPacketToDefaultHubGroup(Packet packet)
         {
             var response = CapturedPacketResponse.WithSuccess(packet);

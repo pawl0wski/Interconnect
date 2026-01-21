@@ -7,6 +7,9 @@ using Services;
 
 namespace Controllers
 {
+    /// <summary>
+    /// Controller managing entities in the system.
+    /// </summary>
     [ApiController]
     [Route("[controller]/[action]")]
     public sealed class EntityController : ControllerBase
@@ -25,6 +28,11 @@ namespace Controllers
             _internetEntityService = internetEntityService;
         }
 
+        /// <summary>
+        /// Creates a new virtual machine entity.
+        /// </summary>
+        /// <param name="req">Data for creating virtual machine.</param>
+        /// <returns>Created virtual machine entity.</returns>
         [HttpPost]
         public async Task<ActionResult<VirtualMachineEntityResponse>> CreateVirtualMachineEntity(CreateVirtualMachineEntityRequest req)
         {
@@ -33,6 +41,11 @@ namespace Controllers
             return Ok(VirtualMachineEntityResponse.WithSuccess(entity));
         }
 
+        /// <summary>
+        /// Creates a new virtual network node.
+        /// </summary>
+        /// <param name="req">Data for creating node.</param>
+        /// <returns>Created network node.</returns>
         [HttpPost]
         public async Task<ActionResult<VirtualNetworkNodesEntitiesResponse>> CreateVirtualNetworkNodeEntity(CreateVirtualNetworkNodeEntityRequest req)
         {
@@ -41,6 +54,10 @@ namespace Controllers
             return VirtualNetworkNodesEntitiesResponse.WithSuccess([virtualNetworkNode]);
         }
 
+        /// <summary>
+        /// Creates a new Internet entity.
+        /// </summary>
+        /// <returns>Created Internet entity.</returns>
         [HttpPost]
         public async Task<ActionResult<InternetEntitiesResponse>> CreateInternetEntity()
         {
@@ -49,6 +66,11 @@ namespace Controllers
             return InternetEntitiesResponse.WithSuccess([internetEntity]);
         }
 
+        /// <summary>
+        /// Updates entity position on the board.
+        /// </summary>
+        /// <param name="req">Data for updating position.</param>
+        /// <returns>Operation confirmation.</returns>
         [HttpPut]
         public async Task<ActionResult<StringResponse>> UpdateEntityPosition(UpdateEntityPositionRequest req)
         {

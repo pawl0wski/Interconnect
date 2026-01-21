@@ -4,6 +4,9 @@ using Services;
 
 namespace Controllers
 {
+    /// <summary>
+    /// Controller managing hypervisor connection.
+    /// </summary>
     [ApiController]
     [Route("[controller]/[action]")]
     public sealed class HypervisorConnectionController : ControllerBase
@@ -15,6 +18,10 @@ namespace Controllers
             _hypervisorConnectionService = hypervisorConnectionService;
         }
 
+        /// <summary>
+        /// Retrieves hypervisor connection information.
+        /// </summary>
+        /// <returns>Connection information.</returns>
         [HttpGet]
         public ActionResult<ConnectionInfoResponse> ConnectionInfo()
         {

@@ -3,8 +3,15 @@ using Services.Impl;
 
 namespace Services
 {
+    /// <summary>
+    /// Initializer for application services.
+    /// </summary>
     static public class ServicesInitializer
     {
+        /// <summary>
+        /// Registers application services in the dependency injection container.
+        /// </summary>
+        /// <param name="serviceCollection">The service collection.</param>
         public static void Initialize(IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<IHypervisorConnectionService, HypervisorConnectionService>();

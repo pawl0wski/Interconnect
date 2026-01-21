@@ -5,6 +5,9 @@ using Services;
 
 namespace Controllers
 {
+    /// <summary>
+    /// Controller managing virtual networks and connections.
+    /// </summary>
     [ApiController]
     [Route("[controller]/[action]")]
     public sealed class VirtualNetworkController : ControllerBase
@@ -24,6 +27,11 @@ namespace Controllers
         }
 
 
+        /// <summary>
+        /// Connects two entities in the virtual network.
+        /// </summary>
+        /// <param name="req">Connection data.</param>
+        /// <returns>Created connection.</returns>
         [HttpPost]
         public async Task<VirtualNetworkConnectionsResponse> ConnectEntities(ConnectEntitiesRequest req)
         {
@@ -32,6 +40,11 @@ namespace Controllers
             return VirtualNetworkConnectionsResponse.WithSuccess([virtualNetworkConnection]);
         }
 
+        /// <summary>
+        /// Disconnects entities in the virtual network.
+        /// </summary>
+        /// <param name="req">Connection data to remove.</param>
+        /// <returns>Operation confirmation.</returns>
         [HttpPost]
         public async Task<StringResponse> DisconnectEntities(VirtualNetworkEntityConnectionRequest req)
         {
@@ -40,6 +53,10 @@ namespace Controllers
             return StringResponse.WithEmptySuccess();
         }
 
+        /// <summary>
+        /// Retrieves all connections in the virtual network.
+        /// </summary>
+        /// <returns>List of connections.</returns>
         [HttpGet]
         public async Task<VirtualNetworkConnectionsResponse> GetAllConnections()
         {
