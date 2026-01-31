@@ -1,5 +1,5 @@
 import { Menu } from "@mantine/core";
-import { MdOutlineCable, MdTerminal } from "react-icons/md";
+import { MdDelete, MdOutlineCable, MdTerminal } from "react-icons/md";
 import { PositionModel } from "../../../models/PositionModel.ts";
 import { useTranslation } from "react-i18next";
 import VirtualNetworkConnectionModel from "../../../models/VirtualNetworkConnectionModel.ts";
@@ -15,6 +15,7 @@ interface VirtualMachineContextMenuProps {
 
     onOpenVirtualMachineConsole: () => void;
     onStartPlacingVirtualNetwork: () => void;
+    onDeleteEntity: () => void;
 }
 
 const VirtualMachineContextMenu = ({
@@ -25,6 +26,7 @@ const VirtualMachineContextMenu = ({
     connections,
     onOpenVirtualMachineConsole,
     onStartPlacingVirtualNetwork,
+    onDeleteEntity,
 }: VirtualMachineContextMenuProps) => {
     const { t } = useTranslation();
 
@@ -43,6 +45,12 @@ const VirtualMachineContextMenu = ({
                     onClick={onOpenVirtualMachineConsole}
                 >
                     {t("terminal")}
+                </Menu.Item>
+                <Menu.Item
+                    leftSection={<MdDelete size={14} color="red" />}
+                    onClick={onDeleteEntity}
+                >
+                    {t("delete")}
                 </Menu.Item>
                 <Menu.Divider />
                 <Menu.Label>{t("network")}</Menu.Label>

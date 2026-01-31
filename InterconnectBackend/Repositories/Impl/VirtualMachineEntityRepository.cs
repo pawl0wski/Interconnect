@@ -29,6 +29,14 @@ namespace Repositories.Impl
             return await _context.VirtualMachineEntityModels.Where((e) => e.Id == id).SingleAsync();
         }
 
+        public async Task Remove(int id)
+        {
+            var model = await _context.VirtualMachineEntityModels.FirstAsync((e) => e.Id == id);
+            
+            _context.VirtualMachineEntityModels.Remove(model);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task Update(VirtualMachineEntityModel model)
         {
             _context.VirtualMachineEntityModels.Update(model);

@@ -10,6 +10,7 @@ import useSimulationStageContextMenuClose from "../../../hooks/useSimulationStag
 import { useEntityPlacementStore } from "../../../store/entityPlacementStore.ts";
 import useNetworkPlacementStore from "../../../store/networkPlacementStore.ts";
 import useNetworkConnectionsStore from "../../../store/networkConnectionsStore.ts";
+import useFullscreenLoader from "../../../hooks/useFullscreenLoader.ts";
 
 const VirtualMachineContextMenuContainer = () => {
     const simulationStageContextMenusStore =
@@ -22,6 +23,7 @@ const VirtualMachineContextMenuContainer = () => {
     const networkPlacementStore = useNetworkPlacementStore();
     const networkConnectionsStore = useNetworkConnectionsStore();
     const { closeContextMenu } = useSimulationStageContextMenuClose();
+    const { startLoading, stopLoading } = useFullscreenLoader();
 
     const currentEntity = useMemo(() => {
         const currentEntityId =
@@ -69,6 +71,22 @@ const VirtualMachineContextMenuContainer = () => {
         networkPlacementStore,
     ]);
 
+    const handleEntityDelete = useCallback(async () => {
+        try {
+            startLoading();
+            await virtualMachineEntitiesStore.deleteById(currentEntity!.id);
+        } finally {
+            closeContextMenu();
+            stopLoading();
+        }
+    }, [
+        closeContextMenu,
+        currentEntity,
+        startLoading,
+        stopLoading,
+        virtualMachineEntitiesStore,
+    ]);
+
     const entityConnections = networkConnectionsStore.getConnectionsForEntity(
         currentEntity?.id ?? 0,
         EntityType.VirtualMachine,
@@ -83,6 +101,7 @@ const VirtualMachineContextMenuContainer = () => {
             connections={entityConnections}
             onOpenVirtualMachineConsole={handleOpenVirtualMachineConsole}
             onStartPlacingVirtualNetwork={handleStartPlacingVirtualNetwork}
+            onDeleteEntity={handleEntityDelete}
         />
     );
 };

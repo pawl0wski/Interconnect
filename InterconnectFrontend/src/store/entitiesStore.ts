@@ -25,6 +25,7 @@ export interface EntitiesStore<TEntity extends BaseEntity> {
     clearEntities: () => void;
     /** Retrieves a specific entity by ID, or null if not found */
     getById: (id: number) => TEntity | null;
+    deleteById: (id: number) => Promise<void>;
 }
 
 type getEntitiesFunc<TEntity extends BaseEntity> = () => Promise<
@@ -91,6 +92,10 @@ export const createEntitiesStore = <TEntity extends BaseEntity>(
         },
         getById: (id: number) =>
             get().entities.find((e) => e.id === id) ?? null,
+        deleteById: async (id: number) => {
+            await entityResourceClient.deleteEntity({ id, type });
+            await get().fetchEntities();
+        },
     }));
 
 /**

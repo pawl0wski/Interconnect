@@ -7,6 +7,7 @@ import StringResponse from "../responses/StringResponse.ts";
 import UpdateEntityPositionRequest from "../requests/UpdateEntityPositionRequest.ts";
 import InternetEntitiesResponse from "../responses/InternetEntitiesResponse.ts";
 import VirtualMachineEntityResponse from "../responses/VirtualMachineEntityResponse.ts";
+import DeleteEntityRequest from "../requests/DeleteEntityRequest.ts";
 
 /**
  * Resource client for managing entities (virtual machines, networks, Internet) in the simulation.
@@ -91,6 +92,10 @@ class EntityResourceClient extends BaseBackendResourceClient {
      */
     public getAllInternetEntities(): Promise<InternetEntitiesResponse> {
         return this.sendBackendRequest("GetAllInternetEntities", "GET", {});
+    }
+
+    public deleteEntity(request: DeleteEntityRequest): Promise<StringResponse> {
+        return this.sendBackendRequest("DeleteEntity", "DELETE", request);
     }
 
     protected getResourceName(): string {

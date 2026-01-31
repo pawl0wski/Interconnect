@@ -1,7 +1,7 @@
 import { PositionModel } from "../../../models/PositionModel.ts";
 import { useTranslation } from "react-i18next";
 import { Menu } from "@mantine/core";
-import { MdOutlineCable } from "react-icons/md";
+import { MdDelete, MdOutlineCable } from "react-icons/md";
 import VirtualNetworkConnectionModel from "../../../models/VirtualNetworkConnectionModel.ts";
 import NetworkConnectionMenuItemContainer from "./MenuItems/NetworkConnectionMenuItemContainer.tsx";
 import { EntityType } from "../../../models/enums/EntityType.ts";
@@ -14,6 +14,7 @@ interface VirtualNetworkNodeContextMenuProps {
     connections: VirtualNetworkConnectionModel[];
 
     onStartPlacingVirtualNetwork: () => void;
+    onDeleteEntity: () => void;
 }
 
 const VirtualNetworkNodeContextMenu = ({
@@ -23,6 +24,7 @@ const VirtualNetworkNodeContextMenu = ({
     isVisible,
     connections,
     onStartPlacingVirtualNetwork,
+    onDeleteEntity,
 }: VirtualNetworkNodeContextMenuProps) => {
     const { t } = useTranslation();
 
@@ -36,6 +38,12 @@ const VirtualNetworkNodeContextMenu = ({
                 }}
             >
                 <Menu.Label>{title}</Menu.Label>
+                <Menu.Item
+                    leftSection={<MdDelete size={14} color="red" />}
+                    onClick={onDeleteEntity}
+                >
+                    {t("delete")}
+                </Menu.Item>
                 <Menu.Divider />
                 <Menu.Label>{t("network")}</Menu.Label>
                 <Menu.Item

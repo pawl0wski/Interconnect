@@ -31,5 +31,12 @@ namespace Repositories
         /// </summary>
         /// <param name="model">Entity model to update.</param>
         public Task Update(VirtualMachineEntityModel model);
+
+        /// <summary>
+        /// Removes the item with the specified identifier.
+        /// </summary>
+        /// <param name="id">The unique identifier of the item to remove.</param>
+        public Task Remove(int id);
+
     }
 }
