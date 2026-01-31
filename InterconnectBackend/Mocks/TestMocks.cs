@@ -15,6 +15,8 @@ namespace TestUtils
                 HypervisorUrl = "test:///testing",
                 VmPrefix = "interconnect",
                 MaxConsoleDataHistory = 1024,
+                InternetEntityDefaultIp = "192.168.0.1",
+                InternetEntityDefaultNetmask = "255.255.255.0"
             });
         }
 

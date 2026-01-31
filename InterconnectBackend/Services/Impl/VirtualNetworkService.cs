@@ -1,5 +1,7 @@
 ﻿using Mappers;
+using Microsoft.Extensions.Options;
 using Models;
+using Models.Config;
 using Models.Database;
 using Models.DTO;
 using NativeLibrary.Wrappers;
@@ -10,6 +12,7 @@ namespace Services.Impl
 {
     public class VirtualNetworkService : IVirtualNetworkService
     {
+        private readonly InterconnectConfig _config;
         private readonly IVirtualizationWrapper _wrapper;
         private readonly IVirtualMachineEntityRepository _vmEntityRepository;
         private readonly IVirtualNetworkConnectionRepository _connectionRepository;
@@ -19,6 +22,7 @@ namespace Services.Impl
         private readonly IVirtualMachineEntityNetworkInterfaceRepository _networkInterfaceRepository;
 
         public VirtualNetworkService(
+            IOptions<InterconnectConfig> config,
             IVirtualizationWrapper wrapper,
             IVirtualMachineEntityRepository vmEntityRepository,
             IVirtualNetworkConnectionRepository connectionRepository,
@@ -27,6 +31,7 @@ namespace Services.Impl
             IPacketSnifferService packetSnifferService,
             IVirtualMachineEntityNetworkInterfaceRepository networkInterfaceRepository)
         {
+            _config = config.Value;
             _wrapper = wrapper;
             _vmEntityRepository = vmEntityRepository;
             _connectionRepository = connectionRepository;
@@ -136,8 +141,8 @@ namespace Services.Impl
                 NetworkName = networkName,
                 BridgeName = bridgeName,
                 ForwardNat = true,
-                IpAddress = "192.168.0.1",
-                NetMask = "255.255.255.0"
+                IpAddress = _config.InternetEntityDefaultIp,
+                NetMask = _config.InternetEntityDefaultNetmask
             });
         }
 
