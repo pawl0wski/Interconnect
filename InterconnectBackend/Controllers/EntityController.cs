@@ -17,15 +17,18 @@ namespace Controllers
         private readonly IVirtualMachineEntityService _vmEntityService;
         private readonly IVirtualNetworkService _virtualNetworkService;
         private readonly IInternetEntityService _internetEntityService;
+        private readonly IDeleteEntityService _deleteEntityService;
 
         public EntityController(
             IVirtualMachineEntityService vmEntityService,
             IVirtualNetworkService virtualNetworkService,
-            IInternetEntityService internetEntityService)
+            IInternetEntityService internetEntityService,
+            IDeleteEntityService deleteEntityService)
         {
             _vmEntityService = vmEntityService;
             _virtualNetworkService = virtualNetworkService;
             _internetEntityService = internetEntityService;
+            _deleteEntityService = deleteEntityService;
         }
 
         /// <summary>
@@ -90,6 +93,27 @@ namespace Controllers
             }
 
             return Ok(StringResponse.WithSuccess("OK"));
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult<StringResponse>> DeleteEntity(DeleteEntityRequest request)
+        {
+            switch (request.Type)
+            {
+                case EntityType.VirtualMachine:
+                    await _deleteEntityService.DeleteVirtualMachineEntity(request.Id);
+                    break;
+                case EntityType.VirtualNetworkNode:
+                    await _deleteEntityService.DeleteVirtualNetworkNodeEntity(request.Id);
+                    break;
+                case EntityType.Internet:
+                    await _deleteEntityService.DeleteInternetEntity(request.Id);
+                    break;
+                default:
+                    throw new Exception("Unsuported entity type");
+            }
+
+            return Ok(StringResponse.WithEmptySuccess());
         }
 
         [HttpGet]

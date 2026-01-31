@@ -35,6 +35,13 @@ const VirtualNetworkConnectionContainer = ({
         [destinationEntityPosition.x, destinationEntityPosition.y],
     );
 
+    if (
+        (sourceEntityPosition.x === 0 && sourceEntityPosition.y === 0) ||
+        (destinationEntityPosition.y === 0 && destinationEntityPosition.y === 0)
+    ) {
+        return null;
+    }
+    
     return (
         sourcePosition &&
         destinationPosition && (

@@ -1,5 +1,5 @@
 import { Menu } from "@mantine/core";
-import { MdOutlineCable } from "react-icons/md";
+import { MdDelete, MdOutlineCable } from "react-icons/md";
 import NetworkConnectionMenuItemContainer from "./MenuItems/NetworkConnectionMenuItemContainer.tsx";
 import { EntityType } from "../../../models/enums/EntityType.ts";
 import { useTranslation } from "react-i18next";
@@ -11,7 +11,9 @@ interface InternetContextMenuProps {
     isVisible: boolean;
     entityId: number;
     connections: VirtualNetworkConnectionModel[];
+
     onStartPlacingVirtualNetwork: () => void;
+    onDeleteEntity: () => void;
 }
 
 const InternetContextMenu = ({
@@ -20,6 +22,7 @@ const InternetContextMenu = ({
     entityId,
     connections,
     onStartPlacingVirtualNetwork,
+    onDeleteEntity,
 }: InternetContextMenuProps) => {
     const { t } = useTranslation();
 
@@ -33,6 +36,12 @@ const InternetContextMenu = ({
                 }}
             >
                 <Menu.Label>{t("internet.internet")}</Menu.Label>
+                <Menu.Item
+                    leftSection={<MdDelete size={14} />}
+                    onClick={onDeleteEntity}
+                >
+                    {t("delete")}
+                </Menu.Item>
                 <Menu.Divider />
                 <Menu.Label>{t("network")}</Menu.Label>
                 <Menu.Item

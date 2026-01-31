@@ -8,15 +8,18 @@ import { useEntityPlacementStore } from "../../../store/entityPlacementStore.ts"
 import useNetworkPlacementStore from "../../../store/networkPlacementStore.ts";
 import useSimulationStageContextMenuClose from "../../../hooks/useSimulationStageContextMenuClose.ts";
 import useNetworkConnectionsStore from "../../../store/networkConnectionsStore.ts";
+import useFullscreenLoader from "../../../hooks/useFullscreenLoader.ts";
 
 const VirtualNetworkNodeContextMenuContainer = () => {
     const simulationStageContextMenusStore =
         useSimulationStageContextMenusStore();
-    const virtualNetworkNodeEntitiesStore = useVirtualNetworkNodeEntitiesStore();
+    const virtualNetworkNodeEntitiesStore =
+        useVirtualNetworkNodeEntitiesStore();
     const entityPlacementStore = useEntityPlacementStore();
     const networkPlacementStore = useNetworkPlacementStore();
     const networkConnectionsStore = useNetworkConnectionsStore();
     const { closeContextMenu } = useSimulationStageContextMenuClose();
+    const { startLoading, stopLoading } = useFullscreenLoader();
 
     const currentEntity = useMemo(() => {
         const currentEntityId =
@@ -49,6 +52,21 @@ const VirtualNetworkNodeContextMenuContainer = () => {
         networkPlacementStore,
     ]);
 
+    const handleDeleteEntity = useCallback(async () => {
+        try {
+            startLoading();
+            await virtualNetworkNodeEntitiesStore.deleteById(currentEntity!.id);
+        } finally {
+            closeContextMenu();
+            stopLoading();
+        }
+    }, [
+        currentEntity,
+        startLoading,
+        stopLoading,
+        virtualNetworkNodeEntitiesStore,
+    ]);
+
     const connections =
         currentEntity === null
             ? []
@@ -65,6 +83,7 @@ const VirtualNetworkNodeContextMenuContainer = () => {
             isVisible={visible}
             connections={connections}
             onStartPlacingVirtualNetwork={handleStartPlacingVirtualNetwork}
+            onDeleteEntity={handleDeleteEntity}
         />
     );
 };

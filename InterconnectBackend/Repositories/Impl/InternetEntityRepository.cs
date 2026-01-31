@@ -27,6 +27,14 @@ namespace Repositories.Impl
             return model;
         }
 
+        public async Task Remove(int id)
+        {
+            var model = await _context.InternetEntityModels.FirstAsync(m => m.Id == id);
+        
+            _context.InternetEntityModels.Remove(model);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<List<InternetEntityModel>> GetAll()
         {
             return await _context.InternetEntityModels.Include(x => x.VirtualNetwork).ToListAsync();

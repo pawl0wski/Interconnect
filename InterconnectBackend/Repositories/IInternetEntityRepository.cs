@@ -35,5 +35,11 @@ namespace Repositories
         /// <param name="y">New Y coordinate.</param>
         /// <returns>Updated entity.</returns>
         public Task<InternetEntityModel> UpdatePosition(int id, int x, int y);
+
+        /// <summary>
+        /// Deletes the entity with the specified identifier.
+        /// </summary>
+        /// <param name="id">The unique identifier of the entity to delete.</param>
+        public Task Remove(int id);
     }
 }

@@ -8,6 +8,7 @@ import { useCallback, useMemo } from "react";
 import { useSimulationStageContextMenuInfo } from "../../../hooks/useSimulationStageContextMenuInfo.ts";
 import { EntityType } from "../../../models/enums/EntityType.ts";
 import InternetContextMenu from "./InternetContextMenu.tsx";
+import useFullscreenLoader from "../../../hooks/useFullscreenLoader.ts";
 
 const InternetContextMenuContainer = () => {
     const simulationStageContextMenusStore =
@@ -17,6 +18,7 @@ const InternetContextMenuContainer = () => {
     const networkPlacementStore = useNetworkPlacementStore();
     const networkConnectionsStore = useNetworkConnectionsStore();
     const { closeContextMenu } = useSimulationStageContextMenuClose();
+    const { startLoading, stopLoading } = useFullscreenLoader();
 
     const currentEntity = useMemo(() => {
         const currentEntityId =
@@ -50,6 +52,22 @@ const InternetContextMenuContainer = () => {
         networkPlacementStore,
     ]);
 
+    const handleEntityDelete = useCallback(() => {
+        try {
+            startLoading();
+            internetEntitiesStore.deleteById(currentEntity!.id);
+        } finally {
+            closeContextMenu();
+            stopLoading();
+        }
+    }, [
+        closeContextMenu,
+        currentEntity,
+        internetEntitiesStore,
+        startLoading,
+        stopLoading,
+    ]);
+
     const connections =
         currentEntity === null
             ? []
@@ -65,6 +83,7 @@ const InternetContextMenuContainer = () => {
             isVisible={visible}
             connections={connections}
             onStartPlacingVirtualNetwork={handleStartPlacingVirtualNetwork}
+            onDeleteEntity={handleEntityDelete}
         />
     );
 };

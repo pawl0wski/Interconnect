@@ -9,6 +9,7 @@ const pl = {
     performingActions: "Wykonywanie akcji...",
     actions: "Akcje",
     type: "Typ",
+    delete: "Usuń",
     virtualNetworkNode: {
         virtualNetworkNode: "Węzeł sieci",
         form: {

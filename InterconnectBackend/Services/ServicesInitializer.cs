@@ -27,6 +27,7 @@ namespace Services
             serviceCollection.AddScoped<IInternetEntityService, InternetEntityService>();
             serviceCollection.AddScoped<IEntitiesDisconnectorService, EntitiesDisconnectorService>();
             serviceCollection.AddScoped<IEntitiesConnectorService, EntitiesConnectorService>();
+            serviceCollection.AddScoped<IDeleteEntityService, DeleteEntityService>();
         }
     }
 }
