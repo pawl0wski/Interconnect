@@ -7,6 +7,9 @@ using Services.Utils;
 
 namespace Services.Impl
 {
+    /// <summary>
+    /// Service responsible for connecting virtual network nodes.
+    /// </summary>
     public class VirtualNetworkNodeConnector : IVirtualNetworkNodeConnector
     {
         private record EntityTypeWithId
@@ -41,6 +44,12 @@ namespace Services.Impl
             _networkInterfaceRepository = networkInterfaceRepository;
         }
 
+        /// <summary>
+        /// Connects two virtual network nodes.
+        /// </summary>
+        /// <param name="sourceVirtualNetworkNode">First node identifier.</param>
+        /// <param name="destinationVirtualNetworkNode">Second node identifier.</param>
+        /// <returns>Created connection data.</returns>
         public async Task<VirtualNetworkConnectionDTO> ConnectTwoVirtualNetworkNodes(int sourceVirtualNetworkNode, int destinationVirtualNetworkNode)
         {
             var sourceVirtualNetworkNodeEntities = await GetAllConnectedEntitiesToVirtualNetworkNode(sourceVirtualNetworkNode, null);
@@ -54,6 +63,12 @@ namespace Services.Impl
             return VirtualNetworkEntityConnectionMapper.MapToDTO(connectionModel);
         }
 
+        /// <summary>
+        /// Disconnects two virtual network nodes.
+        /// </summary>
+        /// <param name="connectionId">Connection identifier.</param>
+        /// <param name="firstVirtualNetworkNodeId">First node identifier.</param>
+        /// <param name="secondVirtualNetworkNode">Second node identifier.</param>
         public async Task DisconnectTwoVirtualNetworkNodes(int connectionId, int firstVirtualNetworkNodeId, int secondVirtualNetworkNode)
         {
             var firstVirtualNetworkNodeEntities = await GetAllConnectedEntitiesToVirtualNetworkNode(firstVirtualNetworkNodeId, connectionId);
@@ -65,6 +80,12 @@ namespace Services.Impl
             await _connectionRepository.Remove(connectionId);
         }
 
+        /// <summary>
+        /// Connects a virtual network node to the Internet.
+        /// </summary>
+        /// <param name="virtualNetworkNodeId">Network node identifier.</param>
+        /// <param name="internetId">Internet entity identifier.</param>
+        /// <returns>Created connection data.</returns>
         public async Task<VirtualNetworkConnectionDTO> ConnectVirtualNetworkNodeToInternet(int virtualNetworkNodeId, int internetId)
         {
             var virtualNetworkNodeConnectedEntities = await GetAllConnectedEntitiesToVirtualNetworkNode(virtualNetworkNodeId, null);
@@ -76,6 +97,11 @@ namespace Services.Impl
             return VirtualNetworkEntityConnectionMapper.MapToDTO(connectionModel);
         }
 
+        /// <summary>
+        /// Disconnects a virtual network node from the Internet.
+        /// </summary>
+        /// <param name="connectionId">Connection identifier.</param>
+        /// <param name="virtualNetworkNodeId">Network node identifier.</param>
         public async Task DisconnectVirtualNetworkNodeFromInternet(int connectionId, int virtualNetworkNodeId)
         {
             var virtualNetworkNodeConnectedEntities = await GetAllConnectedEntitiesToVirtualNetworkNode(virtualNetworkNodeId, connectionId);
@@ -85,6 +111,12 @@ namespace Services.Impl
             await _connectionRepository.Remove(connectionId);
         }
 
+        /// <summary>
+        /// Retrieves all entities connected to a specific virtual network node by traversing the connection graph.
+        /// </summary>
+        /// <param name="virtualNetworkNodeId">The ID of the virtual network node to start from.</param>
+        /// <param name="connectionIdToSkip">Optional connection ID to exclude from the traversal.</param>
+        /// <returns>A list of entities (with their IDs and types) connected to the specified node.</returns>
         private async Task<List<EntityTypeWithId>> GetAllConnectedEntitiesToVirtualNetworkNode(int virtualNetworkNodeId, int? connectionIdToSkip)
         {
             var virtualNetworkNode = VirtualNetworkNodeEntityMapper.MapToDTO(await _virtualNetworkNodeRepository.GetById(virtualNetworkNodeId));
@@ -121,6 +153,11 @@ namespace Services.Impl
             return [.. visitiedEntities];
         }
 
+        /// <summary>
+        /// Connects a group of disconnected entities to a virtual network.
+        /// If an Internet entity is present, uses its network; otherwise creates a new network.
+        /// </summary>
+        /// <param name="entities">List of entities to connect.</param>
         private async Task ConnectDisconnectedEntities(List<EntityTypeWithId> entities)
         {
             EntityTypeWithId? internetEntityWithId = entities.FirstOrDefault(entity => entity.Type == EntityType.Internet);
@@ -141,6 +178,12 @@ namespace Services.Impl
             await ConnectEntitiesToNetwork(entities, virtualNetwork);
         }
 
+        /// <summary>
+        /// Connects multiple entities to a specified virtual network by updating their network configuration.
+        /// Handles virtual machines and virtual network nodes differently based on their type.
+        /// </summary>
+        /// <param name="entities">List of entities to connect to the network.</param>
+        /// <param name="virtualNetwork">The virtual network to connect entities to.</param>
         private async Task ConnectEntitiesToNetwork(List<EntityTypeWithId> entities, VirtualNetworkModel virtualNetwork)
         {
             foreach (var entity in entities)
@@ -165,6 +208,12 @@ namespace Services.Impl
             }
         }
 
+        /// <summary>
+        /// Determines the most popular network among a group of entities.
+        /// Internet entities always have priority, otherwise selects the network with the most connections.
+        /// </summary>
+        /// <param name="entities">List of entities to evaluate.</param>
+        /// <returns>The most popular virtual network among the entities.</returns>
         private async Task<VirtualNetworkModel> GetPopularNetwork(List<EntityTypeWithId> entities)
         {
             HashSet<EntityTypeWithId> uniqueEntities = [.. entities];

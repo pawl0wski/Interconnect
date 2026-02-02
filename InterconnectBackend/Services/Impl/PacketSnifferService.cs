@@ -46,7 +46,7 @@ namespace Services.Impl
             }
             var nativePacket = _snifferWrapper.GetPacket();
 
-            return PacketAnalyzer.AnalyzePacket(nativePacket, nativePacket.InterfaceName);
+            return PacketAnalyzer.AnalyzePacket(nativePacket);
         }
     }
 }

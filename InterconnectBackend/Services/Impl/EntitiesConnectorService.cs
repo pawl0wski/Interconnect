@@ -7,6 +7,9 @@ using Services.Utils;
 
 namespace Services.Impl
 {
+    /// <summary>
+    /// Service responsible for connecting network entities.
+    /// </summary>
     public class EntitiesConnectorService : IEntitiesConnectorService
     {
         private readonly IVirtualMachineEntityRepository _vmEntityRepository;
@@ -32,6 +35,14 @@ namespace Services.Impl
             _virtualNetworkNodeConnector = virtualNetworkNodeConnector;
         }
 
+        /// <summary>
+        /// Connects two entities of different types.
+        /// </summary>
+        /// <param name="sourceEntityId">Source entity identifier.</param>
+        /// <param name="sourceEntityType">Source entity type.</param>
+        /// <param name="destinationEntitiyId">Destination entity identifier.</param>
+        /// <param name="destinationEntityType">Destination entity type.</param>
+        /// <returns>Created connection data.</returns>
         public async Task<VirtualNetworkConnectionDTO> ConnectTwoEntities(int sourceEntityId, EntityType sourceEntityType, int destinationEntityId, EntityType destinationEntityType)
         {
             VirtualNetworkConnectionDTO? virtualNetworkConnection = null;
@@ -75,6 +86,12 @@ namespace Services.Impl
             return virtualNetworkConnection;
         }
 
+        /// <summary>
+        /// Connects two virtual machines.
+        /// </summary>
+        /// <param name="sourceEntityId">First virtual machine identifier.</param>
+        /// <param name="destinationEntityId">Second virtual machine identifier.</param>
+        /// <returns>Created connection data.</returns>
         public async Task<VirtualNetworkConnectionDTO> ConnectTwoVirtualMachines(int sourceEntityId, int destinationEntityId)
         {
             var sourceEntity = await _vmEntityRepository.GetById(sourceEntityId);
@@ -101,6 +118,12 @@ namespace Services.Impl
             return VirtualNetworkEntityConnectionMapper.MapToDTO(connectionModel);
         }
 
+        /// <summary>
+        /// Connects a virtual machine to a virtual network node.
+        /// </summary>
+        /// <param name="sourceEntityId">Virtual machine identifier.</param>
+        /// <param name="destinationEntityId">Network node identifier.</param>
+        /// <returns>Created connection data.</returns>
         public async Task<VirtualNetworkConnectionDTO> ConnectVirtualMachineToVirtualNetworkNode(int sourceEntityId, int destinationEntityId)
         {
             var sourceVirtualMachine = await _vmEntityRepository.GetById(sourceEntityId);
@@ -120,6 +143,12 @@ namespace Services.Impl
             return VirtualNetworkEntityConnectionMapper.MapToDTO(connection);
         }
 
+        /// <summary>
+        /// Connects a virtual machine to the Internet.
+        /// </summary>
+        /// <param name="sourceEntityId">Virtual machine identifier.</param>
+        /// <param name="destinationEntityId">Internet entity identifier.</param>
+        /// <returns>Created connection data.</returns>
         public async Task<VirtualNetworkConnectionDTO> ConnectVirtualMachineToInternet(int sourceEntityId, int destinationEntityId)
         {
             var sourceVirtualMachine = await _vmEntityRepository.GetById(sourceEntityId);
