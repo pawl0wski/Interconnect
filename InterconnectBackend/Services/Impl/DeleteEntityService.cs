@@ -3,6 +3,9 @@ using Repositories;
 
 namespace Services.Impl
 {
+    /// <summary>
+    /// Service responsible for deleting entities from the system.
+    /// </summary>
     public class DeleteEntityService : IDeleteEntityService
     {
         private readonly IInternetEntityRepository _internetEntityRepository;
@@ -11,6 +14,14 @@ namespace Services.Impl
         private readonly IVirtualNetworkConnectionRepository _virtualNetworkConnectionRepository;
         private readonly IEntitiesDisconnectorService _entitiesDisconnectorService;
 
+        /// <summary>
+        /// Initializes a new instance of the DeleteEntityService.
+        /// </summary>
+        /// <param name="internetEntityRepository">Repository for Internet entities.</param>
+        /// <param name="virtualMachineEntityRepository">Repository for virtual machine entities.</param>
+        /// <param name="virtualNetworkNodeEntityRepository">Repository for virtual network node entities.</param>
+        /// <param name="virtualNetworkConnectionRespository">Repository for virtual network connections.</param>
+        /// <param name="entitiesDisconnectorService">Service for disconnecting entities.</param>
         public DeleteEntityService(
             IInternetEntityRepository internetEntityRepository,
             IVirtualMachineEntityRepository virtualMachineEntityRepository,
@@ -25,6 +36,10 @@ namespace Services.Impl
             _entitiesDisconnectorService = entitiesDisconnectorService;
         }
 
+        /// <summary>
+        /// Deletes an Internet entity.
+        /// </summary>
+        /// <param name="id">Entity identifier to delete.</param>
         public async Task DeleteInternetEntity(int id)
         {
             await DisconnectAllConnectionsFromEntity(id, EntityType.Internet);
@@ -32,6 +47,10 @@ namespace Services.Impl
             await _internetEntityRepository.Remove(id);
         }
 
+        /// <summary>
+        /// Deletes a virtual network node entity.
+        /// </summary>
+        /// <param name="id">Entity identifier to delete.</param>
         public async Task DeleteVirtualNetworkNodeEntity(int id)
         {
             await DisconnectAllConnectionsFromEntity(id, EntityType.VirtualNetworkNode);
@@ -39,6 +58,10 @@ namespace Services.Impl
             await _virtualNetworkNodeEntityRepository.Remove(id);
         }
 
+        /// <summary>
+        /// Deletes a virtual machine entity.
+        /// </summary>
+        /// <param name="id">Entity identifier to delete.</param>
         public async Task DeleteVirtualMachineEntity(int id)
         {
             await DisconnectAllConnectionsFromEntity(id, EntityType.VirtualMachine);

@@ -3,6 +3,9 @@ using System.Xml;
 
 namespace Services.Utils
 {
+    /// <summary>
+    /// Builder class for creating virtual machine XML definitions.
+    /// </summary>
     public class VirtualMachineDefinitionBuilder : BaseDefinitionBuilder<VirtualMachineCreateDefinition>
     {
         private string? _prefix;
@@ -11,6 +14,11 @@ namespace Services.Utils
         private uint? _virtualCpus;
         private string? _bootableDiskPath;
 
+        /// <summary>
+        /// Sets the VM name prefix.
+        /// </summary>
+        /// <param name="prefix">The prefix for VM names.</param>
+        /// <returns>The builder instance for method chaining.</returns>
         public VirtualMachineDefinitionBuilder SetPrefix(string prefix)
         {
             _prefix = prefix;
@@ -18,6 +26,11 @@ namespace Services.Utils
             return this;
         }
 
+        /// <summary>
+        /// Sets the builder state from a virtual machine create definition.
+        /// </summary>
+        /// <param name="definition">The VM creation definition.</param>
+        /// <returns>The builder instance for method chaining.</returns>
         public override VirtualMachineDefinitionBuilder SetFromCreateDefinition(VirtualMachineCreateDefinition definition)
         {
             if (_prefix is null)
@@ -33,6 +46,10 @@ namespace Services.Utils
             return this;
         }
 
+        /// <summary>
+        /// Builds the complete virtual machine XML definition.
+        /// </summary>
+        /// <returns>The XML definition as a string.</returns>
         public override string Build()
         {
             CheckIsEverythingIsProvided(_name, _memory, _virtualCpus, _bootableDiskPath);

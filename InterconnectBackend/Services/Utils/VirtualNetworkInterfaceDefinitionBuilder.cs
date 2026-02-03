@@ -3,11 +3,19 @@ using System.Xml;
 
 namespace Services.Utils
 {
+    /// <summary>
+    /// Builder class for creating virtual network interface XML definitions.
+    /// </summary>
     public class VirtualNetworkInterfaceCreateDefinitionBuilder : BaseDefinitionBuilder<VirtualNetworkInterfaceCreateDefinition>
     {
         private string? _macAddress;
         private string? _networkName;
 
+        /// <summary>
+        /// Sets the builder state from a network interface create definition.
+        /// </summary>
+        /// <param name="definition">The interface creation definition.</param>
+        /// <returns>The builder instance for method chaining.</returns>
         public override VirtualNetworkInterfaceCreateDefinitionBuilder SetFromCreateDefinition(VirtualNetworkInterfaceCreateDefinition definition)
         {
             _macAddress = definition.MacAddress;
@@ -16,6 +24,11 @@ namespace Services.Utils
             return this;
         }
 
+        /// <summary>
+        /// Sets the builder state from an existing network interface XML definition.
+        /// </summary>
+        /// <param name="xml">The existing interface XML definition.</param>
+        /// <returns>The builder instance for method chaining.</returns>
         public VirtualNetworkInterfaceCreateDefinitionBuilder SetFromXml(string xml)
         {
             var doc = new XmlDocument();
@@ -32,6 +45,11 @@ namespace Services.Utils
             return this;
         }
 
+        /// <summary>
+        /// Sets the network name for the interface.
+        /// </summary>
+        /// <param name="networkName">The name of the network to attach to.</param>
+        /// <returns>The builder instance for method chaining.</returns>
         public VirtualNetworkInterfaceCreateDefinitionBuilder SetNetworkName(string networkName)
         {
             _networkName = networkName;
@@ -39,6 +57,10 @@ namespace Services.Utils
             return this;
         }
 
+        /// <summary>
+        /// Builds the complete network interface XML definition.
+        /// </summary>
+        /// <returns>The XML definition as a string.</returns>
         public override string Build()
         {
             CheckIsEverythingIsProvided(_macAddress, _networkName);

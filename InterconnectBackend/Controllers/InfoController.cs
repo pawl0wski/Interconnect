@@ -13,6 +13,10 @@ namespace Controllers
     {
         private IInfoService _infoService;
 
+        /// <summary>
+        /// Initializes a new instance of the InfoController.
+        /// </summary>
+        /// <param name="infoService">Service for providing system information.</param>
         public InfoController(IInfoService infoService)
         {
             _infoService = infoService;

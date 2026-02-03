@@ -19,6 +19,13 @@ namespace Controllers
         private readonly IInternetEntityService _internetEntityService;
         private readonly IDeleteEntityService _deleteEntityService;
 
+        /// <summary>
+        /// Initializes a new instance of the EntityController.
+        /// </summary>
+        /// <param name="vmEntityService">Service for managing virtual machine entities.</param>
+        /// <param name="virtualNetworkService">Service for managing virtual networks.</param>
+        /// <param name="internetEntityService">Service for managing Internet entities.</param>
+        /// <param name="deleteEntityService">Service for deleting entities.</param>
         public EntityController(
             IVirtualMachineEntityService vmEntityService,
             IVirtualNetworkService virtualNetworkService,
@@ -95,6 +102,11 @@ namespace Controllers
             return Ok(StringResponse.WithSuccess("OK"));
         }
 
+        /// <summary>
+        /// Deletes an entity from the system.
+        /// </summary>
+        /// <param name="request">Data for entity deletion.</param>
+        /// <returns>Operation confirmation.</returns>
         [HttpDelete]
         public async Task<ActionResult<StringResponse>> DeleteEntity(DeleteEntityRequest request)
         {
@@ -116,6 +128,10 @@ namespace Controllers
             return Ok(StringResponse.WithEmptySuccess());
         }
 
+        /// <summary>
+        /// Retrieves all virtual machine entities with their MAC addresses.
+        /// </summary>
+        /// <returns>List of virtual machine entities and MAC addresses.</returns>
         [HttpGet]
         public async Task<ActionResult<VirtualMachineEntitiesResponse>> GetAllVirtualMachineEntities()
         {
@@ -131,6 +147,10 @@ namespace Controllers
                 ));
         }
 
+        /// <summary>
+        /// Retrieves all virtual network node entities.
+        /// </summary>
+        /// <returns>List of virtual network nodes.</returns>
         [HttpGet]
         public async Task<ActionResult<VirtualNetworkNodesEntitiesResponse>> GetAllVirtualNetworkNodeEntities()
         {
@@ -139,6 +159,10 @@ namespace Controllers
             return Ok(VirtualNetworkNodesEntitiesResponse.WithSuccess(entities));
         }
 
+        /// <summary>
+        /// Retrieves all Internet entities.
+        /// </summary>
+        /// <returns>List of Internet entities.</returns>
         [HttpGet]
         public async Task<ActionResult<InternetEntitiesResponse>> GetAllInternetEntities()
         {

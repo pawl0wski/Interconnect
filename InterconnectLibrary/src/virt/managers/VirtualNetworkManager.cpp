@@ -2,6 +2,13 @@
 
 #include "../../exceptions/VirtualizationException.h"
 
+/**
+ * @brief Creates a virtual network from an XML definition.
+ * 
+ * @param networkDefinition XML definition of the network.
+ * @return virNetworkPtr Pointer to the created network.
+ * @throws VirtualizationException if connection is not set or creation fails.
+ */
 virNetworkPtr VirtualNetworkManager::createNetworkFromXml(const std::string& networkDefinition) const
 {
     checkIfConnectionIsSet();
@@ -16,6 +23,12 @@ virNetworkPtr VirtualNetworkManager::createNetworkFromXml(const std::string& net
     return network;
 }
 
+/**
+ * @brief Destroys (deletes) a virtual network.
+ * 
+ * @param name The name of the network to destroy.
+ * @throws VirtualizationException if connection is not set or destruction fails.
+ */
 void VirtualNetworkManager::destroyNetwork(const std::string& name) const
 {
     checkIfConnectionIsSet();
@@ -28,6 +41,13 @@ void VirtualNetworkManager::destroyNetwork(const std::string& name) const
     }
 }
 
+/**
+ * @brief Retrieves the XML definition of a virtual network.
+ * 
+ * @param name The name of the network.
+ * @return std::string The XML definition of the network.
+ * @throws VirtualizationException if connection is not set or retrieval fails.
+ */
 std::string VirtualNetworkManager::getNetworkXmlDefinition(const std::string& name) const
 {
     checkIfConnectionIsSet();

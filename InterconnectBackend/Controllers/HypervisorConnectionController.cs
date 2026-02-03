@@ -13,6 +13,10 @@ namespace Controllers
     {
         private IHypervisorConnectionService _hypervisorConnectionService;
 
+        /// <summary>
+        /// Initializes a new instance of the HypervisorConnectionController.
+        /// </summary>
+        /// <param name="hypervisorConnectionService">Service for managing hypervisor connection.</param>
         public HypervisorConnectionController(IHypervisorConnectionService hypervisorConnectionService)
         {
             _hypervisorConnectionService = hypervisorConnectionService;

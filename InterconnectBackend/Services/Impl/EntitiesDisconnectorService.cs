@@ -7,6 +7,9 @@ using Services.Utils;
 
 namespace Services.Impl
 {
+    /// <summary>
+    /// Service responsible for disconnecting network entities.
+    /// </summary>
     public class EntitiesDisconnectorService : IEntitiesDisconnectorService
     {
         private readonly IVirtualizationWrapper _wrapper;
@@ -17,6 +20,16 @@ namespace Services.Impl
         private readonly IVirtualNetworkNodeConnector _virtualNetworkNodeConnector;
         private readonly IVirtualMachineEntityNetworkInterfaceRepository _networkInterfaceRepository;
 
+        /// <summary>
+        /// Initializes a new instance of the EntitiesDisconnectorService.
+        /// </summary>
+        /// <param name="wrapper">Virtualization wrapper for hypervisor operations.</param>
+        /// <param name="vmEntityRepository">Repository for virtual machine entities.</param>
+        /// <param name="connectionRepository">Repository for network connections.</param>
+        /// <param name="virtualNetworkNodeRepository">Repository for network nodes.</param>
+        /// <param name="networkRepository">Repository for virtual networks.</param>
+        /// <param name="virtualNetworkNodeConnector">Service for network node connections.</param>
+        /// <param name="networkInterfaceRepository">Repository for network interfaces.</param>
         public EntitiesDisconnectorService(
             IVirtualizationWrapper wrapper,
             IVirtualMachineEntityRepository vmEntityRepository,
@@ -36,6 +49,11 @@ namespace Services.Impl
             _networkInterfaceRepository = networkInterfaceRepository;
         }
 
+        /// <summary>
+        /// Disconnects entities based on connection identifier.
+        /// </summary>
+        /// <param name="connectionId">Connection identifier to remove.</param>
+        /// <returns>Removed connection data.</returns>
         public async Task<VirtualNetworkConnectionDTO> DisconnectEntities(int connectionId)
         {
             var connection = await _connectionRepository.GetById(connectionId);
@@ -77,6 +95,12 @@ namespace Services.Impl
             throw new NotImplementedException("Disconnect entities not implemented with provided entity types");
         }
 
+        /// <summary>
+        /// Disconnects a virtual machine from a virtual network node.
+        /// </summary>
+        /// <param name="connectionId">Connection identifier.</param>
+        /// <param name="sourceEntityId">Virtual machine identifier.</param>
+        /// <param name="destinationEntityId">Network node identifier.</param>
         public async Task DisconnectVirtualMachineFromVirtualNetworkNode(int connectionId, int sourceEntityId, int destinationEntityId)
         {
             var virtualMachine = await _vmEntityRepository.GetById(sourceEntityId);
@@ -92,6 +116,12 @@ namespace Services.Impl
             await _connectionRepository.Remove(connectionId);
         }
 
+        /// <summary>
+        /// Disconnects two virtual machines.
+        /// </summary>
+        /// <param name="connectionId">Connection identifier.</param>
+        /// <param name="sourceEntityId">First virtual machine identifier.</param>
+        /// <param name="destinationEntityId">Second virtual machine identifier.</param>
         public async Task DisconnectVirtualMachineFromVirtualMachine(int connectionId, int sourceEntityId, int destinationEntityId)
         {
             var sourceVirtualMachine = await _vmEntityRepository.GetById(sourceEntityId);
@@ -128,6 +158,12 @@ namespace Services.Impl
             await _connectionRepository.Remove(connectionId);
         }
 
+        /// <summary>
+        /// Disconnects a virtual machine from the Internet.
+        /// </summary>
+        /// <param name="connectionId">Connection identifier.</param>
+        /// <param name="virtualMachineEntityId">Virtual machine identifier.</param>
+        /// <param name="internetEntityId">Internet entity identifier.</param>
         public async Task DisconnectVirtualMachineFromInternet(int connectionId, int virtualMachineEntityId, int internetEntityId)
         {
             var virtualMachine = await _vmEntityRepository.GetById(virtualMachineEntityId);

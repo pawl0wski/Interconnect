@@ -8,6 +8,9 @@ using System.Xml.Linq;
 
 namespace Services.Impl
 {
+    /// <summary>
+    /// Service managing virtual machine entities.
+    /// </summary>
     public class VirtualMachineEntityService : IVirtualMachineEntityService
     {
         private readonly IVirtualMachineEntityRepository _repository;
@@ -15,6 +18,13 @@ namespace Services.Impl
         private readonly IVirtualMachineManagerService _vmManagerService;
         private readonly IVirtualMachineEntityNetworkInterfaceRepository _networkInterfaceRepository;
 
+        /// <summary>
+        /// Initializes a new instance of the VirtualMachineEntityService.
+        /// </summary>
+        /// <param name="repository">Repository for virtual machine entities.</param>
+        /// <param name="bootableDiskProviderService">Service for managing bootable disks.</param>
+        /// <param name="vmManagerService">Service for managing virtual machines.</param>
+        /// <param name="networkInterfaceRepository">Repository for network interfaces.</param>
         public VirtualMachineEntityService(
             IVirtualMachineEntityRepository repository,
             IBootableDiskProviderService bootableDiskProviderService,
@@ -27,6 +37,17 @@ namespace Services.Impl
             _networkInterfaceRepository = networkInterfaceRepository;
         }
 
+        /// <summary>
+        /// Creates a new virtual machine entity.
+        /// </summary>
+        /// <param name="name">Virtual machine name.</param>
+        /// <param name="bootableDiskId">Bootable disk identifier.</param>
+        /// <param name="memory">Amount of RAM in MB.</param>
+        /// <param name="virtualCpus">Number of virtual CPUs.</param>
+        /// <param name="type">Virtual machine entity type.</param>
+        /// <param name="x">X coordinate position.</param>
+        /// <param name="y">Y coordinate position.</param>
+        /// <returns>Created virtual machine entity.</returns>
         public async Task<VirtualMachineEntityDTO> CreateEntity(string name, int bootableDiskId, uint memory, uint virtualCpus, VirtualMachineEntityType type, int x, int y)
         {
             var bootableDiskPath = await _bootableDiskProviderService.GetBootableDiskPathById(bootableDiskId);
@@ -59,6 +80,10 @@ namespace Services.Impl
             return VirtualMachineEntityMapper.MapToDTO(entity);
         }
 
+        /// <summary>
+        /// Retrieves a list of all virtual machine entities.
+        /// </summary>
+        /// <returns>List of virtual machine entities.</returns>
         public async Task<List<VirtualMachineEntityDTO>> GetEntities()
         {
             var entities = await _repository.GetAll();
@@ -80,6 +105,10 @@ namespace Services.Impl
             return entitiesDto;
         }
 
+        /// <summary>
+        /// Retrieves a list of virtual machine MAC addresses.
+        /// </summary>
+        /// <returns>List of MAC addresses.</returns>
         public async Task<List<VirtualMachineEntityMacAddressDTO>> GetMacAddresses()
         {
             var entities = await _repository.GetAll();
@@ -112,6 +141,11 @@ namespace Services.Impl
             return result;
         }
 
+        /// <summary>
+        /// Retrieves a virtual machine entity by identifier.
+        /// </summary>
+        /// <param name="id">Entity identifier.</param>
+        /// <returns>Virtual machine entity.</returns>
         public async Task<VirtualMachineEntityDTO> GetById(int id)
         {
             var entity = await _repository.GetById(id);
@@ -119,6 +153,13 @@ namespace Services.Impl
             return VirtualMachineEntityMapper.MapToDTO(entity);
         }
 
+        /// <summary>
+        /// Updates the position of a virtual machine entity on the board.
+        /// </summary>
+        /// <param name="id">Entity identifier.</param>
+        /// <param name="x">New X coordinate.</param>
+        /// <param name="y">New Y coordinate.</param>
+        /// <returns>Updated entity.</returns>
         public async Task<VirtualMachineEntityDTO> UpdateEntityPosition(int id, int x, int y)
         {
             var entity = await _repository.GetById(id);
@@ -131,6 +172,12 @@ namespace Services.Impl
             return VirtualMachineEntityMapper.MapToDTO(entity);
         }
 
+        /// <summary>
+        /// Updates the virtual machine UUID for an entity.
+        /// </summary>
+        /// <param name="id">Entity identifier.</param>
+        /// <param name="uuid">New virtual machine UUID.</param>
+        /// <returns>Updated entity.</returns>
         public async Task<VirtualMachineEntityDTO> UpdateEntityVmUUID(int id, string uuid)
         {
             var entity = await _repository.GetById(id);

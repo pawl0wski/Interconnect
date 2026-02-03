@@ -16,6 +16,12 @@ namespace Controllers
         private readonly IEntitiesConnectorService _entitiesConnectorService;
         private readonly IEntitiesDisconnectorService _entitiesDisconnectorService;
 
+        /// <summary>
+        /// Initializes a new instance of the VirtualNetworkController.
+        /// </summary>
+        /// <param name="virtualNetworkService">Service for managing virtual networks.</param>
+        /// <param name="entitiesConnectorService">Service for connecting entities.</param>
+        /// <param name="entitiesDisconnectorService">Service for disconnecting entities.</param>
         public VirtualNetworkController(
             IVirtualNetworkService virtualNetworkService,
             IEntitiesConnectorService entitiesConnectorService,

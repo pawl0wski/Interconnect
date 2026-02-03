@@ -3,6 +3,9 @@ using System.Xml;
 
 namespace Services.Utils
 {
+    /// <summary>
+    /// Builder class for creating virtual network XML definitions.
+    /// </summary>
     public class VirtualNetworkCreateDefinitionBuilder : BaseDefinitionBuilder<VirtualNetworkCreateDefinition>
     {
         private string? _networkName;
@@ -14,6 +17,11 @@ namespace Services.Utils
         private string? _dhcpEndRange;
         private string? _bridgeName;
 
+        /// <summary>
+        /// Sets the builder state from a virtual network create definition.
+        /// </summary>
+        /// <param name="definition">The network creation definition.</param>
+        /// <returns>The builder instance for method chaining.</returns>
         public override VirtualNetworkCreateDefinitionBuilder SetFromCreateDefinition(VirtualNetworkCreateDefinition definition)
         {
             _networkName = definition.NetworkName;
@@ -27,6 +35,11 @@ namespace Services.Utils
 
             return this;
         }
+        
+        /// <summary>
+        /// Builds the complete virtual network XML definition.
+        /// </summary>
+        /// <returns>The XML definition as a string.</returns>
         public override string Build()
         {
             CheckIsEverythingIsProvided(_networkName);

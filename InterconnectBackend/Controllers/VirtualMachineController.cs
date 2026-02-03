@@ -13,6 +13,10 @@ namespace Controllers
     {
         private readonly IBootableDiskProviderService _bootableDiskProviderService;
 
+        /// <summary>
+        /// Initializes a new instance of the VirtualMachineController.
+        /// </summary>
+        /// <param name="bootableDiskProviderService">Service for providing bootable disk information.</param>
         public VirtualMachineController(IBootableDiskProviderService bootableDiskProviderService)
         {
             _bootableDiskProviderService = bootableDiskProviderService;
